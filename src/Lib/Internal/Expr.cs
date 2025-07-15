@@ -24,7 +24,25 @@ public abstract class Expr
 
     public string GetSource(string source) => source.Substring(Start, End + 1);
 
-    public class Null : Expr
+    public void ReplaceChild(Expr toReplace, Expr replacement)
+    {
+        for (int i = 0; i < Children.Length; i++)
+        {
+            if (Children[i] != toReplace) continue;
+
+            Children[i] = replacement;
+            toReplace.Parent = null;
+            replacement.Parent = this;
+
+            break;
+        }
+    }
+
+    public void Replace(Expr replacement) => Parent?.ReplaceChild(this, replacement);
+
+    #region Implementations
+
+        public class Null : Expr
     {
         public Null(int start, int end) : base(start, end)
         {
@@ -198,4 +216,6 @@ public abstract class Expr
 
         public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
     }
+
+    #endregion
 }
