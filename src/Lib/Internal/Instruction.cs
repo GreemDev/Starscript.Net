@@ -1,6 +1,6 @@
 ﻿namespace Starscript.Internal;
 
-public enum Instruction
+public enum Instruction : byte
 {
     Constant,
     Null,

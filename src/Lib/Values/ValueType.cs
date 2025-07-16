@@ -1,6 +1,7 @@
 ﻿namespace Starscript;
 
-public enum ValueType {
+public enum ValueType : byte
+{
     Null,
     Boolean,
     Number,

@@ -48,6 +48,9 @@ public class Value
         _ => false
     };
 
+    public static bool operator ==(Value left, Value right) => left.Equals(right);
+    public static bool operator !=(Value left, Value right) => !left.Equals(right);
+
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(this, obj)) return true;
@@ -72,7 +75,7 @@ public class Value
     {
         // ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
         var result = 31 * base.GetHashCode();
-
+        
         switch (Type)
         {
             case ValueType.Boolean: result += GetBool().GetHashCode(); break;

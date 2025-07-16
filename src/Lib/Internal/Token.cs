@@ -1,6 +1,7 @@
 ﻿namespace Starscript.Internal;
 
-public enum Token {
+public enum Token : byte
+{
     String, Identifier, Number,
 
     Null,
