@@ -1,6 +1,6 @@
 ﻿namespace Starscript.Internal;
 
-public struct ParserResult
+public struct ParserResult : IExprVisitable
 {
     public ParserResult()
     {

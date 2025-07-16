@@ -1,6 +1,6 @@
 ﻿namespace Starscript.Internal;
 
-public abstract class Expr
+public abstract class Expr : IExprVisitable
 {
     public int Start { get; }
     public int End { get; }
