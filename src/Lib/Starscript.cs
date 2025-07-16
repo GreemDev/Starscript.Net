@@ -1,8 +1,5 @@
-﻿using Starscript.Internal;
-
-namespace Starscript;
+﻿namespace Starscript;
 
 public class Starscript
 {
-    public static ParserResult Parse(string script) => new Parser(script).Run();
 }

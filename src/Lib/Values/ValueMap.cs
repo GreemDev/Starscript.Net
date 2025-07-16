@@ -19,6 +19,8 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
     }
 
     public ValueMap Set(string name, Value value) => Set(name, () => value);
+    
+    public ValueMap Set(string name, StarscriptFunction function) => Set(name, () => function);
 
     public ValueMap Set(string name, Func<Value> value)
     {

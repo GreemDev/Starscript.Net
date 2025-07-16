@@ -15,6 +15,15 @@ public class Compiler : IExprVisitor
     private Compiler()
     {
     }
+
+    public static Script CompileFromSource(string source)
+    {
+        var parsed = Parser.Parse(source);
+        if (parsed.HasErrors)
+            throw new ParserException(parsed.Errors.First());
+
+        return Compile(parsed);
+    }
     
     public static Script Compile(ParserResult result)
     {

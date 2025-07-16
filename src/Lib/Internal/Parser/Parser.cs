@@ -19,6 +19,8 @@ public partial class Parser
         _lexer = new Lexer(source);
     }
 
+    public static ParserResult Parse(string source) => new Parser(source).Run();
+
     internal ParserResult Run()
     {
         var result = new ParserResult();
