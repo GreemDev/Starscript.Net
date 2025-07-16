@@ -21,6 +21,8 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
     public ValueMap Set(string name, Value value) => Set(name, () => value);
     
     public ValueMap Set(string name, StarscriptFunction function) => Set(name, () => function);
+    
+    public ValueMap Set(string name, object obj) => Set(name, () => TopLevelFunctions.Object(obj));
 
     public ValueMap Set(string name, Func<Value> value)
     {
@@ -82,7 +84,7 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
     /// <b>Dot Notation:</b><br/>
     /// If the name is for example 'user.name' then it attempts to get a value with the name 'user' from this map and calls .Remove("name") on the second map. If `user` is not a map then the last param is removed.
     /// </summary>
-    public bool Remove(string name, out Func<Value> removedValue)
+    public bool Remove(string name, [MaybeNullWhen(false)] out Func<Value> removedValue)
     {
         var dotIndex = name.IndexOf('.');
         if (dotIndex is -1)

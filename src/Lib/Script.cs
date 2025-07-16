@@ -1,27 +1,20 @@
 ﻿using Starscript.Internal;
+using Starscript.Util;
 
 namespace Starscript;
 
 public class Script
 {
-    private byte[] _code;
-    
     public int Size { get; private set; }
     
     public List<Value> Constants { get; } = [];
 
-    public ReadOnlySpan<byte> CodeBuffer => _code;
-
-    public Script()
-    {
-        _code = new byte[8];
-        Array.Fill(_code, (byte)0);
-    }
+    public ResizableBuffer<byte> CodeBuffer { get; } = new();
 
     /// <summary>
     ///     Write an <see cref="Instruction"/> to this <see cref="Script"/>.
     /// </summary>
-    public void Write(Instruction insn) => WriteByte((byte)insn);
+    public void Write(Instruction insn) => CodeBuffer.Write((byte)insn);
 
     /// <summary>
     ///     Write an <see cref="Instruction"/> with an additional byte to this <see cref="Script"/>.
@@ -29,7 +22,7 @@ public class Script
     public void Write(Instruction insn, byte b)
     {
         Write(insn);
-        WriteByte(b);
+        CodeBuffer.Write(b);
     }
 
     /// <summary>
@@ -63,7 +56,7 @@ public class Script
             Constants.Add(constant);
         }
         
-        WriteByte((byte)constIndex);
+        CodeBuffer.Write((byte)constIndex);
     }
 
     /// <summary>
@@ -73,8 +66,8 @@ public class Script
     public int WriteJump(Instruction insn)
     {
         Write(insn);
-        WriteByte(0);
-        WriteByte(0);
+        CodeBuffer.Write(0);
+        CodeBuffer.Write(0);
 
         return Size - 2;
     }
@@ -86,27 +79,7 @@ public class Script
     {
         int jump = Size - offset - 2;
 
-        _code[offset] = (byte)((jump >> 8) & 0xFF);
-        _code[offset + 1] = (byte)(jump & 0xFF);
+        CodeBuffer.Span[offset] = (byte)((jump >> 8) & 0xFF);
+        CodeBuffer.Span[offset + 1] = (byte)(jump & 0xFF);
     }
-    
-    #region Buffer logic
-
-    private void WriteByte(byte b)
-    {
-        GrowIfNeeded();
-        _code[Size++] = b;
-    }
-
-    private void GrowIfNeeded()
-    {
-        if (Size >= _code.Length)
-        {
-            byte[] newBuffer = new byte[(int)(_code.Length * 1.5)];
-            Array.Copy(_code, 0, newBuffer, 0, _code.Length);
-            _code = newBuffer;
-        }
-    }
-
-    #endregion
 }

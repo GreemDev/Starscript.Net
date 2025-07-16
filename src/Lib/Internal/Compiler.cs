@@ -35,6 +35,8 @@ public class Compiler : IExprVisitor
         }
         
         compiler._output.Write(End);
+        
+        compiler._output.CodeBuffer.TrimExcess();
 
         return compiler._output;
     }
