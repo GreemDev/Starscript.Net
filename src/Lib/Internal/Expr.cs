@@ -168,6 +168,8 @@ public abstract class Expr : IExprVisitable
         public Expr Callee => Children.First();
         public int ArgCount => Children.Length - 1;
         public Expr GetArg(int idx) => Children[idx + 1];
+
+        public IEnumerable<Expr> Arguments => Children.Skip(1);
         
         public Call(int start, int end, Expr callee, IEnumerable<Expr> args) : base(start, end, args.Prepend(callee).ToArray())
         {

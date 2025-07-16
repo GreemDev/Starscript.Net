@@ -4,6 +4,8 @@ namespace Starscript;
 
 public class Script
 {
+    public static Script Compile(ParserResult result) => Compiler.Compile(result);
+    
     private byte[] _code;
     
     public int Size { get; private set; }
