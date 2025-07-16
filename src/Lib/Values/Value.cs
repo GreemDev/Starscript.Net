@@ -104,7 +104,8 @@ public class Value
                 var ptr = Marshal.GetFunctionPointerForDelegate(GetFunction());
                 return $"<function@0x{ptr:x8}>";
             case ValueType.Map:
-                throw new NotImplementedException("Implement ValueMap.");
+                var customToString = GetMap().GetRaw("_toString");
+                return customToString?.Invoke()?.ToString() ?? "<map>";
             case ValueType.Object: return GetObject().ToString() ?? string.Empty;
             default: return string.Empty;
         }

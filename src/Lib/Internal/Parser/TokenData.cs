@@ -20,7 +20,7 @@ public record struct TokenData(
         Character = character;
     }
 
-    public void Set(TokenData other) => Set(
+    public void Set(ref TokenData other) => Set(
         other.Token, other.Lexeme, 
         other.Start, other.End, other.Line,
         other.CharacterPos, other.Character

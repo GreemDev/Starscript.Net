@@ -1,13 +1,13 @@
 ﻿namespace Starscript.Internal;
 
-public struct ParserResult : IExprVisitable
+public class ParserResult : IExprVisitable
 {
     public ParserResult()
     {
         Exprs = [];
         Errors = [];
     }
-        
+
     public readonly List<Expr> Exprs;
     public readonly List<ParserError> Errors;
 
