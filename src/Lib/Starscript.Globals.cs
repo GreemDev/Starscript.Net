@@ -25,6 +25,25 @@ public partial class Starscript
         Globals.Set(name, function);
         return this;
     }
+    
+    public Starscript Set(string name, Constraint constraint, ContextualStarscriptFunction contextualFunction) =>
+        Set(name, (ss, argCount) 
+            => contextualFunction(new StarscriptFunctionContext(name, ss, argCount).Constrain(constraint)));
+    
+    public Starscript Set(string name, ContextualStarscriptFunction contextualFunction) =>
+        Set(name, (ss, argCount) 
+            => contextualFunction(new StarscriptFunctionContext(name, ss, argCount)));
+    
+    public Starscript SetToString(Func<string> getter) 
+        => Set("_toString", () => getter());
+
+    public Starscript NewSubMap(string name, Action<ValueMap> init)
+    {
+        var map = new ValueMap();
+        init(map);
+
+        return Set(name, map);
+    }
 
     /// <summary>
     ///     Sets an object variable supplier that always returns the same value for the provided name.

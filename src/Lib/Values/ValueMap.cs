@@ -101,6 +101,25 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
             : value.GetMap().Remove(name2, out removedValue);
     }
 
+    public ValueMap SetFunction(string name, Constraint constraint, ContextualStarscriptFunction contextualFunction) =>
+        Set(name, (ss, argCount) 
+            => contextualFunction(new StarscriptFunctionContext(name, ss, argCount).Constrain(constraint)));
+    
+    public ValueMap SetFunction(string name, ContextualStarscriptFunction contextualFunction) =>
+        Set(name, (ss, argCount) 
+            => contextualFunction(new StarscriptFunctionContext(name, ss, argCount)));
+
+    public ValueMap SetToString(Func<string> getter) 
+        => Set("_toString", () => getter());
+
+    public ValueMap NewSubMap(string name, Action<ValueMap> init)
+    {
+        var map = new ValueMap();
+        init(map);
+
+        return Set(name, map);
+    }
+
     #region IReadOnlyDictionary impl
 
     public IEnumerator<KeyValuePair<string, Func<Value>>> GetEnumerator() => _entries.GetEnumerator();
