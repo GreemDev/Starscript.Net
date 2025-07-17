@@ -110,7 +110,7 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
             => contextualFunction(new StarscriptFunctionContext(name, ss, argCount)));
 
     public ValueMap SetToString(Func<string> getter) 
-        => Set("_toString", () => getter());
+        => Set(Value.ToStringIdentifier, () => getter());
 
     public ValueMap NewSubMap(string name, Action<ValueMap> init)
     {

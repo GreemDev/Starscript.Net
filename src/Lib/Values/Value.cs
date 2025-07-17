@@ -8,6 +8,8 @@ namespace Starscript;
 /// </summary>
 public class Value
 {
+    public const string ToStringIdentifier = "_toString";
+    
     private static readonly Value True = new Boolean(true);
     private static readonly Value False = new Boolean(false);
     
@@ -107,7 +109,7 @@ public class Value
                 var ptr = Marshal.GetFunctionPointerForDelegate(GetFunction());
                 return $"<function@0x{ptr:x8}>";
             case ValueType.Map:
-                var customToString = GetMap().GetRaw("_toString");
+                var customToString = GetMap().GetRaw(ToStringIdentifier);
                 return customToString?.Invoke()?.ToString() ?? "<map>";
             case ValueType.Object: return GetObject().ToString() ?? string.Empty;
             default: return string.Empty;
