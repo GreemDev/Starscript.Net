@@ -207,7 +207,7 @@ public partial class Parser
                     expr = new Expr.Get(start, _current.End, expr, "");
                 }
 
-                TokenData name = Consume(Token.Identifier, "Expected field name after '.'.", expr);
+                ref TokenData name = ref Consume(Token.Identifier, "Expected field name after '.'.", expr);
                 expr = new Expr.Get(start, _previous.End, expr, name.Lexeme);
             }
             else
