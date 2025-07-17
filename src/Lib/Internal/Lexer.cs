@@ -199,7 +199,7 @@ public class Lexer {
     }
 
     private void CreateToken(Token token) {
-        CreateToken(token, _source.Substring(Start, Current));
+        CreateToken(token, _source[Start..Current]);
     }
 
     private bool Match(char expected) {
