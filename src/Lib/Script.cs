@@ -10,6 +10,10 @@ public class Script
     public List<Value> Constants { get; } = [];
 
     public ResizableBuffer<byte> CodeBuffer { get; } = new();
+    
+    public byte GetByteAt(int idx) => CodeBuffer.RoSpan[idx];
+    
+    public int GetMaskedByteAt(int idx) => GetByteAt(idx) & 0xFF;
 
     /// <summary>
     ///     Write an <see cref="Instruction"/> to this <see cref="Script"/>.

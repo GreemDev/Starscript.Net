@@ -2,4 +2,4 @@
 
 public delegate void CompletionCallback(string completion, bool function);
 
-public delegate Value StarscriptFunction(Starscript starscript, int argCount);
+public delegate Value? StarscriptFunction(Starscript starscript, byte argCount);
