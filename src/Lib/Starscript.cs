@@ -8,15 +8,21 @@ namespace Starscript;
 public partial class StarscriptHypervisor
 {
     public readonly ValueMap Globals;
-
-    public StarscriptHypervisor()
+    
+    public StarscriptHypervisor(bool withStandardLibrary = true)
     {
         Globals = new ValueMap();
+
+        if (withStandardLibrary)
+            StandardLibrary.Init(this);
     }
 
-    public StarscriptHypervisor(StarscriptHypervisor parent)
+    public StarscriptHypervisor(StarscriptHypervisor parent, bool withStandardLibrary = true)
     {
         Globals = parent.Globals;
+
+        if (withStandardLibrary)
+            StandardLibrary.Init(this);
     }
 
     [DoesNotReturn]

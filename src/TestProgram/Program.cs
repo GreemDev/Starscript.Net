@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Starscript;
+﻿using Starscript;
 using Starscript.Internal;
 
 string source = "Name: {user.name}     Age: {498474 + 48894}";
