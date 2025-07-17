@@ -33,9 +33,6 @@ public partial class StarscriptHypervisor
     public StarscriptHypervisor Set(string name, ContextualStarscriptFunction contextualFunction) =>
         Set(name, (ss, argCount) 
             => contextualFunction(new StarscriptFunctionContext(name, ss, argCount)));
-    
-    public StarscriptHypervisor SetToString(Func<string> getter) 
-        => Set("_toString", () => getter());
 
     public StarscriptHypervisor NewSubMap(string name, Action<ValueMap> init)
     {
