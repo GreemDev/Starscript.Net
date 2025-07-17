@@ -46,4 +46,4 @@ jobs:
           dotnet build -o ../../nuget_build/client -p:Version="${{ steps.version_info.outputs.build_version }}"
           cd ../../
           
-          dotnet nuget push "nuget_build/Starscript.Net.${{ steps.version_info.outputs.build_version }}.nupkg" --source nuget.org --apikey ${{ secrets.NUGETORG_API_KEY }}
+          dotnet nuget push "nuget_build/Starscript.Net.${{ steps.version_info.outputs.build_version }}.nupkg" --source nuget.org --api-key ${{ secrets.NUGETORG_API_KEY }}
