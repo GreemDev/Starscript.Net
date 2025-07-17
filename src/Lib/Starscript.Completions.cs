@@ -33,7 +33,7 @@ public partial class StarscriptHypervisor
 
         if (expr is Expr.Variable variableExpr)
         {
-            var start = source.Substring(variableExpr.Start, pos);
+            var start = source[variableExpr.Start..pos];
 
             foreach (var key in Globals.Keys)
             {
@@ -49,7 +49,7 @@ public partial class StarscriptHypervisor
 
                 if (value is not null && value.IsMap)
                 {
-                    var start = source.Substring(getExpr.Object.End + 1, pos);
+                    var start = source[(getExpr.Object.End + 1)..pos];
 
                     foreach (var key in value.GetMap().Keys)
                     {

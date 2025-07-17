@@ -75,7 +75,7 @@ public class Lexer {
 
                     case '#':
                         while (char.IsDigit(Peek())) Advance();
-                        CreateToken(Token.Section, _source.Substring(Start + 1, Current));
+                        CreateToken(Token.Section, _source[(Start + 1)..Current]);
                         break;
 
                     default:   Unexpected(); break;
@@ -93,7 +93,7 @@ public class Lexer {
             }
             else if (CanStartSection(c, Peek())) {
                 while (char.IsDigit(Peek())) Advance();
-                CreateToken(Token.Section, _source.Substring(Start + 1, Current));
+                CreateToken(Token.Section, _source[(Start + 1)..Current]);
             }
             else {
                 while (!IsAtEnd && !CanStartExpression(Peek(), PeekNext()) && !CanStartSection(Peek(), PeekNext())) {
