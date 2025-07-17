@@ -4,7 +4,7 @@ public class StarscriptFunctionContext
 {
     public int ArgPos { get; private set; } = 1;
     
-    public StarscriptFunctionContext(string name, Starscript hypervisor, byte argCount)
+    public StarscriptFunctionContext(string name, StarscriptHypervisor hypervisor, byte argCount)
     {
         Name = name;
         Hypervisor = hypervisor;
@@ -14,7 +14,7 @@ public class StarscriptFunctionContext
 
     public string FormattedName => $"{Name}()";
     
-    public Starscript Hypervisor { get; }
+    public StarscriptHypervisor Hypervisor { get; }
     public byte ArgCount { get; }
 
     public StarscriptFunctionContext Constrain(Constraint constraint, string? customError = null)

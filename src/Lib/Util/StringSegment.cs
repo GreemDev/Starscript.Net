@@ -5,7 +5,7 @@ namespace Starscript;
 public class StringSegment
 {
     // ReSharper disable once InconsistentNaming
-    private static readonly ThreadLocal<StringBuilder> tl_StringBuilder = new();
+    private static readonly ThreadLocal<StringBuilder> tl_StringBuilder = new(() => new StringBuilder());
     
     public int Index { get; }
     public string Content { get; }

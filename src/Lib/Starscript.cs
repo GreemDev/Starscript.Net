@@ -3,16 +3,16 @@
 /// <summary>
 ///     A hypervisor capable of running compiled Starscript <see cref="Script"/>s, with contextual global variables.
 /// </summary>
-public partial class Starscript
+public partial class StarscriptHypervisor
 {
     public readonly ValueMap Globals;
 
-    public Starscript()
+    public StarscriptHypervisor()
     {
         Globals = new ValueMap();
     }
 
-    public Starscript(Starscript parent)
+    public StarscriptHypervisor(StarscriptHypervisor parent)
     {
         Globals = parent.Globals;
     }

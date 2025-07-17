@@ -2,7 +2,7 @@
 
 namespace Starscript;
 
-public partial class Starscript
+public partial class StarscriptHypervisor
 {
     private readonly TransparentStack<Value> _stack = new();
 

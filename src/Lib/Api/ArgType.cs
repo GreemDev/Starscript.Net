@@ -4,11 +4,11 @@ public abstract class ArgType<T>
 {
     public string FriendlyName { get; }
 
-    public Func<Starscript, string, T> Popper { get; }
+    public Func<StarscriptHypervisor, string, T> Popper { get; }
 
-    public T Pop(Starscript ss, string error) => Popper(ss, error);
+    public T Pop(StarscriptHypervisor ss, string error) => Popper(ss, error);
 
-    internal ArgType(string friendly, Func<Starscript, string, T> popper)
+    internal ArgType(string friendly, Func<StarscriptHypervisor, string, T> popper)
     {
         FriendlyName = friendly;
         Popper = popper;

@@ -2,7 +2,7 @@
 
 namespace Starscript;
 
-public partial class Starscript
+public partial class StarscriptHypervisor
 { 
     /// <summary>
     ///     Calls the provided callback for every completion that can be resolved from global variables. 

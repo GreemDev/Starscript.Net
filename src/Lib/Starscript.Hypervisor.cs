@@ -4,7 +4,7 @@ using static Starscript.Internal.Instruction;
 
 namespace Starscript;
 
-public partial class Starscript
+public partial class StarscriptHypervisor
 {
     public StringSegment Run(Script script) => Run(script, new StringBuilder());
     
