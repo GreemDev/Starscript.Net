@@ -24,39 +24,35 @@ public partial class StarscriptHypervisor
     {
         var a = Pop();
         
-        if (!a.IsBool)
-            ThrowError(error);
-
-        return a.GetBool();
+        return a.IsBool
+            ? a.GetBool()
+            : throw Error(error);
     }
     
     public double PopNumber(string error)
     {
         var a = Pop();
         
-        if (!a.IsNumber)
-            ThrowError(error);
-
-        return a.GetNumber();
+        return a.IsNumber
+            ? a.GetNumber()
+            : throw Error(error);
     }
     
     public string PopString(string error)
     {
         var a = Pop();
         
-        if (!a.IsString)
-            ThrowError(error);
-
-        return a.GetString();
+        return a.IsString
+            ? a.GetString()
+            : throw Error(error);
     }
     
     public object PopObject(string error)
     {
         var a = Pop();
         
-        if (!a.IsObject)
-            ThrowError(error);
-
-        return a.GetObject();
+        return a.IsObject
+            ? a.GetObject()
+            : throw Error(error);
     }
 }

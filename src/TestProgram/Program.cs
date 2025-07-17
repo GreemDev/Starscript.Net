@@ -1,11 +1,11 @@
 ﻿using Starscript;
 using Starscript.Internal;
 
-string source = "Name: {user.name}     Age: {498474 + 48894}";
+string source = "Name: {user.name}     Age: {user.age()}";
 
 Script script = Compiler.CompileFromSource(source);
 
-var hypervisor = new StarscriptHypervisor();
+var hypervisor = StarscriptHypervisor.CreateWithStdLib().WithStandardLibraryEnv();
 
 hypervisor.Set("user.name", "GreemDev");
 hypervisor.Set("user.age", _ => 5);

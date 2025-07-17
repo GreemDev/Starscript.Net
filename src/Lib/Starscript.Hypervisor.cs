@@ -42,8 +42,8 @@ public partial class StarscriptHypervisor
                         Push(a.GetNumber() + b.GetNumber());
                     else if (a.IsString)
                         Push(a.GetString() + b);
-                    else
-                        ThrowError("Can only add 2 numbers, or 1 string and any other value.");
+                    else 
+                        throw Error("Can only add 2 numbers, or 1 string and any other value.");
 
                     break;
                 }
@@ -54,7 +54,7 @@ public partial class StarscriptHypervisor
                     if (a.IsNumber && b.IsNumber)
                         Push(a.GetNumber() - b.GetNumber());
                     else
-                        ThrowError("Can only subtract 2 numbers.");
+                        throw Error("Can only subtract 2 numbers.");
 
                     break;
                 }
@@ -64,8 +64,8 @@ public partial class StarscriptHypervisor
 
                     if (a.IsNumber && b.IsNumber)
                         Push(a.GetNumber() * b.GetNumber());
-                    else
-                        ThrowError("Can only multiply 2 numbers.");
+                    else 
+                        throw Error("Can only multiply 2 numbers.");
 
                     break;
                 }
@@ -76,7 +76,7 @@ public partial class StarscriptHypervisor
                     if (a.IsNumber && b.IsNumber)
                         Push(a.GetNumber() / b.GetNumber());
                     else
-                        ThrowError("Can only divide 2 numbers.");
+                        throw Error("Can only divide 2 numbers.");
 
                     break;
                 }
@@ -87,7 +87,7 @@ public partial class StarscriptHypervisor
                     if (a.IsNumber && b.IsNumber)
                         Push(a.GetNumber() % b.GetNumber());
                     else
-                        ThrowError("Can only modulo 2 numbers.");
+                        throw Error("Can only modulo 2 numbers.");
 
                     break;
                 }
@@ -98,7 +98,7 @@ public partial class StarscriptHypervisor
                     if (a.IsNumber && b.IsNumber)
                         Push(Math.Pow(a.GetNumber(), b.GetNumber()));
                     else
-                        ThrowError("Can only power 2 numbers.");
+                        throw Error("Can only power 2 numbers.");
 
                     break;
                 }
@@ -113,7 +113,8 @@ public partial class StarscriptHypervisor
                     else if (a.IsString)
                         Push(a.GetString() + b);
                     else
-                        ThrowError("Can only add 2 numbers, or 1 string and any other value.");
+                        throw Error("Can only add 2 numbers, or 1 string and any other value.");
+                    
                     break;
                 }
 
@@ -128,7 +129,8 @@ public partial class StarscriptHypervisor
 
                     if (a.IsNumber)
                         Push(-a.GetNumber());
-                    else ThrowError("Negation requires a number.");
+                    else 
+                        throw Error("Negation requires a number.");
 
                     break;
                 }
@@ -152,7 +154,7 @@ public partial class StarscriptHypervisor
                     if (a.IsNumber && b.IsNumber)
                         Push(a.GetNumber() > b.GetNumber());
                     else
-                        ThrowError("> operation requires 2 numbers.");
+                        throw Error("> operation requires 2 numbers.");
 
                     break;
                 }
@@ -163,7 +165,7 @@ public partial class StarscriptHypervisor
                     if (a.IsNumber && b.IsNumber)
                         Push(a.GetNumber() >= b.GetNumber());
                     else
-                        ThrowError(">= operation requires 2 numbers.");
+                        throw Error(">= operation requires 2 numbers.");
 
                     break;
                 }
@@ -174,7 +176,7 @@ public partial class StarscriptHypervisor
                     if (a.IsNumber && b.IsNumber)
                         Push(a.GetNumber() < b.GetNumber());
                     else
-                        ThrowError("< operation requires 2 numbers.");
+                        throw Error("< operation requires 2 numbers.");
 
                     break;
                 }
@@ -185,7 +187,7 @@ public partial class StarscriptHypervisor
                     if (a.IsNumber && b.IsNumber)
                         Push(a.GetNumber() <= b.GetNumber());
                     else
-                        ThrowError("<= operation requires 2 numbers.");
+                        throw Error("<= operation requires 2 numbers.");
 
                     break;
                 }
@@ -224,7 +226,7 @@ public partial class StarscriptHypervisor
                         Push(result);
                     } 
                     else
-                        ThrowError("Tried to call {0}, can only call functions.", Enum.GetName(a.Type));
+                        throw Error("Tried to call {0}, can only call functions.", Enum.GetName(a.Type));
 
                     break;
                 }
@@ -320,7 +322,7 @@ public partial class StarscriptHypervisor
                         Append(sb, result);
                     } 
                     else
-                        ThrowError("Tried to call {0}, can only call functions.", Enum.GetName(a.Type));
+                        throw Error("Tried to call {0}, can only call functions.", Enum.GetName(a.Type));
 
                     break;
                 }

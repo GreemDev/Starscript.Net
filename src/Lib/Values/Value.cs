@@ -20,11 +20,11 @@ public class Value
         Type = type;
     }
 
-    public static implicit operator Value(bool value) => value ? True : False;
-    public static implicit operator Value(double value) => new Number(value);
-    public static implicit operator Value(string value) => new String(value);
+    public static implicit operator Value(bool? value) => value is null ? Null : value.Value ? True : False;
+    public static implicit operator Value(double? value) => value is null ? Null : new Number(value.Value);
+    public static implicit operator Value(string? value) =>value is null ? Null : new String(value);
     public static implicit operator Value(StarscriptFunction value) => new Function(value);
-    public static implicit operator Value(ValueMap value) => new Map(value);
+    public static implicit operator Value(ValueMap? value) => value is null ? Null : new Map(value);
 
     public bool IsNull => Type is ValueType.Null;
     public bool IsBool => Type is ValueType.Boolean;
