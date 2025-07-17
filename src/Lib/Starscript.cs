@@ -1,4 +1,6 @@
-﻿namespace Starscript;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Starscript;
 
 /// <summary>
 ///     A hypervisor capable of running compiled Starscript <see cref="Script"/>s, with contextual global variables.
@@ -17,6 +19,7 @@ public partial class StarscriptHypervisor
         Globals = parent.Globals;
     }
 
-    public void ThrowError(string format, params object?[] args) 
+    [DoesNotReturn]
+    public static void ThrowError(string format, params object?[] args) 
         => throw new StarscriptException(args.Length == 0 ? format : string.Format(format, args));
 }

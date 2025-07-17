@@ -1,4 +1,6 @@
-﻿namespace Starscript;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Starscript;
 
 public class StarscriptFunctionContext
 {
@@ -16,6 +18,9 @@ public class StarscriptFunctionContext
     
     public StarscriptHypervisor Hypervisor { get; }
     public byte ArgCount { get; }
+
+    [DoesNotReturn]
+    public void Error(string format, params object?[] args) => StarscriptHypervisor.ThrowError(format, args);
 
     public StarscriptFunctionContext Constrain(Constraint constraint, string? customError = null)
     {
