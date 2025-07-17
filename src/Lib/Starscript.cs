@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Starscript;
+﻿namespace Starscript;
 
 /// <summary>
 ///     A hypervisor capable of running compiled Starscript <see cref="Script"/>s, with contextual global variables.
