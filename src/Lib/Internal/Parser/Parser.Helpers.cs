@@ -21,9 +21,8 @@ public partial class Parser
         }
     }
     
-    [DoesNotReturn]
-    private void ThrowParseError(string message, Expr? expr) =>
-        throw new ParserException(new ParserError(_current.Line, _current.CharacterPos, _current.Character, 
+    private ParseException Error(string message, Expr? expr) =>
+        throw new ParseException(new ParserError(_current.Line, _current.CharacterPos, _current.Character, 
             message, expr));
 
     private bool MatchAnyNext(params Token[] tokens)
@@ -44,8 +43,7 @@ public partial class Parser
     {
         if (Check(token)) return ref Advance();
         
-        ThrowParseError(message, expr);
-        return ref Unsafe.NullRef<TokenData>(); //never hit
+        throw Error(message, expr);
     }
     
     private bool Check(Token token) => !IsAtEnd && _current.Token == token;

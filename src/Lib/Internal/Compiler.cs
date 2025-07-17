@@ -20,7 +20,7 @@ public class Compiler : IExprVisitor
     {
         var parsed = Parser.Parse(source);
         if (parsed.HasErrors)
-            throw new ParserException(parsed.Errors.First());
+            throw new ParseException(parsed.Errors.First());
 
         return Compile(parsed);
     }

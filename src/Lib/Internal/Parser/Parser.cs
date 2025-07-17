@@ -33,7 +33,7 @@ public partial class Parser
             {
                 result.Exprs.Add(Statement());
             }
-            catch (ParserException e)
+            catch (ParseException e)
             {
                 result.Errors.Add(e.Error);
                 Synchronize();
@@ -49,7 +49,8 @@ public partial class Parser
     {
         if (MatchAnyNext(Token.Section))
         {
-            if (_previous.Lexeme == string.Empty) ThrowParseError("Expected section index.", null);
+            if (_previous.Lexeme == string.Empty) 
+                throw Error("Expected section index.", null);
 
             int start = _previous.Start;
 
@@ -57,7 +58,8 @@ public partial class Parser
             Expr expr = Expression();
             expr = new Expr.Section(start, _previous.End, index, expr);
 
-            if (index > 255) ThrowParseError("Section index cannot be larger than 255.", expr);
+            if (index > 255) 
+                throw Error("Section index cannot be larger than 255.", expr);
             return expr;
         }
 
@@ -267,7 +269,7 @@ public partial class Parser
             {
                 expr = Statement();
             }
-            catch (ParserException e)
+            catch (ParseException e)
             {
                 e.Error.Expr ??= new Expr.Block(start, _previous.End, null);
 
@@ -284,9 +286,7 @@ public partial class Parser
             return expr;
         }
 
-        ThrowParseError("Expected expression.", null);
-        // null does not need to be checked from this method; the above method call always throws an exception.
-        return null!; 
+        throw Error("Expected expression.", null);
     }
 
     #endregion
