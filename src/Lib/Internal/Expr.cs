@@ -22,7 +22,7 @@ public abstract class Expr : IExprVisitable
         }
     }
 
-    public string GetSource(string source) => source.Substring(Start, End + 1);
+    public string GetSource(string source) => source[Start..End];
 
     public void ReplaceChild(Expr toReplace, Expr replacement)
     {
