@@ -5,6 +5,16 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Starscript</RootNamespace>
+        
+        <Version>1.0.0.0</Version>
+        
+        <Authors>GreemDev</Authors>
+        <RepositoryType>Git</RepositoryType>
+        <RepositoryUrl>https://github.com/GreemDev/Starscript.Net</RepositoryUrl>
+        <PackageLicenseUrl>https://github.com/GreemDev/Starscript.Net/blob/main/LICENSE</PackageLicenseUrl>
+        <Description>Fast text formatting language for C#. Ported from a Java project https://github.com/MeteorDevelopment/starscript</Description>
+        
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
 </Project>
