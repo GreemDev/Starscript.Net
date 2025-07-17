@@ -10,6 +10,8 @@ public static class StandardLibrary
     public static void Init(StarscriptHypervisor hv)
     {
         hv.Set("PI", Math.PI);
+        hv.Set("E", Math.E);
+        hv.Set("tau", Math.Tau);
         hv.Set("time", () => DateTime.Now.ToString(TimeFormat));
         hv.Set("date", () => DateTime.Now.ToString(DateFormat));
         hv.Set("timeUtc", () => DateTime.UtcNow.ToString(TimeFormat));
