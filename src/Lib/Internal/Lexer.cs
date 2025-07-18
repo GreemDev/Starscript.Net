@@ -18,14 +18,14 @@ public class Lexer {
     
     public char CurrentChar;
 
-    private readonly string _source;
+    public string Source { get; }
     private readonly StringBuilder _sb = new();
     private int _expressionDepth;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public Lexer(string source) {
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        _source = source;
+        Source = source;
     }
 
     /** Scans for next token storing it in {@link Lexer#token} and {@link Lexer#lexeme}. Produces {@link Token#EOF} if the end of source code has been reached and {@link Token#Error} if there has been an error. */
@@ -77,7 +77,7 @@ public class Lexer {
 
                     case '#':
                         while (char.IsDigit(Peek())) Advance();
-                        CreateToken(Token.Section, _source[(Start + 1)..Current]);
+                        CreateToken(Token.Section, Source[(Start + 1)..Current]);
                         break;
 
                     default:   Unexpected(); break;
@@ -95,7 +95,7 @@ public class Lexer {
             }
             else if (CanStartSection(c, Peek())) {
                 while (char.IsDigit(Peek())) Advance();
-                CreateToken(Token.Section, _source[(Start + 1)..Current]);
+                CreateToken(Token.Section, Source[(Start + 1)..Current]);
             }
             else {
                 while (!IsAtEnd && !CanStartExpression(Peek(), PeekNext()) && !CanStartSection(Peek(), PeekNext())) {
@@ -205,12 +205,12 @@ public class Lexer {
     }
 
     private void CreateToken(Token token) {
-        CreateToken(token, _source[Start..Current]);
+        CreateToken(token, Source[Start..Current]);
     }
 
     private bool Match(char expected) {
         if (IsAtEnd) return false;
-        if (_source.ElementAt(Current) != expected) return false;
+        if (Source.ElementAt(Current) != expected) return false;
 
         Advance();
         return true;
@@ -218,20 +218,20 @@ public class Lexer {
 
     private char Advance() {
         Character++;
-        return CurrentChar = _source.ElementAt(Current++);
+        return CurrentChar = Source.ElementAt(Current++);
     }
 
     private char Peek() 
         => IsAtEnd 
             ? '\0' 
-            : _source.ElementAt(Current);
+            : Source.ElementAt(Current);
 
     private char PeekNext() 
-        => Current + 1 >= _source.Length 
+        => Current + 1 >= Source.Length 
             ? '\0' 
-            : _source.ElementAt(Current + 1);
+            : Source.ElementAt(Current + 1);
 
-    private bool IsAtEnd => Current >= _source.Length;
+    private bool IsAtEnd => Current >= Source.Length;
 
     private bool IsAlpha(char c) {
         return c is >= 'a' and <= 'z' || c is >= 'A' and <= 'Z' || c == '_';

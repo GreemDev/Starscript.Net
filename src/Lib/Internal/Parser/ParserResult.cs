@@ -2,14 +2,18 @@
 
 public class ParserResult : IExprVisitable
 {
-    public ParserResult()
+    public ParserResult(string source)
     {
         Exprs = [];
         Errors = [];
+
+        Source = source;
     }
 
     public readonly List<Expr> Exprs;
     public readonly List<ParserError> Errors;
+
+    public readonly string Source;
 
     public bool HasErrors => Errors.Count > 0;
 

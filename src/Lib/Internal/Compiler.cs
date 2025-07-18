@@ -27,12 +27,12 @@ public class Compiler : IExprVisitor
         if (parsed.HasErrors)
             throw new ParseException(parsed.Errors.First());
 
-        return Compile(source, parsed);
+        return Compile(parsed);
     }
     
-    public static Script Compile(string source, ParserResult result)
+    public static Script Compile(ParserResult result)
     {
-        var compiler = new Compiler(source);
+        var compiler = new Compiler(result.Source);
         
         foreach (var expr in result.Exprs)
         {

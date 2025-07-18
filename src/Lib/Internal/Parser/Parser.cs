@@ -23,7 +23,7 @@ public partial class Parser
 
     internal ParserResult Run()
     {
-        var result = new ParserResult();
+        var result = new ParserResult(_lexer.Source);
 
         Advance();
 
