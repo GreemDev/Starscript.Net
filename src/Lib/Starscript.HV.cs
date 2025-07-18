@@ -22,7 +22,15 @@ public partial class StarscriptHypervisor
         
         while (true)
         {
+#if DEBUG
+            var insn = (Instruction)script.GetByteAt(instructionPointer++);
+            DebugLog($"Processing {Enum.GetName(insn)} instruction @ ip 0x{instructionPointer - 1:x8} ({instructionPointer - 1})");
+            
+            switch (insn)
+#else
+            
             switch ((Instruction)script.GetByteAt(instructionPointer++))
+#endif
             {
                 case Constant:
                 {
@@ -44,7 +52,7 @@ public partial class StarscriptHypervisor
                         Push(a.GetString() + b);
                     else 
                         throw Error("Can only add 2 numbers, or 1 string and any other value.");
-
+                    
                     break;
                 }
                 case Subtract:
@@ -375,7 +383,13 @@ public partial class StarscriptHypervisor
 
                     break;
                 }
-                case End: goto EndExecution;
+                case End: 
+                    
+#if DEBUG
+                    DebugLog($"Encountered {Enum.GetName(End)} instruction. Breaking execution.");
+#endif
+                    
+                    goto EndExecution;
                 default:
                     throw new InvalidOperationException($"Unknown instruction '{Enum.GetName((Instruction)script.GetByteAt(instructionPointer))}'");
             }
