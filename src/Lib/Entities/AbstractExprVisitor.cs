@@ -2,7 +2,7 @@
 
 namespace Starscript;
 
-public class AbstractExprVisitor : IExprVisitor
+public class AbstractExprVisitor : Expr.IVisitor
 {
     private void VisitAll<TExpr>(TExpr expr) where TExpr : Expr
     {

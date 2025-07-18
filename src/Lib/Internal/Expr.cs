@@ -1,6 +1,6 @@
 ﻿namespace Starscript.Internal;
 
-public abstract class Expr : IExprVisitable
+public abstract class Expr : Expr.IVisitable
 {
     public int Start { get; }
     public int End { get; }
@@ -9,7 +9,7 @@ public abstract class Expr : IExprVisitable
     
     public abstract string ExprName { get; }
 
-    public abstract void Accept(IExprVisitor visitor);
+    public abstract void Accept(IVisitor visitor);
 
     public Expr(int start, int end) : this(start, end, []) { }
     public Expr(int start, int end, Expr[] children)
@@ -41,6 +41,32 @@ public abstract class Expr : IExprVisitable
     }
 
     public void Replace(Expr replacement) => Parent?.ReplaceChild(this, replacement);
+    
+    public interface IVisitor :
+        IVisitor<Null>,
+        IVisitor<String>,
+        IVisitor<Number>,
+        IVisitor<Boolean>,
+        IVisitor<Block>,
+        IVisitor<Group>,
+        IVisitor<Binary>,
+        IVisitor<Unary>,
+        IVisitor<Variable>,
+        IVisitor<Get>,
+        IVisitor<Call>,
+        IVisitor<Logical>,
+        IVisitor<Conditional>,
+        IVisitor<Section>;
+
+    public interface IVisitor<in TExpr> where TExpr : Expr
+    {
+        void Visit(TExpr expr);
+    }
+    
+    public interface IVisitable
+    {
+        public void Accept(IVisitor visitor);
+    }
 
     #region Implementations
 
@@ -52,7 +78,7 @@ public abstract class Expr : IExprVisitable
         {
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
 
     public class String : Expr
@@ -66,7 +92,7 @@ public abstract class Expr : IExprVisitable
             Value = value;
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
 
     public class Number : Expr
@@ -80,7 +106,7 @@ public abstract class Expr : IExprVisitable
             Value = value;
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
     
     public class Boolean : Expr
@@ -94,7 +120,7 @@ public abstract class Expr : IExprVisitable
             Value = value;
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
     
     public class Block : Expr
@@ -107,7 +133,7 @@ public abstract class Expr : IExprVisitable
         {
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
     
     public class Group : Expr
@@ -120,7 +146,7 @@ public abstract class Expr : IExprVisitable
         {
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
 
     public class Binary : Expr
@@ -137,7 +163,7 @@ public abstract class Expr : IExprVisitable
             Operator = op;
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
     
     public class Unary : Expr
@@ -153,7 +179,7 @@ public abstract class Expr : IExprVisitable
             Operator = op;
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
     
     public class Variable : Expr
@@ -167,7 +193,7 @@ public abstract class Expr : IExprVisitable
             Name = name;
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
     
     public class Get : Expr
@@ -182,7 +208,7 @@ public abstract class Expr : IExprVisitable
             Name = name;
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
 
     public class Call : Expr
@@ -199,7 +225,7 @@ public abstract class Expr : IExprVisitable
         {
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
     
     public class Logical : Expr
@@ -216,7 +242,7 @@ public abstract class Expr : IExprVisitable
             Operator = op;
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
     
     public class Conditional : Expr
@@ -231,7 +257,7 @@ public abstract class Expr : IExprVisitable
         {
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
 
     public class Section : Expr
@@ -246,7 +272,7 @@ public abstract class Expr : IExprVisitable
             Index = index;
         }
 
-        public override void Accept(IExprVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IVisitor visitor) => visitor.Visit(this);
     }
 
     #endregion

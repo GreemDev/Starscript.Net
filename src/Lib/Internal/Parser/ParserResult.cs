@@ -1,6 +1,6 @@
 ﻿namespace Starscript.Internal;
 
-public class ParserResult : IExprVisitable
+public class ParserResult : Expr.IVisitable
 {
     public ParserResult(string source)
     {
@@ -17,7 +17,7 @@ public class ParserResult : IExprVisitable
 
     public bool HasErrors => Errors.Count > 0;
 
-    public void Accept(IExprVisitor visitor)
+    public void Accept(Expr.IVisitor visitor)
     {
         foreach (var expr in Exprs) 
             expr.Accept(visitor);

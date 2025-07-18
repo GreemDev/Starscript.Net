@@ -4,7 +4,7 @@ using static Starscript.Internal.Instruction;
 
 namespace Starscript.Internal;
 
-public class Compiler : IExprVisitor
+public class Compiler : Expr.IVisitor
 {
     private readonly Script _output = new();
 
@@ -34,10 +34,7 @@ public class Compiler : IExprVisitor
     {
         var compiler = new Compiler(result.Source);
         
-        foreach (var expr in result.Exprs)
-        {
-            compiler.Compile(expr);
-        }
+        result.Accept(compiler);
         
         compiler._output.Write(End);
         
