@@ -116,7 +116,7 @@ public class Value
         }
     }
 
-    private static readonly NumberFormatInfo FullDoubleFormatInfo = new() { NumberDecimalDigits = 99 };
+    public static readonly NumberFormatInfo FullDoubleFormatInfo = new() { NumberDecimalDigits = 99 };
 
     #region Internal types
     internal class Boolean(bool value) : Value(ValueType.Boolean)
