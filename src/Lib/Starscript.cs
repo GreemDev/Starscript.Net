@@ -12,12 +12,13 @@ public partial class StarscriptHypervisor
 
     public static StarscriptHypervisor CreateStandalone() => new(new ValueMap());
     
-    public static StarscriptHypervisor CreateWithStdLib() 
-        => new StarscriptHypervisor(new ValueMap()).WithStandardLibrary();
+    public static StarscriptHypervisor CreateWithStdLib(bool @unsafe = false) 
+        => CreateStandalone().WithStandardLibrary(@unsafe);
 
-    public static StarscriptHypervisor CreateFromParent(StarscriptHypervisor hv) => new(hv.Globals);
-    public static StarscriptHypervisor CreateFromParentWithStdLib(StarscriptHypervisor hv) 
-        => new StarscriptHypervisor(hv.Globals).WithStandardLibrary();
+    public static StarscriptHypervisor CreateFromParentStandalone(StarscriptHypervisor hv) 
+        => new(hv.Globals);
+    public static StarscriptHypervisor CreateFromParentWithStdLib(StarscriptHypervisor hv, bool @unsafe = false) 
+        => CreateFromParentStandalone(hv).WithStandardLibrary(@unsafe);
 
     private StarscriptHypervisor(ValueMap globals)
     {
