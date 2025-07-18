@@ -76,5 +76,8 @@ public class ResizableBuffer<T>
         CurrentSize = 0;
     }
 
+    /// <summary>
+    ///     Resizes the current buffer to match the current size. This makes the buffer have an equal size to <see cref="CurrentSize"/> to trim off excess entries.
+    /// </summary>
     public void TrimExcess() => Array.Resize(ref _buffer, CurrentSize);
 }
