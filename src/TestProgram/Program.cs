@@ -9,9 +9,10 @@ Console.WriteLine(source);
 
 DebugLogger.AllOutput = true;
 
-Script script = Compiler.DirectCompile(source);
+if (!StarscriptFactory.TryCompile(source, out Script script, Console.WriteLine))
+    return;
 
-var hypervisor = StarscriptHypervisor.CreateWithStdLib().WithStandardLibraryUnsafe();
+var hypervisor = StarscriptHypervisor.CreateWithStdLib(@unsafe: true);
 
 hypervisor.Set("user.name", "GreemDev");
 hypervisor.Set("user.age", _ => 5);
