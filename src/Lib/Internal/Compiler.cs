@@ -41,10 +41,14 @@ public class Compiler : IExprVisitor
         
         compiler._output.Write(End);
         
+#if DEBUG
+        DebugLog($"Resulting script size in bytes before trim: '{compiler._output.CodeBuffer.BufferByteSize}'");
+#endif
+        
         compiler._output.CodeBuffer.TrimExcess();
         
 #if DEBUG
-        DebugLog($"Resulting script size in bytes: '{compiler._output.CodeBuffer.BufferByteSize}'");
+        DebugLog($"Resulting script size in bytes after trim: '{compiler._output.CodeBuffer.BufferByteSize}'");
 #endif
 
         return compiler._output;
