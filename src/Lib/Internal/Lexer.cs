@@ -4,19 +4,26 @@ using Starscript.Util;
 
 namespace Starscript.Internal;
 
-/** Takes starscript source code and produces a stream or tokens that are used for parsing. */
+/// <summary>
+///     Takes starscript source code and produces a stream or tokens that are used for parsing.
+/// </summary>
 public class Lexer {
-    /** The type of the token. */
-    public Token Token;
-    /** The string representation of the token. */
-    public string Lexeme;
+    /// <summary>
+    ///     The type of the token.
+    /// </summary>
+    public Token Token { get; private set; }
+    /// <summary>
+    ///     The string representation of the token.
+    /// </summary>
+    public string Lexeme { get; private set; }
     
-    public int Start { get; set; }
-    public int Current { get; set; }
+    public int Start { get; private set; }
+    public int Current { get; private set; }
 
-    public int Line = 1, Character = -1;
+    public int Line { get; private set; } = 1;
+    public int Character { get; private set; } = -1;
     
-    public char CurrentChar;
+    public char CurrentChar { get; private set; }
 
     public string Source { get; }
     private readonly StringBuilder _sb = new();
@@ -27,8 +34,11 @@ public class Lexer {
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         Source = source;
     }
-
-    /** Scans for next token storing it in {@link Lexer#token} and {@link Lexer#lexeme}. Produces {@link Token#EOF} if the end of source code has been reached and {@link Token#Error} if there has been an error. */
+    
+    /// <summary>
+    /// Scans for next token storing it in <see cref="Token"/> and <see cref="Lexeme"/>.
+    /// Produces <see cref="Token.EOF"/> if the end of source code has been reached and <see cref="Token.Error"/> if there has been an error.
+    /// </summary>
     public void Next() {
         Start = Current;
 
