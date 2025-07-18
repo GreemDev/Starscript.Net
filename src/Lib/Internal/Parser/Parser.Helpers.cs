@@ -55,6 +55,13 @@ public partial class Parser
         
         _lexer.Next();
         _current.Set(_lexer.Token, _lexer.Lexeme, _lexer.Start, _lexer.Current, _lexer.Line, _lexer.Character, _lexer.CurrentChar);
+        
+#if DEBUG
+        DebugLog($"Next token data created: " +
+                 $"Token {_lexer.Token}, Lexeme '{_lexer.Lexeme}', " +
+                 $"Start {_lexer.Start}, End {_lexer.Current}, Line {_lexer.Line}, " +
+                 $"CharPos {_lexer.Character}, Char '{_lexer.CurrentChar}'");
+#endif
 
         return ref _previous;
     }

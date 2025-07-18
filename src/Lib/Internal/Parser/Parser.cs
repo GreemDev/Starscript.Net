@@ -56,6 +56,12 @@ public partial class Parser
 
             int index = int.Parse(_previous.Lexeme);
             Expr expr = Expression();
+            
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Section)} created: Start {start}, End {_previous.End}, " +
+                     $"Index {index} ExprType {expr.ExprName}");
+#endif
+            
             expr = new Expr.Section(start, _previous.End, index, expr);
 
             if (index > 255) 
@@ -81,6 +87,12 @@ public partial class Parser
             Expr trueExpr = Statement();
             Consume(Token.Colon, "Expected ':' after first part of condition.", expr);
             Expr falseExpr = Statement();
+            
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Conditional)} created: Start {start}, End {_previous.End}, " +
+                     $"ConditionType {expr.ExprName} TrueBranchType {trueExpr.ExprName}, FalseBranchType {falseExpr.ExprName}");
+#endif
+            
             expr = new Expr.Conditional(start, _previous.End, expr, trueExpr, falseExpr);
         }
 
@@ -94,8 +106,12 @@ public partial class Parser
         while (MatchAnyNext(Token.And))
         {
             int start = _previous.Start;
-
             Expr right = Or();
+            
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Logical)} created: Start {start}, End {_previous.End}, LeftType {expr.ExprName} Operator {Enum.GetName(Token.And)}, RightType {right.ExprName}");
+#endif
+            
             expr = new Expr.Logical(start, _previous.End, expr, Token.And, right);
         }
 
@@ -109,8 +125,12 @@ public partial class Parser
         while (MatchAnyNext(Token.Or))
         {
             int start = _previous.Start;
-
             Expr right = Equality();
+            
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Logical)} created: Start {start}, End {_previous.End}, LeftType {expr.ExprName} Operator {Enum.GetName(Token.Or)}, RightType {right.ExprName}");
+#endif
+            
             expr = new Expr.Logical(start, _previous.End, expr, Token.Or, right);
         }
 
@@ -126,6 +146,11 @@ public partial class Parser
         {
             Token op = _previous.Token;
             Expr right = Comparison();
+            
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Binary)} created: Start {start}, End {_previous.End}, LeftType {expr.ExprName} Operator {Enum.GetName(op)}, RightType {right.ExprName}");
+#endif
+            
             expr = new Expr.Binary(start, _previous.End, expr, op, right);
         }
 
@@ -141,6 +166,11 @@ public partial class Parser
         {
             Token op = _previous.Token;
             Expr right = Term();
+            
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Binary)} created: Start {start}, End {_previous.End}, LeftType {expr.ExprName} Operator {Enum.GetName(op)}, RightType {right.ExprName}");
+#endif
+            
             expr = new Expr.Binary(start, _previous.End, expr, op, right);
         }
 
@@ -156,6 +186,11 @@ public partial class Parser
         {
             Token op = _previous.Token;
             Expr right = Factor();
+            
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Binary)} created: Start {start}, End {_previous.End}, LeftType {expr.ExprName} Operator {Enum.GetName(op)}, RightType {right.ExprName}");
+#endif
+            
             expr = new Expr.Binary(start, _previous.End, expr, op, right);
         }
 
@@ -171,6 +206,11 @@ public partial class Parser
         {
             Token op = _previous.Token;
             Expr right = Unary();
+
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Binary)} created: Start {start}, End {_previous.End}, LeftType {expr.ExprName} Operator {Enum.GetName(op)}, RightType {right.ExprName}");
+#endif
+
             expr = new Expr.Binary(start, _previous.End, expr, op, right);
         }
 
@@ -185,6 +225,11 @@ public partial class Parser
 
             Token op = _previous.Token;
             Expr right = Unary();
+            
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Unary)} created: Start {start}, End {_previous.End}, Operator {Enum.GetName(op)}, RightType {right.ExprName}");
+#endif
+            
             return new Expr.Unary(start, _previous.End, op, right);
         }
 
@@ -195,6 +240,12 @@ public partial class Parser
     {
         Expr expr = Primary();
         int start = _previous.Start;
+        
+#if DEBUG
+        int? end = null;
+#endif
+        
+
 
         while (true)
         {
@@ -207,16 +258,27 @@ public partial class Parser
                 if (!Check(Token.Identifier))
                 {
                     expr = new Expr.Get(start, _current.End, expr, "");
+#if DEBUG
+                    end = _current.End;
+#endif
                 }
 
                 ref TokenData name = ref Consume(Token.Identifier, "Expected field name after '.'.", expr);
                 expr = new Expr.Get(start, _previous.End, expr, name.Lexeme);
+#if DEBUG
+                end = _previous.End;
+#endif
             }
             else
             {
                 break;
             }
         }
+        
+#if DEBUG
+        if (expr is Expr.Get getExpr)
+            DebugLog($"Expr {nameof(Expr.Get)} created: Start {start}, End {end}, PrimaryType {getExpr.Object.ExprName}");
+#endif
 
         return expr;
     }
@@ -235,16 +297,62 @@ public partial class Parser
 
         Expr expr = new Expr.Call(callee.Start, _previous.End, callee, args);
         Consume(Token.RightParen, "Expected ')' after function arguments.", expr);
+        
+#if DEBUG
+        DebugLog($"Expr {nameof(Expr.Call)} created: Start {callee.Start}, End {_previous.End}, " +
+                 $"CalleeType {callee.ExprName}, ArgTypes ({string.Join(", ", args.Select(x => x.ExprName))})");
+#endif
+        
         return expr;
     }
 
     private Expr Primary()
     {
-        if (MatchAnyNext(Token.Null)) return new Expr.Null(_previous.Start, _previous.End);
-        if (MatchAnyNext(Token.String)) return new Expr.String(_previous.Start, _previous.End, _previous.Lexeme);
-        if (MatchAnyNext(Token.True, Token.False)) return new Expr.Boolean(_previous.Start, _previous.End, _previous.Lexeme.Equals("true"));
-        if (MatchAnyNext(Token.Number)) return new Expr.Number(_previous.Start, _previous.End, double.Parse(_previous.Lexeme));
-        if (MatchAnyNext(Token.Identifier)) return new Expr.Variable(_previous.Start, _previous.End, _previous.Lexeme);
+        if (MatchAnyNext(Token.Null))
+        {
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Null)} created: Start {_previous.Start}, End {_previous.End}");
+#endif
+            
+            return new Expr.Null(_previous.Start, _previous.End);
+        }
+
+        if (MatchAnyNext(Token.String))
+        {
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.String)} created: Start {_previous.Start}, End {_previous.End}, Lexeme '{_previous.Lexeme}'");
+#endif
+            
+            return new Expr.String(_previous.Start, _previous.End, _previous.Lexeme);
+        }
+
+        if (MatchAnyNext(Token.True, Token.False))
+        {
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Boolean)} created: Start {_previous.Start}, End {_previous.End}, Lexeme '{_previous.Lexeme}', Value {_previous.Lexeme.Equals("true")}");
+#endif
+            
+            return new Expr.Boolean(_previous.Start, _previous.End, _previous.Lexeme.Equals("true"));
+        }
+
+        if (MatchAnyNext(Token.Number))
+        {
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Number)} created: Start {_previous.Start}, End {_previous.End}, " +
+                     $"Lexeme '{_previous.Lexeme}', Value {double.Parse(_previous.Lexeme).ToString(Value.FullDoubleFormatInfo)}");
+#endif
+            
+            return new Expr.Number(_previous.Start, _previous.End, double.Parse(_previous.Lexeme));
+        }
+
+        if (MatchAnyNext(Token.Identifier))
+        {
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Variable)} created: Start {_previous.Start}, End {_previous.End}, Lexeme '{_previous.Lexeme}'");
+#endif
+            
+            return new Expr.Variable(_previous.Start, _previous.End, _previous.Lexeme);
+        }
 
         if (MatchAnyNext(Token.LeftParen))
         {
@@ -254,6 +362,11 @@ public partial class Parser
             expr = new Expr.Group(start, _previous.End, expr);
 
             Consume(Token.RightParen, "Expected ')' after expression.", expr);
+            
+#if DEBUG
+            DebugLog($"Expr {nameof(Expr.Group)} created: Start {start}, End {_previous.End}, ExprType {expr.ExprName}");
+#endif
+            
             return expr;
         }
 
@@ -282,6 +395,12 @@ public partial class Parser
             }
 
             Consume(Token.RightBrace, "Expected '}' after expression.", expr);
+            
+#if DEBUG
+            DebugLog($"Expr {expr.ExprName} created: Start {start}, End {_previous.End}, ExpressionDepth {_expressionDepth}, " +
+                     $"ExprType {(expr is Expr.Block blockExpr ? blockExpr.Expr?.ExprName : "null")}");
+#endif
+            
             _expressionDepth--;
             return expr;
         }
