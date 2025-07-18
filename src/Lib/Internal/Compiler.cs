@@ -55,7 +55,7 @@ public class Compiler : IExprVisitor
         _output.Write(Null);
         
 #if DEBUG
-        DebugLog($"Visited: '{expr.GetSource(_source)}'");
+        DebugLog($"Compiled '{expr.GetSource(_source)}'");
 #endif
     }
 
@@ -64,7 +64,7 @@ public class Compiler : IExprVisitor
         _output.Write(_blockDepth == 0 || _constantAppend ? ConstantAppend : Constant, expr.Value);
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', ConstAppend {_constantAppend}, BlockDepth {_blockDepth}, Value '{expr.Value}'");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}', ConstAppend {_constantAppend}, BlockDepth {_blockDepth}, Value '{expr.Value}'");
 #endif
     }
 
@@ -73,7 +73,7 @@ public class Compiler : IExprVisitor
         _output.Write(Constant, expr.Value);
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Value {expr.Value}");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}', Value {expr.Value}");
 #endif
     }
 
@@ -82,7 +82,7 @@ public class Compiler : IExprVisitor
         _output.Write(expr.Value ? True : False);
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Value: {expr.Value}");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}', Value: {expr.Value}");
 #endif
     }
 
@@ -109,7 +109,7 @@ public class Compiler : IExprVisitor
         Compile(expr.Expr);
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', ConstAppend {_constantAppend}, VarAppend {_variableAppend}, GetAppend {_getAppend}, CallAppend {_callAppend}, BlockDepth {_blockDepth}");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}', ConstAppend {_constantAppend}, VarAppend {_variableAppend}, GetAppend {_getAppend}, CallAppend {_callAppend}, BlockDepth {_blockDepth}");
 #endif
 
         if (!_constantAppend && !_variableAppend && !_getAppend && !_callAppend)
@@ -125,7 +125,7 @@ public class Compiler : IExprVisitor
         Compile(expr.Expr);
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}'");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}'");
 #endif
     }
 
@@ -166,7 +166,7 @@ public class Compiler : IExprVisitor
         }
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Operator {Enum.GetName(expr.Operator)}");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}', Operator {Enum.GetName(expr.Operator)}");
 #endif
     }
 
@@ -184,7 +184,7 @@ public class Compiler : IExprVisitor
         }
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Token {Enum.GetName(expr.Operator)}");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}', Token {Enum.GetName(expr.Operator)}");
 #endif
     }
 
@@ -193,7 +193,7 @@ public class Compiler : IExprVisitor
         _output.Write(_variableAppend ? VariableAppend : Variable, expr.Name);
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Name {expr.GetSource(_source)}");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}', Name {expr.GetSource(_source)}");
 #endif
     }
 
@@ -216,7 +216,7 @@ public class Compiler : IExprVisitor
             _output.Write(_getAppend ? GetAppend : Get, expr.Name);
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}'");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}'");
 #endif
     }
 
@@ -233,7 +233,7 @@ public class Compiler : IExprVisitor
         _output.Write(_callAppend ? CallAppend : Call, (byte)expr.ArgCount);
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}'");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}'");
 #endif
     }
 
@@ -249,7 +249,7 @@ public class Compiler : IExprVisitor
         _output.PatchJump(endJump);
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}'");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}'");
 #endif
     }
 
@@ -271,7 +271,7 @@ public class Compiler : IExprVisitor
         _output.PatchJump(endJump);
         
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', FalseJump {falseJump}, EndJump {endJump}");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}', FalseJump {falseJump}, EndJump {endJump}");
 #endif
     }
 
@@ -281,7 +281,7 @@ public class Compiler : IExprVisitor
         Compile(expr.Expr);
 
 #if DEBUG
-        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Index {expr.Index}");
+        DebugLog($"Compiled {expr.ExprName}: '{expr.GetSource(_source)}', Index {expr.Index}");
 #endif
     }
 
