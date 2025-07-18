@@ -2,14 +2,20 @@
 
 public static partial class StandardLibrary
 {
+    /// <summary>
+    ///     Register all variables and functions present in the Starscript <see cref="StandardLibrary"/> math module.
+    /// </summary>
+    /// <param name="hv">The current <see cref="StarscriptHypervisor"/>.</param>
+    /// <returns>The current <see cref="StarscriptHypervisor"/>, for chaining convenience.</returns>
     public static StarscriptHypervisor WithStandardLibraryMath(this StarscriptHypervisor hv) => hv
         .Set("PI", Math.PI)
         .Set("E", Math.E)
         .Set("tau", Math.Tau)
         .Set("round", Round)
         .Set("roundToString", RoundToString)
-        .Set("floor", Constraint.ExactCount(1), Floor)
-        .Set("abs", Constraint.ExactCount(1), Abs)
+        .Set("floor", Floor)
+        .Set("ceil", Ceil)
+        .Set("abs", Abs)
         .Set("rand", Random);
     
     public static Value Round(StarscriptFunctionContext ctx)
@@ -32,25 +38,24 @@ public static partial class StandardLibrary
 
     public static Value RoundToString(StarscriptFunctionContext ctx) => Round(ctx).ToString();
 
-    public static Value Floor(StarscriptFunctionContext ctx) => Math.Floor(ctx.NextNumber());
+    public static Value Floor(StarscriptFunctionContext ctx) => Math.Floor(ctx.Constrain(Constraint.ExactCount(1)).NextNumber());
     
-    public static Value Ceil(StarscriptFunctionContext ctx) => Math.Ceiling(ctx.NextNumber());
+    public static Value Ceil(StarscriptFunctionContext ctx) => Math.Ceiling(ctx.Constrain(Constraint.ExactCount(1)).NextNumber());
 
-    public static Value Abs(StarscriptFunctionContext ctx) => Math.Abs(ctx.NextNumber());
+    public static Value Abs(StarscriptFunctionContext ctx) => Math.Abs(ctx.Constrain(Constraint.ExactCount(1)).NextNumber());
 
     public static Value Random(StarscriptFunctionContext ctx)
     {
-        if (ctx.ArgCount is 0)
+        switch (ctx.ArgCount)
         {
-            return tl_Random.Value!.NextDouble();
-        } 
-        if (ctx.ArgCount is 2)
-        {
-            var (min, max) = ctx.NextTypedPair(ArgType.Number, ArgType.Number);
+            case 0:
+                return tl_Random.Value!.NextDouble();
+            case 2:
+                var (min, max) = ctx.NextTypedPair(ArgType.Number, ArgType.Number);
 
-            return tl_Random.Value!.NextDouble() * (min + (max - min));
+                return tl_Random.Value!.NextDouble() * (min + (max - min));
+            default:
+                throw ctx.Error("{0} requires 0 or 2 arguments, got {1}.", ctx.FormattedName, ctx.ArgCount);
         }
-        
-        throw ctx.Error("{0} requires 0 or 2 arguments, got {1}.", ctx.FormattedName, ctx.ArgCount);
     }
 }

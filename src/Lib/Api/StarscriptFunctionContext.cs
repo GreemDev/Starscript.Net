@@ -52,6 +52,8 @@ public class StarscriptFunctionContext
         return (left, middle, right);
     }
 
+    public Value PopArg() => Hypervisor.Pop();
+
     public T NextArg<T>(ArgType<T> type, string? customError = null)
         => type.Pop(Hypervisor,
             customError ?? $"Argument {ArgPos++} of {FormattedName} needs to be a {type.FriendlyName}.");

@@ -11,7 +11,7 @@ DebugLogger.AllOutput = true;
 
 Script script = Compiler.CompileFromSource(source);
 
-var hypervisor = StarscriptHypervisor.CreateWithStdLib().WithStandardLibraryEnv();
+var hypervisor = StarscriptHypervisor.CreateWithStdLib().WithStandardLibraryUnsafe();
 
 hypervisor.Set("user.name", "GreemDev");
 hypervisor.Set("user.age", _ => 5);

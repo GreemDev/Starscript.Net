@@ -4,7 +4,12 @@ namespace Starscript;
 
 public static partial class StandardLibrary
 {
-    public static StarscriptHypervisor WithStandardLibraryEnv(this StarscriptHypervisor hv) => hv
+    /// <summary>
+    ///     Register all variables and functions present in the Starscript <see cref="StandardLibrary"/> unsafe module.
+    /// </summary>
+    /// <param name="hv">The current <see cref="StarscriptHypervisor"/>.</param>
+    /// <returns>The current <see cref="StarscriptHypervisor"/>, for chaining convenience.</returns>
+    public static StarscriptHypervisor WithStandardLibraryUnsafe(this StarscriptHypervisor hv) => hv
         .NewSubMap("env", map => map
             .SetToString(() => Environment.MachineName)
             .Set("coreCount", () => Environment.ProcessorCount)

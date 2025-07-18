@@ -23,8 +23,9 @@ public partial class StarscriptHypervisor
         while (true)
         {
 #if DEBUG
-            var insn = (Instruction)script.GetByteAt(instructionPointer++);
-            DebugLog($"Processing {Enum.GetName(insn)} instruction @ ip 0x{instructionPointer - 1:x8} ({instructionPointer - 1})");
+            var idx = instructionPointer++;
+            var insn = (Instruction)script.GetByteAt(idx);
+            DebugLog($"Processing {Enum.GetName(insn)} instruction @ ip 0x{idx:x8} ({idx})");
             
             switch (insn)
 #else
