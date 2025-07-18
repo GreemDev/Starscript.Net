@@ -42,18 +42,49 @@ public class Compiler : IExprVisitor
         compiler._output.Write(End);
         
         compiler._output.CodeBuffer.TrimExcess();
+        
+#if DEBUG
+        DebugLog($"Resulting script size in bytes: '{compiler._output.CodeBuffer.BufferByteSize}'");
+#endif
 
         return compiler._output;
     }
 
-    public void Visit(Expr.Null expr) => _output.Write(Null);
+    public void Visit(Expr.Null expr)
+    {
+        _output.Write(Null);
+        
+#if DEBUG
+        DebugLog($"Visited: '{expr.GetSource(_source)}'");
+#endif
+    }
 
     public void Visit(Expr.String expr)
-        => _output.Write(_blockDepth == 0 || _constantAppend ? ConstantAppend : Constant, expr.Value);
+    {
+        _output.Write(_blockDepth == 0 || _constantAppend ? ConstantAppend : Constant, expr.Value);
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', ConstAppend {_constantAppend}, BlockDepth {_blockDepth}, Value '{expr.Value}'");
+#endif
+    }
 
-    public void Visit(Expr.Number expr) => _output.Write(Constant, expr.Value);
+    public void Visit(Expr.Number expr)
+    {
+        _output.Write(Constant, expr.Value);
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Value {expr.Value}");
+#endif
+    }
 
-    public void Visit(Expr.Boolean expr) => _output.Write(expr.Value ? True : False);
+    public void Visit(Expr.Boolean expr)
+    {
+        _output.Write(expr.Value ? True : False);
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Value: {expr.Value}");
+#endif
+    }
 
     public void Visit(Expr.Block expr)
     {
@@ -76,6 +107,10 @@ public class Compiler : IExprVisitor
         }
 
         Compile(expr.Expr);
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', ConstAppend {_constantAppend}, VarAppend {_variableAppend}, GetAppend {_getAppend}, CallAppend {_callAppend}, BlockDepth {_blockDepth}");
+#endif
 
         if (!_constantAppend && !_variableAppend && !_getAppend && !_callAppend)
             _output.Write(Append);
@@ -85,7 +120,14 @@ public class Compiler : IExprVisitor
         _blockDepth--;
     }
 
-    public void Visit(Expr.Group expr) => Compile(expr.Expr);
+    public void Visit(Expr.Group expr)
+    {
+        Compile(expr.Expr);
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}'");
+#endif
+    }
 
     public void Visit(Expr.Binary expr)
     {
@@ -122,6 +164,10 @@ public class Compiler : IExprVisitor
             case Token.Less:         _output.Write(Less); break;
             case Token.LessEqual:    _output.Write(LessEqual); break;
         }
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Operator {Enum.GetName(expr.Operator)}");
+#endif
     }
 
     public void Visit(Expr.Unary expr)
@@ -136,10 +182,20 @@ public class Compiler : IExprVisitor
                 _output.Write(Negate);
                 break;
         }
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Token {Enum.GetName(expr.Operator)}");
+#endif
     }
 
     public void Visit(Expr.Variable expr)
-        => _output.Write(_variableAppend ? VariableAppend : Variable, expr.Name);
+    {
+        _output.Write(_variableAppend ? VariableAppend : Variable, expr.Name);
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Name {expr.GetSource(_source)}");
+#endif
+    }
 
     public void Visit(Expr.Get expr)
     {
@@ -158,6 +214,10 @@ public class Compiler : IExprVisitor
         }
         else
             _output.Write(_getAppend ? GetAppend : Get, expr.Name);
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}'");
+#endif
     }
 
     public void Visit(Expr.Call expr)
@@ -171,6 +231,10 @@ public class Compiler : IExprVisitor
 
         _callAppend = prevCallAppend;
         _output.Write(_callAppend ? CallAppend : Call, (byte)expr.ArgCount);
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}'");
+#endif
     }
 
     public void Visit(Expr.Logical expr)
@@ -183,6 +247,10 @@ public class Compiler : IExprVisitor
         Compile(expr.Right);
         
         _output.PatchJump(endJump);
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}'");
+#endif
     }
 
     public void Visit(Expr.Conditional expr)
@@ -201,12 +269,20 @@ public class Compiler : IExprVisitor
         Compile(expr.FalseBranch);
         
         _output.PatchJump(endJump);
+        
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', FalseJump {falseJump}, EndJump {endJump}");
+#endif
     }
 
     public void Visit(Expr.Section expr)
     {
         _output.Write(Section, expr.Index);
         Compile(expr.Expr);
+
+#if DEBUG
+        DebugLog($"Visited {expr.ExprName}: '{expr.GetSource(_source)}', Index {expr.Index}");
+#endif
     }
 
     public void Compile(Expr? expr) => expr?.Accept(this);
