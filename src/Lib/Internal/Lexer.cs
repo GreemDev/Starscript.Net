@@ -36,8 +36,8 @@ public class Lexer {
     }
     
     /// <summary>
-    /// Scans for next token storing it in <see cref="Token"/> and <see cref="Lexeme"/>.
-    /// Produces <see cref="Token.EOF"/> if the end of source code has been reached and <see cref="Token.Error"/> if there has been an error.
+    ///     Scans for next token storing it in <see cref="Token"/> and <see cref="Lexeme"/>. <br/>
+    ///     Produces <see cref="Token.EOF"/> if the end of source code has been reached, and <see cref="Token.Error"/> if there has been an error.
     /// </summary>
     public void Next() {
         Start = Current;
