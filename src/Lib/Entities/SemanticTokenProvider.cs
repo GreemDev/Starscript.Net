@@ -102,7 +102,46 @@ public partial record struct SemanticToken
             // Add the error token starting at the error position going to the end of the source
             tokens.Add(new SemanticToken(SemanticTokenType.Error, error.CharacterPos, source.Length));
         }
+        else 
+            result.Accept(new Visitor(tokens));
+        
 
         tokens.Sort(Comparer<SemanticToken>.Create((x, y) => x.Start.CompareTo(y.Start)));
+    }
+
+    private class Visitor : AbstractExprVisitor
+    {
+        private readonly List<SemanticToken> _tokens;
+        
+        public Visitor(List<SemanticToken> tokens)
+        {
+            _tokens = tokens;
+        }
+
+        public override void Visit(Expr.Variable expr)
+        {
+            if (expr.Parent is not Expr.Get)
+                _tokens.Add(new SemanticToken(SemanticTokenType.Identifier, expr.End - expr.Name.Length, expr.End));
+            
+            base.Visit(expr);
+        }
+
+        public override void Visit(Expr.Get expr)
+        {
+            switch (expr.Object)
+            {
+                case Expr.Variable:
+                    _tokens.Add(new SemanticToken(SemanticTokenType.Map, expr.Start, expr.End));
+                    break;
+                case Expr.Get getExpr:
+                    _tokens.Add(new SemanticToken(SemanticTokenType.Map, getExpr.End - getExpr.Name.Length, expr.End));
+                    break;
+            }
+
+            if (expr.Parent is not Expr.Get)
+                _tokens.Add(new SemanticToken(SemanticTokenType.Identifier, expr.End - expr.Name.Length, expr.End));
+
+            base.Visit(expr);
+        }
     }
 }
