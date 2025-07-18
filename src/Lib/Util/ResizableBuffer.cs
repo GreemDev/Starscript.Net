@@ -61,7 +61,8 @@ public class ResizableBuffer<T>
     {
         if (CurrentSize >= _buffer.Length)
         {
-            T[] newBuffer = new T[(int)(_buffer.Length * 1.5)];
+            // the Math.Max ensures the buffer can never get stuck at 0 length (0 * 1.5 = 0 = buffer doesn't grow)
+            T[] newBuffer = new T[Math.Max((int)(_buffer.Length * 1.5), 2)];
             Array.Copy(_buffer, 0, newBuffer, 0, _buffer.Length);
             _buffer = newBuffer;
         }
