@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
+using Starscript.Util;
 
 namespace Starscript.Internal;
 
@@ -234,4 +236,16 @@ public class Lexer {
     private bool IsAlphanumeric(char c) {
         return IsAlpha(c) || char.IsDigit(c);
     }
+
+#if DEBUG
+    private static void DebugLog(string message,
+        [CallerFilePath] string sourceLocation = default!,
+        [CallerLineNumber] int lineNumber = default,
+        [CallerMemberName] string callerName = default!)
+    {
+        if (DebugLogger.CompilerOutput)
+            // ReSharper disable ExplicitCallerInfoArgument
+            DebugLogger.Print(DebugLogSource.Lexer, message, InvocationInfo.Here(sourceLocation, lineNumber, callerName));
+    }
+#endif
 }

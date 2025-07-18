@@ -1,4 +1,6 @@
-﻿using static Starscript.Internal.Instruction;
+﻿using System.Runtime.CompilerServices;
+using Starscript.Util;
+using static Starscript.Internal.Instruction;
 
 namespace Starscript.Internal;
 
@@ -12,8 +14,11 @@ public class Compiler : IExprVisitor
     private bool _getAppend;
     private bool _callAppend;
 
-    private Compiler()
+    private readonly string _source;
+
+    private Compiler(string source)
     {
+        _source = source;
     }
 
     public static Script CompileFromSource(string source)
@@ -22,12 +27,12 @@ public class Compiler : IExprVisitor
         if (parsed.HasErrors)
             throw new ParseException(parsed.Errors.First());
 
-        return Compile(parsed);
+        return Compile(source, parsed);
     }
     
-    public static Script Compile(ParserResult result)
+    public static Script Compile(string source, ParserResult result)
     {
-        var compiler = new Compiler();
+        var compiler = new Compiler(source);
         
         foreach (var expr in result.Exprs)
         {
@@ -205,4 +210,19 @@ public class Compiler : IExprVisitor
     }
 
     public void Compile(Expr? expr) => expr?.Accept(this);
+
+#if DEBUG
+    
+    private static void DebugLog(string message,
+        [CallerFilePath] string sourceLocation = default!,
+        [CallerLineNumber] int lineNumber = default,
+        [CallerMemberName] string callerName = default!)
+    {
+        if (DebugLogger.CompilerOutput)
+            // ReSharper disable ExplicitCallerInfoArgument
+            DebugLogger.Print(DebugLogSource.Compiler, message, InvocationInfo.Here(sourceLocation, lineNumber, callerName));
+    }
+    
+#endif
+
 }

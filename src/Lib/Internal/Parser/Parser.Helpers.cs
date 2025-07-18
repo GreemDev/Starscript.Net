@@ -1,4 +1,6 @@
-﻿using Starscript.Internal;
+﻿using System.Runtime.CompilerServices;
+using Starscript.Internal;
+using Starscript.Util;
 
 namespace Starscript;
 
@@ -56,4 +58,16 @@ public partial class Parser
 
         return ref _previous;
     }
+
+#if DEBUG
+    private void DebugLog(string message,
+        [CallerFilePath] string sourceLocation = default!,
+        [CallerLineNumber] int lineNumber = default,
+        [CallerMemberName] string callerName = default!)
+    {
+        if (DebugLogger.ParserOutput)
+            // ReSharper disable ExplicitCallerInfoArgument
+            DebugLogger.Print(DebugLogSource.Parser, message, InvocationInfo.Here(sourceLocation, lineNumber, callerName));
+    }
+#endif
 }
