@@ -195,9 +195,13 @@ public class Lexer {
         CreateToken(Token.Error, "Unexpected character.");
     }
 
-    private void CreateToken(Token token, String lexeme) {
+    private void CreateToken(Token token, string lexeme) {
         Token = token;
         Lexeme = lexeme;
+
+#if DEBUG
+        DebugLog($"{Enum.GetName(Token)} created: '{lexeme}'");
+#endif
     }
 
     private void CreateToken(Token token) {
