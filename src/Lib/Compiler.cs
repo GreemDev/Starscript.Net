@@ -1,8 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
+using Starscript.Internal;
 using Starscript.Util;
 using static Starscript.Internal.Instruction;
 
-namespace Starscript.Internal;
+namespace Starscript;
 
 public class Compiler : Expr.IVisitor
 {
