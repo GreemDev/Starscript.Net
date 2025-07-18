@@ -2,7 +2,7 @@
 using Starscript.Internal;
 using Starscript.Util;
 
-string source = "Name: {user.name}     Age: {user.age()}";
+string source = "Name: {user.name}     Age: {false ? 0 : user.age()}";
 
 Console.WriteLine("Input: ");
 Console.WriteLine(source);

@@ -5,8 +5,6 @@ namespace Starscript;
 
 public class Script
 {
-    public int Size { get; private set; }
-    
     public List<Value> Constants { get; } = [];
 
     public ResizableBuffer<byte> CodeBuffer { get; } = new();
@@ -73,7 +71,7 @@ public class Script
         CodeBuffer.Write(0);
         CodeBuffer.Write(0);
 
-        return Size - 2;
+        return CodeBuffer.CurrentSize - 2;
     }
 
     /// <summary>
@@ -81,7 +79,7 @@ public class Script
     /// </summary>
     public void PatchJump(int offset)
     {
-        int jump = Size - offset - 2;
+        int jump = CodeBuffer.CurrentSize - offset - 2;
 
         CodeBuffer.Span[offset] = (byte)((jump >> 8) & 0xFF);
         CodeBuffer.Span[offset + 1] = (byte)(jump & 0xFF);
