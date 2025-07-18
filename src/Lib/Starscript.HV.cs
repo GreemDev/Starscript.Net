@@ -8,7 +8,7 @@ public partial class StarscriptHypervisor
 {
     public StringSegment Run(Script script) => Run(script, new StringBuilder());
     
-    public StringSegment Run(Script script, StringBuilder sb)
+    internal StringSegment Run(Script script, StringBuilder sb)
     {
         _stack.Clear();
 
