@@ -9,7 +9,7 @@ Console.WriteLine(source);
 
 DebugLogger.AllOutput = true;
 
-Script script = Compiler.CompileFromSource(source);
+Script script = Compiler.DirectCompile(source);
 
 var hypervisor = StarscriptHypervisor.CreateWithStdLib().WithStandardLibraryUnsafe();
 

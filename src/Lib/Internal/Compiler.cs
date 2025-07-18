@@ -21,7 +21,7 @@ public class Compiler : IExprVisitor
         _source = source;
     }
 
-    public static Script CompileFromSource(string source)
+    public static Script DirectCompile(string source)
     {
         var parsed = Parser.Parse(source);
         if (parsed.HasErrors)
