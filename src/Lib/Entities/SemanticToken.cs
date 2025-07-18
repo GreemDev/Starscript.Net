@@ -3,7 +3,7 @@
 /// <summary>
 ///     A single token containing its <see cref="SemanticTokenType"/> and position in the source string.
 /// </summary>
-public record struct SemanticToken(SemanticTokenType Type, int Start, int End);
+public partial record struct SemanticToken(SemanticTokenType Type, int Start, int End);
 
 public enum SemanticTokenType
 {
