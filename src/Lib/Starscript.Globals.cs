@@ -59,4 +59,11 @@ public partial class StarscriptHypervisor
     ///     Removes a single value with the specified name from the globals and returns the removed value.
     /// </summary>
     public bool Remove(string name, out Func<Value> removedValue) => Globals.Remove(name, out removedValue);
+
+    /// <summary>
+    ///     Returns a new <see cref="StarscriptHypervisor"/> with the globals inherited from this one.
+    ///     Useful for maintaining multiple <see cref="StarscriptHypervisor"/>s for varied use-cases, inheriting from a single globals map with minor differences.
+    /// </summary>
+    /// <returns></returns>
+    public StarscriptHypervisor CopyGlobalsToNew() => CreateFromParentStandalone(this);
 }

@@ -5,12 +5,17 @@ namespace Starscript;
 
 public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
 {
-    private readonly Dictionary<string, Func<Value>> _entries = new();
+    private readonly Dictionary<string, Func<Value>> _entries;
 
     /// <summary>
     ///     Removes all keys and values from this <see cref="ValueMap"/>.
     /// </summary>
     public void Clear() => _entries.Clear();
+
+    public ValueMap(Dictionary<string, Func<Value>>? entries = null)
+    {
+        _entries = entries ?? new Dictionary<string, Func<Value>>();
+    }
 
     public ValueMap SetRaw(string name, Func<Value> value)
     {
@@ -119,6 +124,8 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
 
         return Set(name, map);
     }
+
+    public ValueMap Copy() => new(new Dictionary<string, Func<Value>>(_entries));
 
     #region IReadOnlyDictionary impl
 
