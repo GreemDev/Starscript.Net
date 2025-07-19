@@ -1,5 +1,4 @@
 ﻿using Starscript;
-using Starscript.Internal;
 using Starscript.Util;
 
 string source = "Name: {user.name}     Age: {false ? 0 : user.age()}";
