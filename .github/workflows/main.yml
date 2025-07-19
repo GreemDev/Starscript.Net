@@ -43,7 +43,7 @@ jobs:
       - name: Compile & publish
         run: |
           cd src/Lib
-          dotnet build -o ../../nuget_build -p:Version="${{ steps.version_info.outputs.build_version }}"
+          dotnet build -c Release -o ../../nuget_build -p:Version="${{ steps.version_info.outputs.build_version }}"
           cd ../../
           
           dotnet nuget push "nuget_build/Starscript.Net.${{ steps.version_info.outputs.build_version }}.nupkg" --source nuget.org --api-key ${{ secrets.NUGETORG_API_KEY }}
