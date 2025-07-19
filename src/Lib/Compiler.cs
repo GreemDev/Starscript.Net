@@ -2,6 +2,7 @@
 using Starscript.Internal;
 using Starscript.Util;
 using static Starscript.Internal.Instruction;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace Starscript;
 
@@ -15,20 +16,35 @@ public class Compiler : Expr.IVisitor
     private bool _getAppend;
     private bool _callAppend;
 
+#if DEBUG
     private readonly string _source;
+#endif
 
-    public Compiler(string source)
+    public Compiler(
+#if DEBUG
+        string source
+#endif
+        )
     {
+#if DEBUG
         _source = source;
+#endif
         _output = new MutableScript();
     }
 
-    public Compiler(string source, ref MutableScript script)
+    public Compiler(
+#if DEBUG
+        string source,
+#endif
+        ref MutableScript script)
     {
+#if DEBUG
         _source = source;
+#endif
         _output = script;
     }
-
+    
+    /// <exception cref="ParseException">Thrown if the internal <see cref="ParserResult"/> contains any errors.</exception>
     public static Script DirectCompile(string source)
     {
         var parsed = Parser.Parse(source);
@@ -40,7 +56,12 @@ public class Compiler : Expr.IVisitor
     
     public static Script Compile(ParserResult result)
     {
-        var compiler = new Compiler(result.Source);
+        var compiler =
+#if DEBUG
+            new Compiler(result.Source);
+#else
+            new Compiler();
+#endif
 
         var mutableScript = compiler.Run(result);
         
@@ -59,7 +80,12 @@ public class Compiler : Expr.IVisitor
 
     public MutableScript Run(ParserResult result)
     {
-        var compiler = new Compiler(result.Source);
+        var compiler =
+#if DEBUG
+            new Compiler(result.Source);
+#else
+            new CompilerF();
+#endif
         
         result.Accept(compiler);
 
