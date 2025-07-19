@@ -1,4 +1,6 @@
-﻿namespace Starscript;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Starscript;
 
 public partial class StarscriptHypervisor
 {
@@ -58,7 +60,8 @@ public partial class StarscriptHypervisor
     /// <summary>
     ///     Removes a single value with the specified name from the globals and returns the removed value.
     /// </summary>
-    public bool Remove(string name, out Func<Value> removedValue) => Globals.Remove(name, out removedValue);
+    public bool Remove(string name, [MaybeNullWhen(false)] out Func<Value> removedValue) 
+        => Globals.Remove(name, out removedValue);
 
     /// <summary>
     ///     Returns a new <see cref="StarscriptHypervisor"/> with the globals inherited from this one.

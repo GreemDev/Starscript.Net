@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using Starscript.Internal;
 
 namespace Starscript.Util;
@@ -43,7 +44,7 @@ public class VariableReplacementTransformer : AbstractExprVisitor
         return expr;
     }
 
-    private bool TryGetFullName(Expr.Get expr, out string name)
+    private bool TryGetFullName(Expr.Get expr, [MaybeNullWhen(false)] out string name)
     {
         try
         {
