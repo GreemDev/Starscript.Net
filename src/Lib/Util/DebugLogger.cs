@@ -25,6 +25,13 @@ public static class DebugLogger
     public static bool CompilerOutput { get; set; } = false;
     public static bool HypervisorOutput { get; set; } = false;
     
+    public static void Print(DebugLogSource source, string message,
+        [CallerFilePath] string sourceLocation = default!,
+        [CallerLineNumber] int lineNumber = default,
+        [CallerMemberName] string callerName = default!)
+        // ReSharper disable ExplicitCallerInfoArgument
+        => Print(source, message, InvocationInfo.Here(sourceLocation, lineNumber, callerName));
+    
     public static void Print(DebugLogSource source, string message, InvocationInfo invocation = default)
     {
         if (!invocation.IsInitialized)

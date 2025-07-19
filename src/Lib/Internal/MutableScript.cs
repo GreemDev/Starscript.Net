@@ -3,23 +3,37 @@ using Starscript.Util;
 
 namespace Starscript;
 
-public class Script
+public class MutableScript
 {
     public List<Value> Constants { get; } = [];
 
     public ResizableBuffer<byte> CodeBuffer { get; } = new();
-    
-    public byte GetByteAt(int idx) => CodeBuffer.RoSpan[idx];
-    
-    public int GetMaskedByteAt(int idx) => GetByteAt(idx) & 0xFF;
+
+    public Script MoveToImmutable()
+    {
+        // Trim the excess (null) bytes before copying
+        CodeBuffer.TrimExcess();
+        
+        var codeCopy = CodeBuffer.Span.ToArray();
+        var constantsCopy = new List<Value>(Constants);
+        
+        // Clear the current script's memory, potentially useful for a reusable script instance system in the future(?)
+        CodeBuffer.ResetAndClear();
+        Constants.Clear();
+        
+        return new Script(
+            codeCopy,
+            constantsCopy.AsReadOnly()
+        );
+    }
 
     /// <summary>
-    ///     Write an <see cref="Instruction"/> to this <see cref="Script"/>.
+    ///     Write an <see cref="Instruction"/> to this <see cref="MutableScript"/>.
     /// </summary>
     public void Write(Instruction insn) => CodeBuffer.Write((byte)insn);
 
     /// <summary>
-    ///     Write an <see cref="Instruction"/> with an additional byte to this <see cref="Script"/>.
+    ///     Write an <see cref="Instruction"/> with an additional byte to this <see cref="MutableScript"/>.
     /// </summary>
     public void Write(Instruction insn, byte b)
     {
@@ -28,7 +42,7 @@ public class Script
     }
 
     /// <summary>
-    ///     Write an <see cref="Instruction"/> with an additional constant to this <see cref="Script"/>.
+    ///     Write an <see cref="Instruction"/> with an additional constant to this <see cref="MutableScript"/>.
     /// </summary>
     public void Write(Instruction insn, Value constant)
     {
@@ -37,7 +51,7 @@ public class Script
     }
 
     /// <summary>
-    ///     Write a constant <see cref="Value"/> to this <see cref="Script"/>.
+    ///     Write a constant <see cref="Value"/> to this <see cref="MutableScript"/>.
     /// </summary>
     public void WriteConstant(Value constant)
     {

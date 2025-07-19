@@ -7,7 +7,7 @@ namespace Starscript;
 
 public class Compiler : Expr.IVisitor
 {
-    private readonly Script _output = new();
+    private readonly MutableScript _output = new();
 
     private int _blockDepth;
     private bool _constantAppend;
@@ -17,9 +17,16 @@ public class Compiler : Expr.IVisitor
 
     private readonly string _source;
 
-    private Compiler(string source)
+    public Compiler(string source)
     {
         _source = source;
+        _output = new MutableScript();
+    }
+
+    public Compiler(string source, ref MutableScript script)
+    {
+        _source = source;
+        _output = script;
     }
 
     public static Script DirectCompile(string source)
@@ -34,23 +41,35 @@ public class Compiler : Expr.IVisitor
     public static Script Compile(ParserResult result)
     {
         var compiler = new Compiler(result.Source);
+
+        var mutableScript = compiler.Run(result);
+        
+#if DEBUG
+        DebugLog($"Resulting mutable script size in bytes before trim: '{mutableScript.CodeBuffer.BufferByteSize}'");
+#endif
+
+        var immutableScript = mutableScript.MoveToImmutable();
+        
+#if DEBUG
+        DebugLog($"Resulting immutable script size in bytes after move to immutable: '{immutableScript.Code.Length * Unsafe.SizeOf<byte>()}'");
+#endif
+
+        return immutableScript;
+    }
+
+    public MutableScript Run(ParserResult result)
+    {
+        var compiler = new Compiler(result.Source);
         
         result.Accept(compiler);
-        
-        compiler._output.Write(End);
-        
-#if DEBUG
-        DebugLog($"Resulting script size in bytes before trim: '{compiler._output.CodeBuffer.BufferByteSize}'");
-#endif
-        
-        compiler._output.CodeBuffer.TrimExcess();
-        
-#if DEBUG
-        DebugLog($"Resulting script size in bytes after trim: '{compiler._output.CodeBuffer.BufferByteSize}'");
-#endif
+
+        compiler.WriteEnd();
 
         return compiler._output;
     }
+
+    public void WriteEnd() => _output.Write(End);
+    public Script MoveToImmutableAndReset() => _output.MoveToImmutable();
 
     public void Visit(Expr.Null expr)
     {

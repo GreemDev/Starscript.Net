@@ -76,6 +76,15 @@ public class ResizableBuffer<T>
         Array.Resize(ref _buffer, _initialCapacity);
         CurrentSize = 0;
     }
+    
+    /// <summary>
+    ///     Resizes the current buffer to 0 and sets the <see cref="CurrentSize"/> to 0.
+    /// </summary>
+    public void ResetAndClear()
+    {
+        Array.Resize(ref _buffer, 0);
+        CurrentSize = 0;
+    }
 
     /// <summary>
     ///     Resizes the current buffer to match the current size. This makes the buffer have an equal size to <see cref="CurrentSize"/> to trim off excess entries.
