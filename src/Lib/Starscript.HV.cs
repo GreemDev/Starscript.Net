@@ -290,12 +290,12 @@ public partial class StarscriptHypervisor
 
                 case Instruction.Append:
                 {
-                    sb.Append(Pop());
+                    Append(sb, Pop());
                     break;
                 }
                 case ConstantAppend:
                 {
-                    sb.Append(script.Constants[script.GetMaskedByteAt(instructionPointer++)]);
+                    Append(sb, script.Constants[script.GetMaskedByteAt(instructionPointer++)]);
                     break;
                 }
                 case VariableAppend:
