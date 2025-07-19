@@ -84,7 +84,7 @@ public class Compiler : Expr.IVisitor
 #if DEBUG
             new Compiler(result.Source);
 #else
-            new CompilerF();
+            new Compiler();
 #endif
         
         result.Accept(compiler);
