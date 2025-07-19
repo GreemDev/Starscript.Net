@@ -7,7 +7,7 @@ namespace Starscript;
 public partial class StarscriptHypervisor
 {
     public StringSegment Run(Script script) => Run(script, new StringBuilder());
-    
+
     internal StringSegment Run(Script script, StringBuilder sb)
     {
         _stack.Clear();
@@ -19,17 +19,16 @@ public partial class StarscriptHypervisor
         StringSegment? firstSegment = null;
         StringSegment? segment = null;
         int index = 0;
-        
+
         while (true)
         {
 #if DEBUG
             var idx = instructionPointer++;
             var insn = (Instruction)script.GetByteAt(idx);
             DebugLog($"Processing {Enum.GetName(insn)} instruction @ ip 0x{idx:x8} ({idx})");
-            
+
             switch (insn)
 #else
-            
             switch ((Instruction)script.GetByteAt(instructionPointer++))
 #endif
             {
@@ -51,9 +50,9 @@ public partial class StarscriptHypervisor
                         Push(a.GetNumber() + b.GetNumber());
                     else if (a.IsString)
                         Push(a.GetString() + b);
-                    else 
+                    else
                         throw Error("Can only add 2 numbers, or 1 string and any other value.");
-                    
+
                     break;
                 }
                 case Subtract:
@@ -73,7 +72,7 @@ public partial class StarscriptHypervisor
 
                     if (a.IsNumber && b.IsNumber)
                         Push(a.GetNumber() * b.GetNumber());
-                    else 
+                    else
                         throw Error("Can only multiply 2 numbers.");
 
                     break;
@@ -123,7 +122,7 @@ public partial class StarscriptHypervisor
                         Push(a.GetString() + b);
                     else
                         throw Error("Can only add 2 numbers, or 1 string and any other value.");
-                    
+
                     break;
                 }
 
@@ -136,10 +135,10 @@ public partial class StarscriptHypervisor
                 {
                     var a = Pop();
 
-                    if (a.IsNumber)
-                        Push(-a.GetNumber());
-                    else 
+                    if (!a.IsNumber)
                         throw Error("Negation requires a number.");
+
+                    Push(-a.GetNumber());
 
                     break;
                 }
@@ -219,7 +218,7 @@ public partial class StarscriptHypervisor
                         ? Value.Null
                         : value.GetMap().GetRaw(name)?.Invoke()
                     );
-                    
+
                     break;
                 }
                 case Call:
@@ -228,21 +227,19 @@ public partial class StarscriptHypervisor
 
                     var a = Peek(argCount);
 
-                    if (a.IsFunction)
-                    {
-                        var result = a.GetFunction()(this, argCount);
-                        Pop();
-                        Push(result);
-                    } 
-                    else
+                    if (!a.IsFunction)
                         throw Error("Tried to call {0}, can only call functions.", Enum.GetName(a.Type));
+
+                    var result = a.GetFunction()(this, argCount);
+                    Pop();
+                    Push(result);
 
                     break;
                 }
 
                 case Jump:
                 {
-                    var jump = (script.GetMaskedByteAt(instructionPointer++) << 8) 
+                    var jump = (script.GetMaskedByteAt(instructionPointer++) << 8)
                                | script.GetMaskedByteAt(instructionPointer++);
 
                     instructionPointer += jump;
@@ -251,7 +248,7 @@ public partial class StarscriptHypervisor
                 }
                 case JumpIfTrue:
                 {
-                    var jump = (script.GetMaskedByteAt(instructionPointer++) << 8) 
+                    var jump = (script.GetMaskedByteAt(instructionPointer++) << 8)
                                | script.GetMaskedByteAt(instructionPointer++);
 
                     if (Peek().IsTruthy)
@@ -261,7 +258,7 @@ public partial class StarscriptHypervisor
                 }
                 case JumpIfFalse:
                 {
-                    var jump = (script.GetMaskedByteAt(instructionPointer++) << 8) 
+                    var jump = (script.GetMaskedByteAt(instructionPointer++) << 8)
                                | script.GetMaskedByteAt(instructionPointer++);
 
                     if (!Peek().IsTruthy)
@@ -279,7 +276,7 @@ public partial class StarscriptHypervisor
                     }
                     else
                     {
-                        segment.Next = new StringSegment(index, sb.ToString());
+                        segment!.Next = new StringSegment(index, sb.ToString());
                         segment = segment.Next;
                     }
 
@@ -312,8 +309,8 @@ public partial class StarscriptHypervisor
 
                     var value = Pop();
 
-                    Append(sb, value.IsMap 
-                        ? value.GetMap().GetRaw(name)?.Invoke() 
+                    Append(sb, value.IsMap
+                        ? value.GetMap().GetRaw(name)?.Invoke()
                         : null);
 
                     break;
@@ -324,14 +321,12 @@ public partial class StarscriptHypervisor
 
                     var a = Peek(argCount);
 
-                    if (a.IsFunction)
-                    {
-                        var result = a.GetFunction()(this, argCount);
-                        Pop();
-                        Append(sb, result);
-                    } 
-                    else
+                    if (!a.IsFunction)
                         throw Error("Tried to call {0}, can only call functions.", Enum.GetName(a.Type));
+
+                    var result = a.GetFunction()(this, argCount);
+                    Pop();
+                    Append(sb, result);
 
                     break;
                 }
@@ -340,20 +335,22 @@ public partial class StarscriptHypervisor
                 {
                     Value value;
 
-                    { // Variable
+                    {
+                        // Variable
                         var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
-                        value = Globals.GetRaw(name)?.Invoke() ?? Value.Null; 
+                        value = Globals.GetRaw(name)?.Invoke() ?? Value.Null;
                     }
 
-                    { // Get
+                    {
+                        // Get
                         var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
-                        
+
                         if (!value.IsMap)
                         {
                             Push(null);
                             break;
                         }
-                    
+
                         Push(value.GetMap().GetRaw(name)?.Invoke());
                     }
 
@@ -363,14 +360,16 @@ public partial class StarscriptHypervisor
                 {
                     Value? value;
 
-                    { // Variable
+                    {
+                        // Variable
                         var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
-                        value = Globals.GetRaw(name)?.Invoke() ?? Value.Null; 
+                        value = Globals.GetRaw(name)?.Invoke() ?? Value.Null;
                     }
 
-                    { // Get
+                    {
+                        // Get
                         var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
-                        
+
                         if (!value.IsMap)
                         {
                             Push(null);
@@ -379,20 +378,20 @@ public partial class StarscriptHypervisor
 
                         value = value.GetMap().GetRaw(name)?.Invoke();
                     }
-                    
+
                     Append(sb, value);
 
                     break;
                 }
-                case End: 
-                    
+                case End:
 #if DEBUG
                     DebugLog($"Encountered {Enum.GetName(End)} instruction. Breaking execution.");
 #endif
-                    
+
                     goto EndExecution;
                 default:
-                    throw new InvalidOperationException($"Unknown instruction '{Enum.GetName((Instruction)script.GetByteAt(instructionPointer))}'");
+                    throw new InvalidOperationException(
+                        $"Unknown instruction '{Enum.GetName((Instruction)script.GetByteAt(instructionPointer))}'");
             }
         }
 
