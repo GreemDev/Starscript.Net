@@ -64,6 +64,5 @@ public partial class StarscriptHypervisor
     ///     Returns a new <see cref="StarscriptHypervisor"/> with the globals inherited from this one.
     ///     Useful for maintaining multiple <see cref="StarscriptHypervisor"/>s for varied use-cases, inheriting from a single globals map with minor differences.
     /// </summary>
-    /// <returns></returns>
     public StarscriptHypervisor CopyGlobalsToNew() => CreateFromParentStandalone(this);
 }
