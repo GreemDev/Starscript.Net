@@ -22,15 +22,15 @@ public static partial class StandardLibrary
     
     public static Value String(StarscriptFunctionContext ctx) => ctx.Constrain(Constraint.ExactCount(1)).PopArg().ToString();
 
-    public static Value ToUpper(StarscriptFunctionContext ctx) => ctx.Constrain(Constraint.ExactCount(1)).NextString().ToUpper();
+    public static Value ToUpper(StarscriptFunctionContext ctx) => ctx.Constrain(Constraint.ExactCount(1)).NextString(1).ToUpper();
     
-    public static Value ToLower(StarscriptFunctionContext ctx) => ctx.Constrain(Constraint.ExactCount(1)).NextString().ToLower();
+    public static Value ToLower(StarscriptFunctionContext ctx) => ctx.Constrain(Constraint.ExactCount(1)).NextString(1).ToLower();
 
     public static Value Contains(StarscriptFunctionContext ctx)
     {
         ctx.Constrain(Constraint.ExactCount(2));
         
-        var (content, search) = ctx.NextTypedPair(ArgType.String, ArgType.String);
+        var (content, search) = ctx.NextTypedPair(TypedArg.String(1), TypedArg.String(2));
 
         return content.Contains(search);
     }
@@ -39,7 +39,7 @@ public static partial class StandardLibrary
     {
         ctx.Constrain(Constraint.ExactCount(2));
         
-        var (content, search) = ctx.NextTypedPair(ArgType.String, ArgType.String);
+        var (content, search) = ctx.NextTypedPair(TypedArg.String(1), TypedArg.String(2));
 
         return content.Contains(search, StringComparison.OrdinalIgnoreCase);
     }
@@ -48,7 +48,7 @@ public static partial class StandardLibrary
     {
         ctx.Constrain(Constraint.ExactCount(3));
         
-        var (content, search, replacement) = ctx.NextTypedTriple(ArgType.String, ArgType.String, ArgType.String);
+        var (content, search, replacement) = ctx.NextTypedTriple(TypedArg.String(1), TypedArg.String(2), TypedArg.String(3));
 
         return content.Replace(search, replacement);
     }
@@ -57,7 +57,7 @@ public static partial class StandardLibrary
     {
         ctx.Constrain(Constraint.ExactCount(3));
         
-        var (content, search, replacement) = ctx.NextTypedTriple(ArgType.String, ArgType.String, ArgType.String);
+        var (content, search, replacement) = ctx.NextTypedTriple(TypedArg.String(1), TypedArg.String(2), TypedArg.String(3));
 
         return content.Replace(search, replacement, StringComparison.OrdinalIgnoreCase);
     }
@@ -66,7 +66,7 @@ public static partial class StandardLibrary
     {
         ctx.Constrain(Constraint.ExactCount(2));
         
-        var (content, amount) = ctx.NextTypedPair(ArgType.String, ArgType.Number);
+        var (content, amount) = ctx.NextTypedPair(TypedArg.String(1), TypedArg.Number(2));
 
         var padAmount = Math.Abs((int)amount);
 
@@ -79,7 +79,7 @@ public static partial class StandardLibrary
     {
         ctx.Constrain(Constraint.ExactCount(2));
         
-        var (content, amount) = ctx.NextTypedPair(ArgType.String, ArgType.Number);
+        var (content, amount) = ctx.NextTypedPair(TypedArg.String(1), TypedArg.Number(2));
 
         return amount < 0 
             ? throw ctx.Error($"Negative pad amount passed to {ctx.FormattedName}") 
@@ -90,7 +90,7 @@ public static partial class StandardLibrary
     {
         ctx.Constrain(Constraint.ExactCount(2));
         
-        var (content, amount) = ctx.NextTypedPair(ArgType.String, ArgType.Number);
+        var (content, amount) = ctx.NextTypedPair(TypedArg.String(1), TypedArg.Number(2));
 
         return amount < 0 
             ? throw ctx.Error($"Negative pad amount passed to {ctx.FormattedName}") 

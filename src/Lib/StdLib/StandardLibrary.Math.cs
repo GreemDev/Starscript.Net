@@ -25,9 +25,9 @@ public static partial class StandardLibrary
         switch (ctx.ArgCount)
         {
             case 1:
-                return Math.Round(ctx.NextNumber());
+                return Math.Round(ctx.NextNumber(1));
             case 2:
-                var (a, b) = ctx.NextTypedPair(ArgType.Number, ArgType.Number);
+                var (a, b) = ctx.NextTypedPair(TypedArg.Number(1), TypedArg.Number(2));
 
                 var x = Math.Pow(10, b);
                 return Math.Round(a * x) / x;
@@ -38,11 +38,11 @@ public static partial class StandardLibrary
 
     public static Value RoundToString(StarscriptFunctionContext ctx) => Round(ctx).ToString();
 
-    public static Value Floor(StarscriptFunctionContext ctx) => Math.Floor(ctx.Constrain(Constraint.ExactCount(1)).NextNumber());
+    public static Value Floor(StarscriptFunctionContext ctx) => Math.Floor(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
     
-    public static Value Ceil(StarscriptFunctionContext ctx) => Math.Ceiling(ctx.Constrain(Constraint.ExactCount(1)).NextNumber());
+    public static Value Ceil(StarscriptFunctionContext ctx) => Math.Ceiling(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
 
-    public static Value Abs(StarscriptFunctionContext ctx) => Math.Abs(ctx.Constrain(Constraint.ExactCount(1)).NextNumber());
+    public static Value Abs(StarscriptFunctionContext ctx) => Math.Abs(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
 
     public static Value Random(StarscriptFunctionContext ctx)
     {
@@ -51,7 +51,7 @@ public static partial class StandardLibrary
             case 0:
                 return tl_Random.Value!.NextDouble();
             case 2:
-                var (min, max) = ctx.NextTypedPair(ArgType.Number, ArgType.Number);
+                var (min, max) = ctx.NextTypedPair(TypedArg.Number(1), TypedArg.Number(2));
 
                 return tl_Random.Value!.NextDouble() * (min + (max - min));
             default:

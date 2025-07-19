@@ -2,8 +2,6 @@
 
 public class StarscriptFunctionContext
 {
-    public int ArgPos { get; private set; } = 1;
-
     public StarscriptFunctionContext(string name, StarscriptHypervisor hypervisor, byte argCount)
     {
         Name = name;
@@ -29,8 +27,8 @@ public class StarscriptFunctionContext
     }
 
     public (TLeft Left, TRight Right) NextTypedPair<TLeft, TRight>(
-        ArgType<TLeft> leftType,
-        ArgType<TRight> rightType
+        TypedArgument<TLeft> leftType,
+        TypedArgument<TRight> rightType
     )
     {
         var right = NextArg(rightType);
@@ -40,9 +38,9 @@ public class StarscriptFunctionContext
     }
 
     public (TLeft Left, TMiddle, TRight Right) NextTypedTriple<TLeft, TMiddle, TRight>(
-        ArgType<TLeft> leftType,
-        ArgType<TMiddle> middleType,
-        ArgType<TRight> rightType
+        TypedArgument<TLeft> leftType,
+        TypedArgument<TMiddle> middleType,
+        TypedArgument<TRight> rightType
     )
     {
         var right = NextArg(rightType);
@@ -54,11 +52,11 @@ public class StarscriptFunctionContext
 
     public Value PopArg() => Hypervisor.Pop();
 
-    public T NextArg<T>(ArgType<T> type, string? customError = null)
+    public T NextArg<T>(TypedArgument<T> type, string? customError = null)
         => type.Pop(Hypervisor,
-            customError ?? $"Argument {ArgPos++} of {FormattedName} needs to be a {type.FriendlyName}.");
+            customError ?? $"Argument {type.ArgPos} of {FormattedName} needs to be a {type.FriendlyName}.");
 
-    public bool NextBoolean(string? customError = null) => NextArg(ArgType.Boolean, customError);
-    public string NextString(string? customError = null) => NextArg(ArgType.String, customError);
-    public double NextNumber(string? customError = null) => NextArg(ArgType.Number, customError);
+    public bool NextBoolean(int argPos, string? customError = null) => NextArg(TypedArg.Boolean(argPos), customError);
+    public string NextString(int argPos, string? customError = null) => NextArg(TypedArg.String(argPos), customError);
+    public double NextNumber(int argPos, string? customError = null) => NextArg(TypedArg.Number(argPos), customError);
 }

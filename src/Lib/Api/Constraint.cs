@@ -13,7 +13,7 @@ public abstract class Constraint
         FriendlyError = friendlyError;
     }
 
-    public static Constraint None { get; } = new NoConstraint();
+    public static readonly Constraint None = new NoConstraint();
     public static Constraint ExactCount(int count) => new ExactCountConstraint(count);
     public static Constraint AtLeast(int min) => new AtLeastConstraint(min);
     public static Constraint AtMost(int max) => new AtMostConstraint(max);
@@ -23,27 +23,23 @@ public abstract class Constraint
         => $"{context.FormattedName} requires {FriendlyError()}, got {context.ArgCount}.";
 
     private sealed class NoConstraint() : Constraint(_ => true, () => string.Empty);
-    
-    private sealed class ExactCountConstraint(int count) : Constraint
-    (
+
+    private sealed class ExactCountConstraint(int count) : Constraint(
         it => it == count,
         () => "argument".Pluralize(count, prefixQuantity: true)
     );
-    
-    private sealed class AtLeastConstraint(int min) : Constraint
-    (
+
+    private sealed class AtLeastConstraint(int min) : Constraint(
         it => it >= min,
         () => $"at least {"argument".Pluralize(min, prefixQuantity: true)}"
     );
-    
-    private sealed class AtMostConstraint(int min) : Constraint
-    (
+
+    private sealed class AtMostConstraint(int min) : Constraint(
         it => it <= min,
         () => $"at most {"argument".Pluralize(min, prefixQuantity: true)}"
     );
-    
-    private sealed class WithinConstraint(int min, int max) : Constraint
-    (
+
+    private sealed class WithinConstraint(int min, int max) : Constraint(
         it => it >= min && it <= max,
         () => $"{min}..{max} {"argument".Pluralize(min + max)}"
     );
