@@ -8,7 +8,7 @@ namespace Starscript;
 
 public class Compiler : Expr.IVisitor
 {
-    private readonly MutableScript _output = new();
+    private readonly MutableScript _output;
 
     private int _blockDepth;
     private bool _constantAppend;
