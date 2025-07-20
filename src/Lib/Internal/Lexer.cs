@@ -7,16 +7,18 @@ namespace Starscript.Internal;
 /// <summary>
 ///     Takes starscript source code and produces a stream or tokens that are used for parsing.
 /// </summary>
-public class Lexer {
+public class Lexer
+{
     /// <summary>
     ///     The type of the token.
     /// </summary>
     public Token Token { get; private set; }
+
     /// <summary>
     ///     The string representation of the token.
     /// </summary>
     public string Lexeme { get; private set; }
-    
+
     public int Start { get; private set; }
     public int Current { get; private set; }
 
@@ -57,8 +59,10 @@ public class Lexer {
 
             char c = Advance();
 
-            if (char.IsDigit(c) || (c == '-' && char.IsDigit(Peek()))) Number();
-            else if (IsAlpha(c)) Identifier();
+            if (char.IsDigit(c) || (Token is not Token.Number && c == '-' && char.IsDigit(Peek()))) 
+                Number();
+            else if (IsAlpha(c)) 
+                Identifier();
             else {
                 switch (c) {
                     case '\'':
