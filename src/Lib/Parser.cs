@@ -1,4 +1,5 @@
-﻿using Starscript.Internal;
+﻿using System.Diagnostics.CodeAnalysis;
+using Starscript.Internal;
 
 namespace Starscript;
 
@@ -22,6 +23,9 @@ public partial struct Parser
     }
 
     public static ParserResult Parse(string source) => new Parser(source).Run();
+    
+    public static bool TryParse(string source, [MaybeNullWhen(false)] out ParserResult result) 
+        => !(result = new Parser(source).Run()).HasErrors;
 
     internal ParserResult Run()
     {
