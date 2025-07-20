@@ -40,5 +40,5 @@ public static class StarscriptFactory
     ///     This method assumes the caller has already checked for errors in the <see cref="ParserResult"/>.
     /// </summary>
     /// <returns>Execution-ready compiled Starscript</returns>
-    public static Script Compile(ParserResult result) => Compiler.Compile(result);
+    public static Script Compile(ParserResult result) => Compiler.SingleCompile(result);
 }
