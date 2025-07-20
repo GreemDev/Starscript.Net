@@ -24,7 +24,7 @@ public partial struct Parser
 
     public static ParserResult Parse(string source) => new Parser(source).Run();
     
-    public static bool TryParse(string source, [MaybeNullWhen(false)] out ParserResult result) 
+    public static bool TryParse(string source, out ParserResult result)
         => !(result = new Parser(source).Run()).HasErrors;
 
     internal ParserResult Run()
