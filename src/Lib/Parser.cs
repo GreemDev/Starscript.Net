@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Starscript.Internal;
+﻿using Starscript.Internal;
 
 namespace Starscript;
 
