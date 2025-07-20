@@ -11,7 +11,7 @@ public static partial class StandardLibrary
     ///     Register all variables and functions present in the Starscript <see cref="StandardLibrary"/>.
     /// </summary>
     /// <param name="hv">The current <see cref="StarscriptHypervisor"/>.</param>
-    /// <param name="unsafe">If this <see cref="StarscriptHypervisor"/> instance should have system information available. Not recommended in places where users can write & run Starscript but don't operate the machine it runs on.</param>
+    /// <param name="unsafe">If this <see cref="StarscriptHypervisor"/> instance should have system information available. Not recommended in places where users can write and run Starscript but don't operate the machine it runs on.</param>
     /// <returns>The current <see cref="StarscriptHypervisor"/>, for chaining convenience.</returns>
     public static StarscriptHypervisor WithStandardLibrary(this StarscriptHypervisor hv, bool @unsafe = false)
     {
