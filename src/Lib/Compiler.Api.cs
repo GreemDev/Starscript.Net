@@ -8,11 +8,13 @@ public partial class Compiler
     /// <summary>
     ///     Compile all given <see cref="ParserResult"/>s in the <see cref="IEnumerable{T}"/> into an immutable array of immutable <see cref="Script"/>s, using the same <see cref="Compiler"/> instance.
     /// </summary>
-    /// <param name="parserResults">The parser results to compile.</param>
+    /// <param name="inputResults">The parser results to compile.</param>
     /// <returns>An immutable array of immutable <see cref="Script"/>s.</returns>
-    public static ImmutableArray<Script> CompileAll(IEnumerable<ParserResult> parserResults)
+    public static ImmutableArray<Script> CompileAll(IEnumerable<ParserResult> inputResults)
     {
-        var results = ImmutableArray.CreateBuilder<Script>();
+        var parserResults = inputResults.ToList();
+        
+        var results = ImmutableArray.CreateBuilder<Script>(parserResults.Count);
 
         var compiler = new Compiler();
 
@@ -28,22 +30,10 @@ public partial class Compiler
     /// <summary>
     ///     Compile all given <see cref="ParserResult"/>s in the <see cref="IEnumerable{T}"/> into an immutable array of immutable <see cref="Script"/>s, using the same <see cref="Compiler"/> instance.
     /// </summary>
-    /// <param name="parserResults">The parser results to compile.</param>
+    /// <param name="inputResults">The parser results to compile.</param>
     /// <returns>An immutable array of immutable <see cref="Script"/>s.</returns>
-    public static ImmutableArray<Script> BatchCompile(params IEnumerable<ParserResult> parserResults)
-    {
-        var results = ImmutableArray.CreateBuilder<Script>();
-
-        var compiler = new Compiler();
-
-        foreach (var parserResult in parserResults)
-        {
-            compiler.Compile(parserResult);
-            results.Add(compiler.MoveToImmutableAndReset());
-        }
-
-        return results.MoveToImmutable();
-    }
+    public static ImmutableArray<Script> BatchCompile(params IEnumerable<ParserResult> inputResults) =>
+        CompileAll(inputResults);
     
     /// <summary>
     ///     Parse, then compile, the given Starscript source into an immutable <see cref="Script"/>.
