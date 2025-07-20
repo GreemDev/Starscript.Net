@@ -30,13 +30,11 @@ public static partial class StandardLibrary
 
         try
         {
-            var content = http.GetStringAsync(url).Result;
-
-            return content;
+            return http.GetStringAsync(url).Result;
         }
         catch (InvalidOperationException)
         {
-            throw ctx.Error("'{0}' is not an absolute URI ", url);
+            throw ctx.Error("'{0}' is not an absolute URI", url);
         }
         catch (HttpRequestException hre)
         {
