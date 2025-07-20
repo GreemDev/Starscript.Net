@@ -4,15 +4,14 @@ public class Script
 {
     private readonly byte[] _code;
 
-    private readonly IReadOnlyList<Value> _constants;
-
     public ReadOnlySpan<byte> Code => _code;
-    public IReadOnlyList<Value> Constants => _constants;
     
+    public IReadOnlyList<Value> Constants { get; }
+
     public Script(byte[] codeBuffer, IReadOnlyList<Value> constants)
     {
         _code = codeBuffer;
-        _constants = constants;
+        Constants = constants;
     }
     
     public byte GetByteAt(int idx) => _code[idx];
