@@ -1,4 +1,6 @@
-﻿namespace Starscript;
+﻿using System.Collections.Immutable;
+
+namespace Starscript;
 
 public class StarscriptFunctionContext
 {
@@ -49,6 +51,32 @@ public class StarscriptFunctionContext
 
         return (left, middle, right);
     }
+
+    public ImmutableArray<T> GetVariadicArguments<T>(Func<int, TypedArgument<T>> typeCreator)
+    {
+        var builder = ImmutableArray.CreateBuilder<T>(ArgCount);
+        
+        for (var argPos = ArgCount; argPos != 0; argPos--)
+        {
+            builder.Add(NextArg(typeCreator(argPos)));
+        }
+
+        return builder.MoveToImmutable();
+    }
+    
+    public ImmutableArray<T> GetVariadicArgumentsInPassedOrder<T>(Func<int, TypedArgument<T>> typeCreator)
+    {
+        var varargs = GetVariadicArguments(typeCreator);
+        
+        var corrected = ImmutableArray.CreateBuilder<T>(ArgCount);
+
+        foreach (var arg in varargs.Reverse())
+        {
+            corrected.Add(arg);
+        }
+
+        return corrected.MoveToImmutable();
+    } 
 
     public Value PopArg() => Hypervisor.Pop();
 
