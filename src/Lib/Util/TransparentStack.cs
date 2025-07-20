@@ -1,5 +1,11 @@
 ﻿namespace Starscript.Util;
 
+/// <summary>
+///     Represents a variable size last-in-first-out (LIFO) collection of instances of the same specified type.
+///     <br/>
+///     The justification for this type's existence as opposed to <see cref="Stack{T}"/> is the ability to view any element in the stack via <see cref="TransparentStack{T}.Peek(int)"/>, hence transparent.
+/// </summary>
+/// <typeparam name="T">Specifies the type of elements in the stack.</typeparam>
 public class TransparentStack<T>
 {
     private readonly ResizableBuffer<T> _buffer;
