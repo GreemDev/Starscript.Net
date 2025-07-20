@@ -1,10 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using Starscript.Internal;
 using Starscript.Util;
 
 namespace Starscript;
 
-public partial class Parser
+public partial struct Parser
 {
     private void Synchronize()
     {
@@ -39,6 +40,7 @@ public partial class Parser
         return false;
     }
 
+    [UnscopedRef]
     private ref TokenData Consume(Token token, string message, Expr expr)
     {
         if (Check(token)) return ref Advance();
@@ -49,6 +51,7 @@ public partial class Parser
     private bool Check(Token token) => !IsAtEnd && _current.Token == token;
     private bool IsAtEnd => _current.Token is Token.EOF;
     
+    [UnscopedRef]
     private ref TokenData Advance()
     {
         _previous.Set(ref _current);

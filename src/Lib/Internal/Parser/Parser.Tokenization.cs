@@ -2,7 +2,7 @@
 
 namespace Starscript;
 
-public partial class Parser
+public partial struct Parser
 {
     private Expr Statement()
     {

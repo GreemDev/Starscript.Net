@@ -7,7 +7,7 @@ namespace Starscript;
 /// <summary>
 /// A parser that produces an AST (Abstract Syntax Tree) from Starscript input code and reports errors. 
 /// </summary>
-public partial class Parser
+public partial struct Parser
 {
     private readonly Lexer _lexer;
 
