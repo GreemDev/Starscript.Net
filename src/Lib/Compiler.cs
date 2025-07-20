@@ -336,7 +336,7 @@ public class Compiler : Expr.IVisitor
 
 #if DEBUG
     
-    private static void DebugLog(string message,
+    internal static void DebugLog(string message,
         [CallerFilePath] string sourceLocation = default!,
         [CallerLineNumber] int lineNumber = default,
         [CallerMemberName] string callerName = default!)

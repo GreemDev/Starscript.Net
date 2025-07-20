@@ -1,4 +1,5 @@
-﻿using Starscript.Internal;
+﻿using System.Runtime.CompilerServices;
+using Starscript.Internal;
 using Starscript.Util;
 
 namespace Starscript;
@@ -13,14 +14,18 @@ public class MutableScript
     {
         // Trim the excess (null) bytes before copying
         CodeBuffer.TrimExcess();
-        
+
         var codeCopy = CodeBuffer.Span.ToArray();
         var constantsCopy = new List<Value>(Constants);
-        
+
         // Clear the current script's memory, potentially useful for a reusable script instance system in the future(?)
         CodeBuffer.ResetAndClear();
         Constants.Clear();
-        
+
+#if DEBUG
+        Compiler.DebugLog($"Resulting immutable script size in bytes after move: {codeCopy.Length * Unsafe.SizeOf<byte>()}");
+#endif
+
         return new Script(
             codeCopy,
             constantsCopy.AsReadOnly()
