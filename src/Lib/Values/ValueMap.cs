@@ -25,6 +25,17 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
 
     public ValueMap Set(string name, Value value) => Set(name, () => value);
     
+    public ValueMap Set<T>(string name, IStarscriptObject<T> value) where T : IStarscriptObject<T>
+    {
+        if (_entries.ContainsKey(name))
+            return this;
+
+        ValueMap map = value.ToStarscript();
+        SetRaw(name, () => map);
+
+        return this;
+    }
+
     public ValueMap Set(string name, StarscriptFunction function) => Set(name, () => function);
     
     public ValueMap Set(string name, object obj) => Set(name, () => TopLevelFunctions.Object(obj));
@@ -71,8 +82,8 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
             return _entries[name];
 
         // Split name based on the dot
-        var name1 = name.Substring(0, dotIndex);
-        var name2 = name.Substring(dotIndex + 1);
+        var name1 = name[..dotIndex];
+        var name2 = name[(dotIndex + 1)..];
 
         var value = _entries[name1]();
 
@@ -96,8 +107,8 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
             return _entries.Remove(name, out removedValue);
 
         // Split name based on the dot
-        var name1 = name.Substring(0, dotIndex);
-        var name2 = name.Substring(dotIndex + 1);
+        var name1 = name[..dotIndex];
+        var name2 = name[(dotIndex + 1)..];
 
         var value = this[name1]();
 

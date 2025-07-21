@@ -7,7 +7,8 @@ public partial class StarscriptHypervisor
     /// <summary>
     ///     Sets a variable supplier for the provided name.
     /// </summary>
-    public StarscriptHypervisor Set(string name, Func<Value> supplier) {
+    public StarscriptHypervisor Set(string name, Func<Value> supplier) 
+    {
         Globals.Set(name, supplier);
         return this;
     }
@@ -15,7 +16,17 @@ public partial class StarscriptHypervisor
     /// <summary>
     ///     Sets a variable supplier that always returns the same value for the provided name.
     /// </summary>
-    public StarscriptHypervisor Set(string name, Value value) {
+    public StarscriptHypervisor Set(string name, Value value) 
+    {
+        Globals.Set(name, value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Sets a variable supplier that always returns the same <see cref="IStarscriptObject"/> for the provided name.
+    /// </summary>
+    public StarscriptHypervisor Set<T>(string name, IStarscriptObject<T> value) where T : IStarscriptObject<T>
+    {
         Globals.Set(name, value);
         return this;
     }
@@ -23,18 +34,23 @@ public partial class StarscriptHypervisor
     /// <summary>
     ///     Sets a function variable supplier that always returns the same value for the provided name.
     /// </summary>
-    public StarscriptHypervisor Set(string name, StarscriptFunction function) {
+    public StarscriptHypervisor Set(string name, StarscriptFunction function) 
+    {
         Globals.Set(name, function);
         return this;
     }
-    
-    public StarscriptHypervisor Set(string name, Constraint constraint, ContextualStarscriptFunction contextualFunction) =>
-        Set(name, (ss, argCount) 
-            => contextualFunction(new StarscriptFunctionContext(name, ss, argCount).Constrain(constraint)));
-    
-    public StarscriptHypervisor Set(string name, ContextualStarscriptFunction contextualFunction) =>
-        Set(name, (ss, argCount) 
-            => contextualFunction(new StarscriptFunctionContext(name, ss, argCount)));
+
+    public StarscriptHypervisor Set(string name, Constraint constraint, ContextualStarscriptFunction contextualFunction)
+    {
+        Globals.Set(name, constraint, contextualFunction);
+        return this;
+    }
+
+    public StarscriptHypervisor Set(string name, ContextualStarscriptFunction contextualFunction)
+    {
+        Globals.Set(name, contextualFunction);
+        return this;
+    }
 
     public StarscriptHypervisor NewSubMap(string name, Action<ValueMap> init)
     {
@@ -47,7 +63,8 @@ public partial class StarscriptHypervisor
     /// <summary>
     ///     Sets an object variable supplier that always returns the same value for the provided name.
     /// </summary>
-    public StarscriptHypervisor Set(string name, object obj) {
+    public StarscriptHypervisor Set(string name, object obj) 
+    {
         Globals.Set(name, TopLevelFunctions.Object(obj));
         return this;
     }
