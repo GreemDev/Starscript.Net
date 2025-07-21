@@ -11,7 +11,7 @@ public static partial class StandardLibrary
     /// <returns>The current <see cref="StarscriptHypervisor"/>, for chaining convenience.</returns>
     public static StarscriptHypervisor WithStandardLibraryHttp(this StarscriptHypervisor hv) => hv
         .NewSubMap("http", http => http
-            .SetFunction("get", HttpGet));
+            .Set("get", HttpGet));
 
     public static Value HttpGet(StarscriptFunctionContext ctx)
     {
