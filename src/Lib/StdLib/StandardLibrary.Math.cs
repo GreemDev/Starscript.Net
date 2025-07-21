@@ -20,6 +20,7 @@ public static partial class StandardLibrary
         .Set("cbrt", Cbrt)
         .Set("tan", Tan)
         .Set("atan", Atan)
+        .Set("atan2", Atan2)
         .Set("tanh", Tanh)
         .Set("atanh", Atanh)
         .Set("sin", Sin)
@@ -67,6 +68,14 @@ public static partial class StandardLibrary
     public static Value Cbrt(StarscriptFunctionContext ctx) => Math.Cbrt(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
     public static Value Tan(StarscriptFunctionContext ctx) => Math.Tan(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
     public static Value Atan(StarscriptFunctionContext ctx) => Math.Atan(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
+    public static Value Atan2(StarscriptFunctionContext ctx)
+    {
+        ctx.Constrain(Constraint.ExactCount(2));
+        
+        var (a, b) = ctx.NextTypedPair(TypedArg.Number(1), TypedArg.Number(2));
+
+        return Math.Atan2(a, b);
+    }
     public static Value Tanh(StarscriptFunctionContext ctx) => Math.Tanh(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
     public static Value Atanh(StarscriptFunctionContext ctx) => Math.Atanh(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
     public static Value Sin(StarscriptFunctionContext ctx) => Math.Sin(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
