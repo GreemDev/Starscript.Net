@@ -227,6 +227,9 @@ public partial class StarscriptHypervisor
 
                     var a = Peek(argCount);
 
+                    if (a.IsNull)
+                        throw Error("Unknown function.");
+                    
                     if (!a.IsFunction)
                         throw Error("Tried to call {0}, can only call functions.", Enum.GetName(a.Type));
 
@@ -320,6 +323,9 @@ public partial class StarscriptHypervisor
                     var argCount = script.GetByteAt(instructionPointer++);
 
                     var a = Peek(argCount);
+                    
+                    if (a.IsNull)
+                        throw Error("Unknown function.");
 
                     if (!a.IsFunction)
                         throw Error("Tried to call {0}, can only call functions.", Enum.GetName(a.Type));
