@@ -72,9 +72,9 @@ public static partial class StandardLibrary
     {
         ctx.Constrain(Constraint.ExactCount(2));
         
-        var (a, b) = ctx.NextTypedPair(TypedArg.Number(1), TypedArg.Number(2));
+        var (y, x) = ctx.NextTypedPair(TypedArg.Number(1), TypedArg.Number(2));
 
-        return Math.Atan2(a, b);
+        return Math.Atan2(y, x);
     }
     public static Value Tanh(StarscriptFunctionContext ctx) => Math.Tanh(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
     public static Value Atanh(StarscriptFunctionContext ctx) => Math.Atanh(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
