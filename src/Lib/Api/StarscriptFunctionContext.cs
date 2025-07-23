@@ -39,7 +39,7 @@ public class StarscriptFunctionContext
         return (left, right);
     }
 
-    public (TLeft Left, TMiddle, TRight Right) NextTypedTriple<TLeft, TMiddle, TRight>(
+    public (TLeft Left, TMiddle Middle, TRight Right) NextTypedTriple<TLeft, TMiddle, TRight>(
         TypedArgument<TLeft> leftType,
         TypedArgument<TMiddle> middleType,
         TypedArgument<TRight> rightType

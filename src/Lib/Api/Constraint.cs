@@ -18,6 +18,10 @@ public class Constraint
 
     public static readonly Constraint None = new(_ => true, () => string.Empty);
 
+    public static Constraint ExactlyOneArgument { get; } = ExactCount(1);
+    public static Constraint ExactlyTwoArguments { get; } = ExactCount(2);
+    public static Constraint ExactlyThreeArguments { get; } = ExactCount(3);
+
     public static Constraint ExactCount(int count) => new(
         it => it == count,
         () => "argument".Pluralize(count, prefixQuantity: true)

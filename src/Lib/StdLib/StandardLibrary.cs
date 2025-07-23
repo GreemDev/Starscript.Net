@@ -2,6 +2,7 @@
 
 public static partial class StandardLibrary
 {
+    // ReSharper disable once InconsistentNaming
     private static readonly ThreadLocal<Random> tl_Random = new(() => new Random());
 
     public static string TimeFormat { get; set; } = "HH:mm:ss";

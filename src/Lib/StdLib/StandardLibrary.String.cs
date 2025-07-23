@@ -20,15 +20,15 @@ public static partial class StandardLibrary
         .Set("padLeft", PadLeft)
         .Set("padRight", PadRight);
     
-    public static Value String(StarscriptFunctionContext ctx) => ctx.Constrain(Constraint.ExactCount(1)).PopArg().ToString();
+    public static Value String(StarscriptFunctionContext ctx) => ctx.Constrain(Constraint.ExactlyOneArgument).PopArg().ToString();
 
-    public static Value ToUpper(StarscriptFunctionContext ctx) => ctx.Constrain(Constraint.ExactCount(1)).NextString(1).ToUpper();
+    public static Value ToUpper(StarscriptFunctionContext ctx) => ctx.Constrain(Constraint.ExactlyOneArgument).NextString(1).ToUpper();
     
-    public static Value ToLower(StarscriptFunctionContext ctx) => ctx.Constrain(Constraint.ExactCount(1)).NextString(1).ToLower();
+    public static Value ToLower(StarscriptFunctionContext ctx) => ctx.Constrain(Constraint.ExactlyOneArgument).NextString(1).ToLower();
 
     public static Value Contains(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(2));
+        ctx.Constrain(Constraint.ExactlyTwoArguments);
         
         var (content, search) = ctx.NextTypedPair(TypedArg.String(1), TypedArg.String(2));
 
@@ -37,7 +37,7 @@ public static partial class StandardLibrary
     
     public static Value ContainsIgnoreCase(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(2));
+        ctx.Constrain(Constraint.ExactlyTwoArguments);
         
         var (content, search) = ctx.NextTypedPair(TypedArg.String(1), TypedArg.String(2));
 
@@ -46,7 +46,7 @@ public static partial class StandardLibrary
     
     public static Value Replace(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(3));
+        ctx.Constrain(Constraint.ExactlyThreeArguments);
         
         var (content, search, replacement) = ctx.NextTypedTriple(TypedArg.String(1), TypedArg.String(2), TypedArg.String(3));
 
@@ -55,7 +55,7 @@ public static partial class StandardLibrary
     
     public static Value ReplaceIgnoreCase(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(3));
+        ctx.Constrain(Constraint.ExactlyThreeArguments);
         
         var (content, search, replacement) = ctx.NextTypedTriple(TypedArg.String(1), TypedArg.String(2), TypedArg.String(3));
 
@@ -64,7 +64,7 @@ public static partial class StandardLibrary
     
     public static Value Pad(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(2));
+        ctx.Constrain(Constraint.ExactlyTwoArguments);
         
         var (content, amount) = ctx.NextTypedPair(TypedArg.String(1), TypedArg.Number(2));
 
@@ -77,7 +77,7 @@ public static partial class StandardLibrary
     
     public static Value PadLeft(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(2));
+        ctx.Constrain(Constraint.ExactlyTwoArguments);
         
         var (content, amount) = ctx.NextTypedPair(TypedArg.String(1), TypedArg.Number(2));
 
@@ -88,7 +88,7 @@ public static partial class StandardLibrary
     
     public static Value PadRight(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(2));
+        ctx.Constrain(Constraint.ExactlyTwoArguments);
         
         var (content, amount) = ctx.NextTypedPair(TypedArg.String(1), TypedArg.Number(2));
 

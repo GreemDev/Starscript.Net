@@ -15,7 +15,7 @@ public static partial class StandardLibrary
 
     public static Value HttpGet(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(1));
+        ctx.Constrain(Constraint.ExactlyOneArgument);
 
         var url = ctx.NextString(1);
 
