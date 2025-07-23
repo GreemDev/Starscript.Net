@@ -35,10 +35,10 @@ public partial class StarscriptHypervisor
         {
             var start = source[variableExpr.Start..pos];
 
-            foreach (var key in Globals.Keys)
+            foreach (var (key, value) in Globals)
             {
                 if (!key.StartsWith('_') && key.StartsWith(start))
-                    callback(key, Globals.GetRaw(key)!().IsFunction);
+                    callback(key, value().IsFunction);
             }
         } 
         else if (expr is Expr.Get getExpr)
@@ -51,10 +51,10 @@ public partial class StarscriptHypervisor
                 {
                     var start = source[(getExpr.Object.End + 1)..pos];
 
-                    foreach (var key in value.GetMap().Keys)
+                    foreach (var (subKey, subValue) in value.GetMap())
                     {
-                        if (!key.StartsWith('_') && key.StartsWith(start))
-                            callback(key, value.GetMap().GetRaw(key)!().IsFunction);
+                        if (!subKey.StartsWith('_') && subKey.StartsWith(start))
+                            callback(subKey, subValue().IsFunction);
                     }
                 }
                 
@@ -67,10 +67,10 @@ public partial class StarscriptHypervisor
         {
             if (blockExpr.Expr is null)
             {
-                foreach (var key in Globals.Keys)
+                foreach (var (key, value) in Globals)
                 {
                     if (!key.StartsWith('_'))
-                        callback(key, Globals.GetRaw(key)!().IsFunction);
+                        callback(key, value().IsFunction);
                 }
             }
             else
