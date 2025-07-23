@@ -18,9 +18,7 @@ public static class StarscriptFactory
     /// <returns>true, if the script has been compiled; false otherwise.</returns>
     public static bool TryCompile(string source, out Script compiledScript, Action<ParserError>? onError = null)
     {
-        var result = Parse(source);
-
-        if (result.HasErrors)
+        if (!Parser.TryParse(source, out var result))
         {
             compiledScript = null!;
             onError?.Invoke(result.Errors.First());
