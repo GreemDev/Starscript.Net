@@ -266,7 +266,9 @@ public partial struct Parser
 
 #if DEBUG
         DebugLog($"Expr {nameof(Expr.Call)} created: Start {callee.Start}, End {_previous.End}, " +
-                 $"CalleeType {callee.ExprName}, ArgTypes ({string.Join(", ", args.Select(x => x.ExprName))})");
+                 $"CalleeType {callee.ExprName}, ArgTypes ({
+                     (args.Count is 0 ? "<no arguments>" : string.Join(", ", args.Select(x => x.ExprName)))
+                 })");
 #endif
 
         return expr;
