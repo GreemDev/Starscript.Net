@@ -6,9 +6,7 @@ namespace Starscript;
 
 public partial class StarscriptHypervisor
 {
-    public StringSegment Run(Script script) => Run(script, new StringBuilder());
-
-    internal StringSegment Run(Script script, StringBuilder sb)
+    internal StringSegment RunImpl(Script script, StringBuilder sb)
     {
         _stack.Clear();
 
@@ -204,7 +202,7 @@ public partial class StarscriptHypervisor
                 {
                     var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
 
-                    Push(Globals.GetRaw(name)?.Invoke());
+                    Push((Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke());
 
                     break;
                 }
@@ -302,7 +300,7 @@ public partial class StarscriptHypervisor
                 {
                     var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
 
-                    Append(sb, Globals.GetRaw(name)?.Invoke());
+                    Append(sb, (Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke());
 
                     break;
                 }
@@ -344,7 +342,7 @@ public partial class StarscriptHypervisor
                     {
                         // Variable
                         var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
-                        value = Globals.GetRaw(name)?.Invoke() ?? Value.Null;
+                        value = (Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke() ?? Value.Null;
                     }
 
                     {
@@ -369,7 +367,7 @@ public partial class StarscriptHypervisor
                     {
                         // Variable
                         var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
-                        value = Globals.GetRaw(name)?.Invoke() ?? Value.Null;
+                        value = (Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke() ?? Value.Null;
                     }
 
                     {
@@ -403,6 +401,8 @@ public partial class StarscriptHypervisor
 
         EndExecution:
 
+        Locals = null;
+
         if (firstSegment != null)
         {
             segment!.Next = new StringSegment(index, sb.ToString());
@@ -412,5 +412,5 @@ public partial class StarscriptHypervisor
         return new StringSegment(index, sb.ToString());
     }
 
-    private void Append(StringBuilder sb, Value? value) => sb.Append(value ?? Value.Null);
+    private static void Append(StringBuilder sb, Value? value) => sb.Append(value ?? Value.Null);
 }

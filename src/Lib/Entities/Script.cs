@@ -19,4 +19,8 @@ public class Script
     public int GetMaskedByteAt(int idx) => GetByteAt(idx) & 0xFF;
 
     public StringSegment Execute(StarscriptHypervisor hypervisor) => hypervisor.Run(this);
+    
+    public StringSegment Execute(StarscriptHypervisor hypervisor, ValueMap locals) => hypervisor.Run(this, locals);
+    
+    public StringSegment Execute(StarscriptHypervisor hypervisor, IStarscriptObject obj) => hypervisor.Run(this, obj);
 }

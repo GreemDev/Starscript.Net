@@ -5,7 +5,7 @@ public static class Program
 {
     internal static void Main()
     {
-        string source = "Name: {user.name}     Age: {user.age()}";
+        string source = "Name: {name}     Age: {age()}";
 
         Console.WriteLine("Input: ");
         Console.WriteLine(source);
@@ -17,21 +17,28 @@ public static class Program
         if (!StarscriptFactory.TryCompile(source, out Script script, Console.WriteLine))
             return;
 
-        var hypervisor = StarscriptHypervisor.CreateWithStdLib(@unsafe: true);
-
-        hypervisor.Set("user", new TestUser());
+        var hypervisor = StarscriptHypervisor.Create().WithStandardLibrary();
 
         Console.WriteLine("Output: ");
-        Console.WriteLine("    " + script.Execute(hypervisor));
+        Console.WriteLine("    " + script.Execute(hypervisor, new TestUser()));
 
-        hypervisor.Remove("user.name", out _);
+        try
+        {
+            DebugLogger.HypervisorOutput = false;
+            
+            script.Execute(hypervisor);
 
-        Console.WriteLine("Output #2: ");
-        Console.WriteLine("    " + script.Execute(hypervisor));
+            throw new NotImplementedException();
+        }
+        catch (StarscriptException)
+        {
+            // StarscriptHypervisor should error here, as the source string calls a function that is defined as a local, so it is cleared when the script execution ends.
+            // NotImplementedException is not caught as that is an error case, that being StarscriptHypervisor *not* erroring.  
+        }
     }
 }
 
-struct TestUser : IStarscriptObject<TestUser>
+struct TestUser : IStarscriptObject
 {
     public ValueMap ToStarscript() => new ValueMap()
         .Set("name", "GreemDev")

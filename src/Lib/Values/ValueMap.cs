@@ -17,6 +17,9 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
         _entries = entries ?? new Dictionary<string, Func<Value>>();
     }
 
+    /// <summary>
+    ///     Directly set a value on this map, ignoring dot notation.
+    /// </summary>
     public ValueMap SetRaw(string name, Func<Value> value)
     {
         _entries[name] = value;
@@ -25,7 +28,7 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
 
     public ValueMap Set(string name, Value value) => Set(name, () => value);
     
-    public ValueMap Set<T>(string name, IStarscriptObject<T> value) where T : IStarscriptObject<T>
+    public ValueMap Set(string name, IStarscriptObject value)
     {
         if (_entries.ContainsKey(name))
             return this;
@@ -47,8 +50,8 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
             return SetRaw(name, value);
         
         // Split name based on the dot
-        var name1 = name.Substring(0, dotIndex);
-        var name2 = name.Substring(dotIndex + 1);
+        var name1 = name[..dotIndex];
+        var name2 = name[(dotIndex + 1)..];
 
         ValueMap? map = null;
         if (_entries.TryGetValue(name1, out var get))
@@ -79,19 +82,25 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
     {
         var dotIndex = name.IndexOf('.');
         if (dotIndex is -1)
-            return _entries[name];
+            return GetRaw(name);
 
         // Split name based on the dot
         var name1 = name[..dotIndex];
         var name2 = name[(dotIndex + 1)..];
 
-        var value = _entries[name1]();
+        if (this[name1] is not { } getFunc)
+            return null;
+        
+        var value = getFunc();
 
         return !value.IsMap
             ? null
             : value.GetMap().Get(name2);
     }
 
+    /// <summary>
+    ///     Directly get a value on this map, ignoring dot notation.
+    /// </summary>
     public Func<Value>? GetRaw(string name) => _entries.GetValueOrDefault(name);
 
     /// <summary>
@@ -110,7 +119,13 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
         var name1 = name[..dotIndex];
         var name2 = name[(dotIndex + 1)..];
 
-        var value = this[name1]();
+        if (this[name1] is not { } getFunc)
+        {
+            removedValue = null;
+            return false;
+        }
+        
+        var value = getFunc();
 
         return !value.IsMap 
             ? _entries.Remove(name1, out removedValue)

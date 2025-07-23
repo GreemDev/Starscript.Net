@@ -25,7 +25,7 @@ public partial class StarscriptHypervisor
     /// <summary>
     ///     Sets a variable supplier that always returns the same <see cref="IStarscriptObject"/> for the provided name.
     /// </summary>
-    public StarscriptHypervisor Set<T>(string name, IStarscriptObject<T> value) where T : IStarscriptObject<T>
+    public StarscriptHypervisor Set(string name, IStarscriptObject value)
     {
         Globals.Set(name, value);
         return this;
@@ -61,6 +61,17 @@ public partial class StarscriptHypervisor
     }
 
     /// <summary>
+    ///     Replaces this <see cref="StarscriptHypervisor"/>'s internal globals map with the provided <see cref="ValueMap"/> reference.
+    /// </summary>
+    /// <param name="map">A reference to the new globals map.</param>
+    /// <remarks>StandardLibrary variables &amp; functions are provided via the globals map, so use one of the helpers in <see cref="StandardLibrary"/> to add them back if you want.</remarks>
+    public StarscriptHypervisor ReplaceGlobals(ValueMap map)
+    {
+        Globals = map;
+        return this;
+    }
+
+    /// <summary>
     ///     Sets an object variable supplier that always returns the same value for the provided name.
     /// </summary>
     public StarscriptHypervisor Set(string name, object obj) 
@@ -84,5 +95,5 @@ public partial class StarscriptHypervisor
     ///     Returns a new <see cref="StarscriptHypervisor"/> with the globals inherited from this one.
     ///     Useful for maintaining multiple <see cref="StarscriptHypervisor"/>s for varied use-cases, inheriting from a single globals map with minor differences.
     /// </summary>
-    public StarscriptHypervisor CopyGlobalsToNew() => CreateFromParentCopyStandalone(this);
+    public StarscriptHypervisor CopyGlobalsToNew() => CreateFromParent(this);
 }
