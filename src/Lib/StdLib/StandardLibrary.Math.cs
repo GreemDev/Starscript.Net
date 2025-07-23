@@ -41,6 +41,17 @@ public static partial class StandardLibrary
         .Set("fma", Fma)
         .Set("avg", Avg)
         .Set("rand", Random);
+
+    private static double SingleNumber(StarscriptFunctionContext ctx) =>
+        ctx.Constrain(Constraint.ExactlyOneArgument).NextNumber(1);
+
+    private static (double, double) TwoNumbers(StarscriptFunctionContext ctx) =>
+        ctx.Constrain(Constraint.ExactlyTwoArguments)
+            .NextTypedPair(TypedArg.Number(1), TypedArg.Number(2));
+    
+    private static (double, double, double) ThreeNumbers(StarscriptFunctionContext ctx) =>
+        ctx.Constrain(Constraint.ExactlyThreeArguments)
+            .NextTypedTriple(TypedArg.Number(1), TypedArg.Number(2), TypedArg.Number(3));
     
     public static Value Round(StarscriptFunctionContext ctx)
     {
@@ -61,68 +72,58 @@ public static partial class StandardLibrary
     }
 
     public static Value RoundToString(StarscriptFunctionContext ctx) => Round(ctx).ToString();
-    public static Value Floor(StarscriptFunctionContext ctx) => Math.Floor(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Ceil(StarscriptFunctionContext ctx) => Math.Ceiling(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Abs(StarscriptFunctionContext ctx) => Math.Abs(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Sqrt(StarscriptFunctionContext ctx) => Math.Sqrt(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Cbrt(StarscriptFunctionContext ctx) => Math.Cbrt(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Tan(StarscriptFunctionContext ctx) => Math.Tan(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Atan(StarscriptFunctionContext ctx) => Math.Atan(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
+    public static Value Floor(StarscriptFunctionContext ctx) => Math.Floor(SingleNumber(ctx));
+    public static Value Ceil(StarscriptFunctionContext ctx) => Math.Ceiling(SingleNumber(ctx));
+    public static Value Abs(StarscriptFunctionContext ctx) => Math.Abs(SingleNumber(ctx));
+    public static Value Sqrt(StarscriptFunctionContext ctx) => Math.Sqrt(SingleNumber(ctx));
+    public static Value Cbrt(StarscriptFunctionContext ctx) => Math.Cbrt(SingleNumber(ctx));
+    public static Value Tan(StarscriptFunctionContext ctx) => Math.Tan(SingleNumber(ctx));
+    public static Value Atan(StarscriptFunctionContext ctx) => Math.Atan(SingleNumber(ctx));
     public static Value Atan2(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(2));
-        
-        var (y, x) = ctx.NextTypedPair(TypedArg.Number(1), TypedArg.Number(2));
+        var (y, x) = TwoNumbers(ctx);
 
         return Math.Atan2(y, x);
     }
-    public static Value Tanh(StarscriptFunctionContext ctx) => Math.Tanh(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Atanh(StarscriptFunctionContext ctx) => Math.Atanh(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Sin(StarscriptFunctionContext ctx) => Math.Sin(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Asin(StarscriptFunctionContext ctx) => Math.Asin(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Sinh(StarscriptFunctionContext ctx) => Math.Sinh(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Asinh(StarscriptFunctionContext ctx) => Math.Asinh(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Cos(StarscriptFunctionContext ctx) => Math.Cos(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Acos(StarscriptFunctionContext ctx) => Math.Acos(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Cosh(StarscriptFunctionContext ctx) => Math.Cosh(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Acosh(StarscriptFunctionContext ctx) => Math.Acosh(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Log(StarscriptFunctionContext ctx) => Math.Log(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Log2(StarscriptFunctionContext ctx) => Math.Log2(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Log10(StarscriptFunctionContext ctx) => Math.Log10(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
-    public static Value Truncate(StarscriptFunctionContext ctx) => Math.Truncate(ctx.Constrain(Constraint.ExactCount(1)).NextNumber(1));
+    public static Value Tanh(StarscriptFunctionContext ctx) => Math.Tanh(SingleNumber(ctx));
+    public static Value Atanh(StarscriptFunctionContext ctx) => Math.Atanh(SingleNumber(ctx));
+    public static Value Sin(StarscriptFunctionContext ctx) => Math.Sin(SingleNumber(ctx));
+    public static Value Asin(StarscriptFunctionContext ctx) => Math.Asin(SingleNumber(ctx));
+    public static Value Sinh(StarscriptFunctionContext ctx) => Math.Sinh(SingleNumber(ctx));
+    public static Value Asinh(StarscriptFunctionContext ctx) => Math.Asinh(SingleNumber(ctx));
+    public static Value Cos(StarscriptFunctionContext ctx) => Math.Cos(SingleNumber(ctx));
+    public static Value Acos(StarscriptFunctionContext ctx) => Math.Acos(SingleNumber(ctx));
+    public static Value Cosh(StarscriptFunctionContext ctx) => Math.Cosh(SingleNumber(ctx));
+    public static Value Acosh(StarscriptFunctionContext ctx) => Math.Acosh(SingleNumber(ctx));
+    public static Value Log(StarscriptFunctionContext ctx) => Math.Log(SingleNumber(ctx));
+    public static Value Log2(StarscriptFunctionContext ctx) => Math.Log2(SingleNumber(ctx));
+    public static Value Log10(StarscriptFunctionContext ctx) => Math.Log10(SingleNumber(ctx));
+    public static Value Truncate(StarscriptFunctionContext ctx) => Math.Truncate(SingleNumber(ctx));
 
     public static Value Min(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(2));
-        
-        var (a, b) = ctx.NextTypedPair(TypedArg.Number(1), TypedArg.Number(2));
+        var (a, b) = TwoNumbers(ctx);
 
         return Math.Min(a, b);
     }
     
     public static Value Max(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(2));
-        
-        var (a, b) = ctx.NextTypedPair(TypedArg.Number(1), TypedArg.Number(2));
+        var (a, b) = TwoNumbers(ctx);
         
         return Math.Max(a, b);
     }
     
     public static Value Clamp(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(3));
-        
-        var (value, min, max) = ctx.NextTypedTriple(TypedArg.Number(1), TypedArg.Number(2), TypedArg.Number(3));
+        var (value, min, max) = ThreeNumbers(ctx);
 
         return Math.Clamp(value, min, max);
     }
 
     public static Value Fma(StarscriptFunctionContext ctx)
     {
-        ctx.Constrain(Constraint.ExactCount(3));
-
-        var (x, y, z) = ctx.NextTypedTriple(TypedArg.Number(1), TypedArg.Number(2), TypedArg.Number(3));
+        var (x, y, z) = ThreeNumbers(ctx);
 
         return Math.FusedMultiplyAdd(x, y, z);
     }
