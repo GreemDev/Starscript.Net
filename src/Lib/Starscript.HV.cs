@@ -401,7 +401,8 @@ public partial class StarscriptHypervisor
 
         EndExecution:
 
-        Locals = null;
+        if (!_persistentLocals) 
+            Locals = null;
 
         if (firstSegment != null)
         {

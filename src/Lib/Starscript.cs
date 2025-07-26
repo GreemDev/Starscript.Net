@@ -14,28 +14,31 @@ public partial class StarscriptHypervisor
 
     public ValueMap? Locals { get; private set; }
 
+    private readonly bool _persistentLocals;
+
     public static StarscriptHypervisor Create() 
         => new();
 
     public static StarscriptHypervisor CreateFromParent(StarscriptHypervisor hv) 
         => new(hv.Globals);
 
-    public static StarscriptHypervisor CreateWithLocals(ValueMap locals) 
-        => new(locals: locals);
+    public static StarscriptHypervisor CreateWithLocals(ValueMap locals, bool persistentLocals = false) 
+        => new(locals: locals, persistentLocals: persistentLocals);
 
-    public static StarscriptHypervisor CreateFromParentWithLocals(StarscriptHypervisor hv, ValueMap locals)
-        => new(hv.Globals, locals);
+    public static StarscriptHypervisor CreateFromParentWithLocals(StarscriptHypervisor hv, ValueMap locals, bool persistentLocals = false)
+        => new(hv.Globals, locals, persistentLocals);
     
-    public static StarscriptHypervisor CreateWithLocals(IStarscriptObject obj)
-        => new(locals: obj.ToStarscript());
+    public static StarscriptHypervisor CreateWithLocals(IStarscriptObject obj, bool persistentLocals = false)
+        => CreateWithLocals(obj.ToStarscript(), persistentLocals);
 
-    public static StarscriptHypervisor CreateFromParentWithLocals(StarscriptHypervisor hv, IStarscriptObject obj)
-        => new(hv.Globals, obj.ToStarscript());
+    public static StarscriptHypervisor CreateFromParentWithLocals(StarscriptHypervisor hv, IStarscriptObject obj, bool persistentLocals = false)
+        => CreateFromParentWithLocals(hv, obj.ToStarscript(), persistentLocals);
 
-    private StarscriptHypervisor(ValueMap? globals = null, ValueMap? locals = null)
+    private StarscriptHypervisor(ValueMap? globals = null, ValueMap? locals = null, bool persistentLocals = false)
     {
         Globals = globals?.Copy() ?? new ValueMap();
         Locals = locals;
+        _persistentLocals = persistentLocals;
     }
 
     public static StarscriptException Error([StringSyntax("CompositeFormat")] string format, params object?[] args) 
