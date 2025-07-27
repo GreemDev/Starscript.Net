@@ -5,13 +5,13 @@ namespace Starscript;
 public partial class StarscriptHypervisor
 { 
     /// <summary>
-    ///     Calls the provided callback for every completion that can be resolved from global variables. 
+    ///     Calls the provided callback for every completion that can be resolved from global variables, and returns the parsed <paramref name="source"/>.
     /// </summary>
     /// <param name="source">Starscript input.</param>
     /// <param name="position">The position of the caret.</param>
     /// <param name="callback">What to do with each completion suggestion.</param>
     /// <param name="cancellationToken">A cancellation token you can use to short-circuit return from completion logic on a best-effort basis.</param>
-    public void GetCompletions(string source, int position, CompletionCallback callback, CancellationToken cancellationToken = default)
+    public ParserResult ParseAndGetCompletions(string source, int position, CompletionCallback callback, CancellationToken cancellationToken = default)
     {
         var parserResult = Parser.Parse(source);
 
@@ -25,8 +25,20 @@ public partial class StarscriptHypervisor
             if (err.Expr is not null)
                 CompletionsExpr(source, position, err.Expr, callback, cancellationToken);
         }
+
+        return parserResult;
     }
     
+    /// <summary>
+    ///     Calls the provided callback for every completion that can be resolved from global variables. 
+    /// </summary>
+    /// <param name="source">Starscript input.</param>
+    /// <param name="position">The position of the caret.</param>
+    /// <param name="callback">What to do with each completion suggestion.</param>
+    /// <param name="cancellationToken">A cancellation token you can use to short-circuit return from completion logic on a best-effort basis.</param>
+    public void GetCompletions(string source, int position, CompletionCallback callback, CancellationToken cancellationToken = default) 
+        => _ = ParseAndGetCompletions(source, position, callback, cancellationToken);
+
     private void CompletionsExpr(string source, int pos, Expr expr, CompletionCallback callback, CancellationToken cancellationToken)
     {
         if (pos < expr.Start || (pos > expr.End && pos != source.Length)) 
