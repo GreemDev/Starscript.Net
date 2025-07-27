@@ -90,7 +90,7 @@ public partial class StarscriptHypervisor
     {
         if (expr is Expr.Variable variableExpr)
         {
-            return Globals.GetRaw(variableExpr.Name)?.Invoke();
+            return (Locals?.GetRaw(variableExpr.Name) ?? Globals.GetRaw(variableExpr.Name))?.Invoke();
         } 
         
         if (expr is Expr.Get getExpr)
