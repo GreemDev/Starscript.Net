@@ -58,14 +58,14 @@ public partial class StarscriptHypervisor
     /// <summary>
     ///     Calls <see cref="Run(Script)"/> after calling <see cref="ReplaceLocals(Starscript.ValueMap)"/>.
     /// </summary>
-    /// <remarks>The internal locals map has been reset by the time this method returns.</remarks>
+    /// <remarks>The internal locals map has been reset by the time this method returns, if persistent locals is disabled.</remarks>
     public StringSegment Run(Script script, ValueMap locals) 
         => ReplaceLocals(locals).Run(script);
 
     /// <summary>
     ///     Calls <see cref="Run(Script)"/> after calling <see cref="ReplaceLocals(Starscript.IStarscriptObject)"/>.
     /// </summary>
-    /// <remarks>The internal locals map has been reset by the time this method returns.</remarks>
+    /// <remarks>The internal locals map has been reset by the time this method returns, if persistent locals is disabled.</remarks>
     public StringSegment Run(Script script, IStarscriptObject locals) 
         => ReplaceLocals(locals).Run(script);
 
