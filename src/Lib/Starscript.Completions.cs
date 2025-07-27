@@ -10,25 +10,29 @@ public partial class StarscriptHypervisor
     /// <param name="source">Starscript input.</param>
     /// <param name="position">The position of the caret.</param>
     /// <param name="callback">What to do with each completion suggestion.</param>
-    public void GetCompletions(string source, int position, CompletionCallback callback)
+    /// <param name="cancellationToken">A cancellation token you can use to short-circuit return from completion logic on a best-effort basis.</param>
+    public void GetCompletions(string source, int position, CompletionCallback callback, CancellationToken cancellationToken = default)
     {
         var parserResult = Parser.Parse(source);
 
         foreach (var expr in parserResult.Exprs)
         {
-            CompletionsExpr(source, position, expr, callback);
+            CompletionsExpr(source, position, expr, callback, cancellationToken);
         }
 
         foreach (var err in parserResult.Errors)
         {
             if (err.Expr is not null)
-                CompletionsExpr(source, position, err.Expr, callback);
+                CompletionsExpr(source, position, err.Expr, callback, cancellationToken);
         }
     }
     
-    private void CompletionsExpr(string source, int pos, Expr expr, CompletionCallback callback)
+    private void CompletionsExpr(string source, int pos, Expr expr, CompletionCallback callback, CancellationToken cancellationToken)
     {
         if (pos < expr.Start || (pos > expr.End && pos != source.Length)) 
+            return;
+
+        if (cancellationToken.IsCancellationRequested)
             return;
 
         if (expr is Expr.Variable variableExpr)
@@ -50,7 +54,7 @@ public partial class StarscriptHypervisor
                 if (value is not null && value.IsMap)
                 {
                     var start = source[(getExpr.Object.End + 1)..pos];
-
+                    
                     foreach (var (subKey, subValue) in value.GetMap())
                     {
                         if (!subKey.StartsWith('_') && subKey.StartsWith(start))
@@ -61,7 +65,7 @@ public partial class StarscriptHypervisor
             }
             else
                 foreach (var child in expr.Children) 
-                    CompletionsExpr(source, pos, child, callback);
+                    CompletionsExpr(source, pos, child, callback, cancellationToken);
         }
         else if (expr is Expr.Block blockExpr)
         {
@@ -76,13 +80,13 @@ public partial class StarscriptHypervisor
             else
             {
                 foreach (var child in expr.Children) 
-                    CompletionsExpr(source, pos, child, callback);
+                    CompletionsExpr(source, pos, child, callback, cancellationToken);
             }
         }
         else
         {
             foreach (var child in expr.Children) 
-                CompletionsExpr(source, pos, child, callback);
+                CompletionsExpr(source, pos, child, callback, cancellationToken);
         }
     }
     
