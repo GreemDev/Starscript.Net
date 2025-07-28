@@ -13,7 +13,7 @@ public partial class StarscriptHypervisor
     /// <param name="position">The position of the caret.</param>
     /// <param name="callback">What to do with each completion suggestion.</param>
     /// <param name="cancellationToken">A cancellation token you can use to short-circuit return from completion logic on a best-effort basis.</param>
-    public ParserResult ParseAndGetCompletions(string source, int position, CompletionCallback callback,
+    public Parser.Result ParseAndGetCompletions(string source, int position, CompletionCallback callback,
         CancellationToken cancellationToken = default)
     {
         var parserResult = Parser.Parse(source);

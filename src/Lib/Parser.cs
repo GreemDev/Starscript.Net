@@ -21,14 +21,14 @@ public partial struct Parser
         _lexer = new Lexer(source);
     }
 
-    public static ParserResult Parse(string source) => new Parser(source).Run();
+    public static Result Parse(string source) => new Parser(source).Run();
     
-    public static bool TryParse(string source, out ParserResult result)
+    public static bool TryParse(string source, out Result result)
         => !(result = new Parser(source).Run()).HasErrors;
 
-    internal ParserResult Run()
+    internal Result Run()
     {
-        var result = new ParserResult(_lexer.Source);
+        var result = new Result(_lexer.Source);
 
         Advance();
 
@@ -46,5 +46,29 @@ public partial struct Parser
         }
 
         return result;
+    }
+    
+    public class Result : Expr.IVisitable
+    {
+        public Result(string source)
+        {
+            Exprs = [];
+            Errors = [];
+
+            Source = source;
+        }
+
+        public readonly List<Expr> Exprs;
+        public readonly List<ParserError> Errors;
+
+        public readonly string Source;
+
+        public bool HasErrors => Errors.Count > 0;
+
+        public void Accept(Expr.IVisitor visitor)
+        {
+            foreach (var expr in Exprs) 
+                expr.Accept(visitor);
+        } 
     }
 }

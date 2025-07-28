@@ -7,7 +7,7 @@ public static class StarscriptFactory
     /// <summary>
     ///     Runs the <paramref name="source"/> string through the Starscript <see cref="Parser"/>, directly returning the result. 
     /// </summary>
-    public static ParserResult Parse(string source) => Parser.Parse(source);
+    public static Parser.Result Parse(string source) => Parser.Parse(source);
 
     /// <summary>
     ///     Tries to compile the provided <paramref name="source"/> string into an executable Starscript <see cref="Script"/>.
@@ -35,8 +35,8 @@ public static class StarscriptFactory
     /// <summary>
     ///     Compiles a parser result into a Starscript <see cref="Script"/> capable of being executed by <see cref="StarscriptHypervisor"/>.
     ///     <br/>
-    ///     This method assumes the caller has already checked for errors in the <see cref="ParserResult"/>.
+    ///     This method assumes the caller has already checked for errors in the <see cref="Parser.Result"/>.
     /// </summary>
     /// <returns>Execution-ready compiled Starscript</returns>
-    public static Script Compile(ParserResult result) => Compiler.SingleCompile(result);
+    public static Script Compile(Parser.Result result) => Compiler.SingleCompile(result);
 }

@@ -6,11 +6,11 @@ namespace Starscript;
 public partial class Compiler
 {
     /// <summary>
-    ///     Compile all given <see cref="ParserResult"/>s in the <see cref="IEnumerable{T}"/> into an immutable array of immutable <see cref="Script"/>s, using the same <see cref="Compiler"/> instance.
+    ///     Compile all given <see cref="Parser.Result"/>s in the <see cref="IEnumerable{T}"/> into an immutable array of immutable <see cref="Script"/>s, using the same <see cref="Compiler"/> instance.
     /// </summary>
     /// <param name="inputResults">The parser results to compile.</param>
     /// <returns>An immutable array of immutable <see cref="Script"/>s.</returns>
-    public static ImmutableArray<Script> CompileAll(IEnumerable<ParserResult> inputResults)
+    public static ImmutableArray<Script> CompileAll(IEnumerable<Parser.Result> inputResults)
     {
         var parserResults = inputResults.ToList();
         
@@ -28,11 +28,11 @@ public partial class Compiler
     }
 
     /// <summary>
-    ///     Compile all given <see cref="ParserResult"/>s in the <see cref="IEnumerable{T}"/> into an immutable array of immutable <see cref="Script"/>s, using the same <see cref="Compiler"/> instance.
+    ///     Compile all given <see cref="Parser.Result"/>s in the <see cref="IEnumerable{T}"/> into an immutable array of immutable <see cref="Script"/>s, using the same <see cref="Compiler"/> instance.
     /// </summary>
     /// <param name="inputResults">The parser results to compile.</param>
     /// <returns>An immutable array of immutable <see cref="Script"/>s.</returns>
-    public static ImmutableArray<Script> BatchCompile(params IEnumerable<ParserResult> inputResults) =>
+    public static ImmutableArray<Script> BatchCompile(params IEnumerable<Parser.Result> inputResults) =>
         CompileAll(inputResults);
     
     /// <summary>
@@ -40,7 +40,7 @@ public partial class Compiler
     /// </summary>
     /// <param name="source">The Starscript source input.</param>
     /// <returns>An immutable <see cref="Script"/>.</returns>
-    /// <exception cref="ParseException">Thrown if the internal <see cref="ParserResult"/> contains any errors.</exception>
+    /// <exception cref="ParseException">Thrown if the internal <see cref="Parser.Result"/> contains any errors.</exception>
     public static Script DirectCompile(string source)
     {
         var parsed = Parser.Parse(source);
@@ -51,9 +51,9 @@ public partial class Compiler
     }
     
     /// <summary>
-    ///     Compile the given <see cref="ParserResult"/> into an immutable <see cref="Script"/>.
+    ///     Compile the given <see cref="Parser.Result"/> into an immutable <see cref="Script"/>.
     /// </summary>
-    /// <param name="result">The <see cref="ParserResult"/> to compile.</param>
+    /// <param name="result">The <see cref="Parser.Result"/> to compile.</param>
     /// <returns>An immutable <see cref="Script"/>.</returns>
-    public static Script SingleCompile(ParserResult result) => new Compiler(result).MoveToImmutableAndReset();
+    public static Script SingleCompile(Parser.Result result) => new Compiler(result).MoveToImmutableAndReset();
 }

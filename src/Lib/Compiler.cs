@@ -25,7 +25,7 @@ public partial class Compiler : Expr.IVisitor
         _output = new MutableScript();
     }
     
-    public Compiler(ParserResult result) : this() 
+    public Compiler(Parser.Result result) : this() 
         => Compile(result);
 
     public Compiler(
@@ -35,14 +35,14 @@ public partial class Compiler : Expr.IVisitor
     }
 
     /// <summary>
-    ///     Run this <see cref="Compiler"/> on the given <see cref="ParserResult"/> imput, producing a <see cref="MutableScript"/>.
+    ///     Run this <see cref="Compiler"/> on the given <see cref="Parser.Result"/> imput, producing a <see cref="MutableScript"/>.
     ///     <br/>
     ///     Using <see cref="MutableScript.MoveToImmutable"/> on the result and storing its return value will allow infinite re-use of this <see cref="Compiler"/> instance.
     /// </summary>
-    /// <param name="result">The <see cref="ParserResult"/> to compile.</param>
+    /// <param name="result">The <see cref="Parser.Result"/> to compile.</param>
     /// <returns>The compiled <see cref="MutableScript"/>.</returns>
     // ReSharper disable once UnusedMethodReturnValue.Global
-    public MutableScript Compile(ParserResult result)
+    public MutableScript Compile(Parser.Result result)
     {
 #if DEBUG
         _source = result.Source;
