@@ -1,4 +1,6 @@
-﻿namespace Starscript.Internal;
+﻿using Starscript.Internal;
+
+namespace Starscript;
 
 public class ParserResult : Expr.IVisitable
 {
