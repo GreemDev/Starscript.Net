@@ -22,18 +22,18 @@ env:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         name: "Checkout code"
         
       - name: Get version info
         id: version_info
+        shell: bash
         run: |
           echo "build_version=${{ env.BASE_VERSION }}.${{ github.run_number }}" >> $GITHUB_OUTPUT
           echo "prev_build_version=${{ env.BASE_VERSION }}.$((${{ github.run_number }} - 1))" >> $GITHUB_OUTPUT
           echo "git_short_hash=$(git rev-parse --short "${{ github.sha }}")" >> $GITHUB_OUTPUT
-        shell: bash
 
       - uses: actions/setup-dotnet@v4
         name: "Install .NET SDK"
@@ -41,6 +41,7 @@ jobs:
           global-json-file: global.json
         
       - name: Compile & publish
+        shell: bash
         run: |
           cd src/Lib
           dotnet build -c Release -o ../../nuget_build -p:Version="${{ steps.version_info.outputs.build_version }}"
