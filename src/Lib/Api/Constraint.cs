@@ -7,7 +7,7 @@ public class Constraint
     public Predicate<int> Test { get; }
     public Func<string> FriendlyError { get; }
 
-    internal Constraint(Predicate<int> test, Func<string> friendlyError)
+    public Constraint(Predicate<int> test, Func<string> friendlyError)
     {
         Test = test;
         FriendlyError = friendlyError;
