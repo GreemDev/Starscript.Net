@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starscript.Net", "src\Lib\Starscript.Net.csproj", "{4F09F759-B495-4A71-B79D-9D4C4AF2A9A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starscript.Net.Tests", "src\Tests\Starscript.Net.Tests.csproj", "{A72E8D8D-DD5B-4DC4-B109-4DEFCEBA17F2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starscript.Net.TestProgram", "src\TestProgram\Starscript.Net.TestProgram.csproj", "{3046ED02-73C4-49D7-A697-4995642D2921}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starscript.Net.Benchmarks", "src\Benchmarks\Starscript.Net.Benchmarks.csproj", "{6087079B-D22A-45C1-9AA6-999DAFFF6A6E}"
@@ -24,10 +22,6 @@ Global
 		{4F09F759-B495-4A71-B79D-9D4C4AF2A9A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F09F759-B495-4A71-B79D-9D4C4AF2A9A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F09F759-B495-4A71-B79D-9D4C4AF2A9A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A72E8D8D-DD5B-4DC4-B109-4DEFCEBA17F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A72E8D8D-DD5B-4DC4-B109-4DEFCEBA17F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A72E8D8D-DD5B-4DC4-B109-4DEFCEBA17F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A72E8D8D-DD5B-4DC4-B109-4DEFCEBA17F2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3046ED02-73C4-49D7-A697-4995642D2921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3046ED02-73C4-49D7-A697-4995642D2921}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3046ED02-73C4-49D7-A697-4995642D2921}.Release|Any CPU.ActiveCfg = Release|Any CPU
