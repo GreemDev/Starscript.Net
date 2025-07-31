@@ -163,7 +163,11 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
     public bool TryGetValue(string key, [MaybeNullWhen(false)] out Func<Value> value) 
         => _entries.TryGetValue(key, out value);
 
-    public Func<Value> this[string key] => Get(key)!;
+    public Func<Value> this[string key]
+    {
+        get => Get(key)!;
+        set => Set(key, value);
+    }
 
     public IEnumerable<string> Keys => _entries.Keys;
     public IEnumerable<Func<Value>> Values => _entries.Values;

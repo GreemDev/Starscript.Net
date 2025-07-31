@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Starscript;
 
@@ -18,8 +19,25 @@ public class StringSegment
     
     public StringSegment? Next { get; set; }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void Walk(Action<StringSegment> walkerAction)
+    {
+        var segment = this;
+
+        while (segment != null)
+        {
+            walkerAction(segment);
+            segment = segment.Next;
+        }
+    }
+
+    private string? _constructed;
+
     public override string ToString()
     {
+        if (_constructed != null)
+            return _constructed;
+        
         var sb = tl_StringBuilder.Value!;
         sb.Length = 0;
 
@@ -30,7 +48,7 @@ public class StringSegment
             sb.Append(segment.Content);
             segment = segment.Next;
         }
-
-        return sb.ToString();
+        
+        return _constructed = sb.ToString();
     }
 }

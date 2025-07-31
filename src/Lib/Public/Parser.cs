@@ -2,7 +2,7 @@
 
 namespace Starscript;
 
-// other parts are in src/Lib/Internal/Parser
+// other parts are in src/Lib/Public/Parser
 
 /// <summary>
 /// A parser that produces an AST (Abstract Syntax Tree) from Starscript input code and reports errors. 

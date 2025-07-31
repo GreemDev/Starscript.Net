@@ -1,6 +1,4 @@
-﻿using Starscript.Internal;
-
-namespace Starscript;
+﻿namespace Starscript.Internal;
 
 public class AbstractExprVisitor : Expr.IVisitor
 {
