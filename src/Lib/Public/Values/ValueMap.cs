@@ -88,7 +88,7 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
         var name1 = name[..dotIndex];
         var name2 = name[(dotIndex + 1)..];
 
-        if (this[name1] is not { } getFunc)
+        if (_entries[name1] is not { } getFunc)
             return null;
         
         var value = getFunc();
@@ -119,7 +119,7 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
         var name1 = name[..dotIndex];
         var name2 = name[(dotIndex + 1)..];
 
-        if (this[name1] is not { } getFunc)
+        if (_entries[name1] is not { } getFunc)
         {
             removedValue = null;
             return false;
