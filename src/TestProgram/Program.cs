@@ -35,6 +35,8 @@ public static class Program
             // StarscriptHypervisor should error here, as the source string calls a function that is defined as a local, so it is cleared when the script execution ends.
             // NotImplementedException is not caught as that is an error case, that being StarscriptHypervisor *not* erroring.  
         }
+        
+        script.Dispose();
     }
 }
 

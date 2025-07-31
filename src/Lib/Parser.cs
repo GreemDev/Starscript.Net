@@ -67,7 +67,7 @@ public partial struct Parser
 
         public void Accept(Expr.IVisitor visitor)
         {
-            foreach (var expr in Exprs) 
+            foreach (var expr in Exprs)
                 expr.Accept(visitor);
         } 
     }

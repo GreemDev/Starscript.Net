@@ -2,7 +2,6 @@
 
 public class ParserError
 {
-    
     public int Line { get; internal set; }
     public int CharacterPos { get; internal set; }
     public char Character { get; internal set; }

@@ -16,7 +16,7 @@ public class MutableScript
         CodeBuffer.TrimExcess();
 
         var codeCopy = CodeBuffer.Span.ToArray();
-        var constantsCopy = new List<Value>(Constants);
+        var constantsCopy = Constants.ToArray();
 
         // Clear the current script's memory, potentially useful for a reusable script instance system in the future(?)
         CodeBuffer.ResetAndClear();
@@ -28,7 +28,7 @@ public class MutableScript
 
         return new Script(
             codeCopy,
-            constantsCopy.AsReadOnly()
+            constantsCopy
         );
     }
 

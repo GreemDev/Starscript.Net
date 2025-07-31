@@ -9,7 +9,7 @@ public class StarscriptVsStringFormat
     public const string FormatSource = "FPS: {0}";
     public const string StarscriptSource = "FPS: {round(fps)}";
 
-    public static Script PrecompiledTestScript = Compiler.DirectCompile(StarscriptSource);
+    public static readonly Script PrecompiledTestScript = Compiler.DirectCompile(StarscriptSource);
 
     public StarscriptVsStringFormat()
     {
@@ -31,6 +31,8 @@ public class StarscriptVsStringFormat
     [Benchmark]
     public void JitStarscript()
     {
-        _ = Compiler.DirectCompile(StarscriptSource).Execute(Hypervisor);
+        using var script = Compiler.DirectCompile(StarscriptSource);
+        
+        _ = script.Execute(Hypervisor);
     }
 }
