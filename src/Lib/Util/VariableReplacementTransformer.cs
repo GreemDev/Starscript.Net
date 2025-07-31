@@ -64,11 +64,16 @@ public class VariableReplacementTransformer : AbstractExprVisitor
 
     private void GetFullNameInternal(Expr.Get expr)
     {
-        if (expr.Object is Expr.Get getExpr)
-            GetFullNameInternal(getExpr);
-        else if (expr.Object is Expr.Variable varExpr)
-            _sb.Append(varExpr.Name);
-        else 
-            throw new InvalidOperationException();
+        switch (expr.Object)
+        {
+            case Expr.Get getExpr:
+                GetFullNameInternal(getExpr);
+                break;
+            case Expr.Variable varExpr:
+                _sb.Append(varExpr.Name);
+                break;
+            default:
+                throw new InvalidOperationException();
+        }
     }
 }
