@@ -8,6 +8,9 @@ public partial class StarscriptHypervisor
 {
     internal StringSegment RunImpl(ExecutableScript script, StringBuilder sb)
     {
+        if (script.IsDisposed)
+            throw new ObjectDisposedException(script.GetType().FullName, "Cannot execute a disposed Script.");
+        
         _stack.Clear();
 
         sb.Length = 0;
