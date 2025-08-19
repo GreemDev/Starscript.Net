@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Starscript.Internal;
 using Starscript.Util;
+// ReSharper disable UnusedMethodReturnValue.Global
 
 namespace Starscript;
 
