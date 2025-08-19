@@ -16,6 +16,8 @@ public class ResizableBuffer<T>
 
     public ReadOnlyMemory<T> RoMemory => _buffer;
 
+    public ref readonly T this[int idx] => ref _buffer[idx];
+
     public ResizableBuffer(int initialCapacity = 8)
     {
         _initialCapacity = initialCapacity;

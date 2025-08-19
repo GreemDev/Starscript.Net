@@ -29,12 +29,12 @@ public class TransparentStack<T>
 
     public T Pop()
     {
-        var item = _buffer.RoSpan[--_buffer.CurrentSize];
+        var item = _buffer[--_buffer.CurrentSize];
         _buffer.Span[_buffer.CurrentSize] = default!;
         return item;
     }
 
-    public T Peek() => _buffer.RoSpan[_buffer.CurrentSize - 1];
+    public T Peek() => _buffer[_buffer.CurrentSize - 1];
     
-    public T Peek(int offset) => _buffer.RoSpan[_buffer.CurrentSize - 1 - offset];
+    public T Peek(int offset) => _buffer[_buffer.CurrentSize - 1 - offset];
 }
