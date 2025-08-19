@@ -26,6 +26,8 @@ public partial record struct SemanticToken
                 case Token.GreaterEqual:
                 case Token.Less:
                 case Token.LessEqual:
+                case Token.LeftShift: 
+                case Token.RightShift:
                 case Token.Plus:
                 case Token.Minus:
                 case Token.Star:
