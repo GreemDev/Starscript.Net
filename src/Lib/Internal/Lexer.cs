@@ -83,8 +83,8 @@ public class Lexer
                         CreateToken(
                             Match('=') 
                                 ? Token.LessEqual 
-                                : Match('>') 
-                                    ? Token.RightShift 
+                                : Match('<') 
+                                    ? Token.LeftShift 
                                     : Token.Less
                             ); 
                         break;
