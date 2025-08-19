@@ -20,6 +20,7 @@ public enum Token : byte
     QuestionMark, Colon,
     LeftParen, RightParen,
     LeftBrace, RightBrace,
+    LeftShift, RightShift,
 
     Section,
 

@@ -175,6 +175,17 @@ public partial class StarscriptHypervisor
 
                     break;
                 }
+                case RightShift:
+                {
+                    var (a, b) = PopPair();
+                    
+                    if (a.IsNumber && b.IsNumber)
+                        Push(Convert.ToInt32(a.GetNumber()) >> Convert.ToInt32(double.Truncate(b.GetNumber())));
+                    else
+                        throw Error(">> operation requires 2 numbers.");
+
+                    break;
+                }
                 case Less:
                 {
                     var (a, b) = PopPair();
@@ -194,6 +205,17 @@ public partial class StarscriptHypervisor
                         Push(a.GetNumber() <= b.GetNumber());
                     else
                         throw Error("<= operation requires 2 numbers.");
+
+                    break;
+                }
+                case LeftShift:
+                {
+                    var (a, b) = PopPair();
+
+                    if (a.IsNumber && b.IsNumber)
+                        Push(Convert.ToInt32(a.GetNumber()) << Convert.ToInt32(double.Truncate(b.GetNumber())));
+                    else
+                        throw Error("<< operation requires 2 numbers.");
 
                     break;
                 }

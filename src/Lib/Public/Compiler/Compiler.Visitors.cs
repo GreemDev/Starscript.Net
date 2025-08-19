@@ -120,6 +120,8 @@ public partial class Compiler
             case Token.GreaterEqual: _output.Write(GreaterEqual); break;
             case Token.Less: _output.Write(Less); break;
             case Token.LessEqual: _output.Write(LessEqual); break;
+            case Token.LeftShift: _output.Write(LeftShift); break;
+            case Token.RightShift: _output.Write(RightShift); break;
         }
 
 #if DEBUG

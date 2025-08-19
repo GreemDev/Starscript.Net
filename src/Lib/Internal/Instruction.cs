@@ -26,6 +26,8 @@ public enum Instruction : byte
     GreaterEqual,
     Less,
     LessEqual,
+    LeftShift, 
+    RightShift,
 
     Variable,
     Get,

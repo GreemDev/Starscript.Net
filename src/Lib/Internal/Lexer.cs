@@ -70,8 +70,24 @@ public class Lexer
 
                     case '=':  if (Match('=')) CreateToken(Token.EqualEqual); else Unexpected(); break;
                     case '!':  CreateToken(Match('=') ? Token.BangEqual : Token.Bang); break;
-                    case '>':  CreateToken(Match('=') ? Token.GreaterEqual : Token.Greater); break;
-                    case '<':  CreateToken(Match('=') ? Token.LessEqual : Token.Less); break;
+                    case '>':  
+                        CreateToken(
+                            Match('=') 
+                                ? Token.GreaterEqual 
+                                : Match('>') 
+                                    ? Token.RightShift 
+                                    : Token.Greater
+                            ); 
+                        break;
+                    case '<':
+                        CreateToken(
+                            Match('=') 
+                                ? Token.LessEqual 
+                                : Match('>') 
+                                    ? Token.RightShift 
+                                    : Token.Less
+                            ); 
+                        break;
 
                     case '+':  CreateToken(Token.Plus); break;
                     case '-':  CreateToken(Token.Minus); break;

@@ -166,7 +166,7 @@ public partial struct Parser
         int start = _previous.Start;
         Expr expr = Unary();
 
-        while (MatchAnyNext(Token.Star, Token.Slash, Token.Percentage, Token.UpArrow))
+        while (MatchAnyNext(Token.Star, Token.Slash, Token.Percentage, Token.UpArrow, Token.LeftShift, Token.RightShift))
         {
             Token op = _previous.Token;
             Expr right = Unary();

@@ -5,7 +5,7 @@ public static class Program
 {
     internal static void Main()
     {
-        string source = "Name: {name}     Age: {age()}";
+        string source = "Name: {name}     Age: {age() >> 2}";
 
         Console.WriteLine("Input: ");
         Console.WriteLine(source);
@@ -44,6 +44,6 @@ struct TestUser : IStarscriptObject
 {
     public ValueMap ToStarscript() => new ValueMap()
         .Set("name", "GreemDev")
-        .Set("age", _ => 5);
+        .Set("age", _ => 60);
 }
 
