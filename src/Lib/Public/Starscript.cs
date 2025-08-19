@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Starscript.Internal;
 using Starscript.Util;
 
 namespace Starscript;
@@ -59,20 +60,20 @@ public partial class StarscriptHypervisor
     public StarscriptHypervisor ReplaceLocals(IStarscriptObject locals) 
         => ReplaceLocals(locals.ToStarscript());
     
-    public StringSegment Run(Script script) => RunImpl(script, new StringBuilder());
+    public StringSegment Run(ExecutableScript script) => RunImpl(script, new StringBuilder());
 
     /// <summary>
     ///     Calls <see cref="Run(Script)"/> after calling <see cref="ReplaceLocals(Starscript.ValueMap)"/>.
     /// </summary>
     /// <remarks>The internal locals map has been reset by the time this method returns, if persistent locals is disabled.</remarks>
-    public StringSegment Run(Script script, ValueMap locals) 
+    public StringSegment Run(ExecutableScript script, ValueMap locals) 
         => ReplaceLocals(locals).Run(script);
 
     /// <summary>
     ///     Calls <see cref="Run(Script)"/> after calling <see cref="ReplaceLocals(Starscript.IStarscriptObject)"/>.
     /// </summary>
     /// <remarks>The internal locals map has been reset by the time this method returns, if persistent locals is disabled.</remarks>
-    public StringSegment Run(Script script, IStarscriptObject locals) 
+    public StringSegment Run(ExecutableScript script, IStarscriptObject locals) 
         => ReplaceLocals(locals).Run(script);
 
 #if DEBUG

@@ -6,7 +6,7 @@ namespace Starscript;
 
 public partial class StarscriptHypervisor
 {
-    internal StringSegment RunImpl(Script script, StringBuilder sb)
+    internal StringSegment RunImpl(ExecutableScript script, StringBuilder sb)
     {
         _stack.Clear();
 

@@ -1,14 +1,19 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Starscript.Internal;
 using Starscript.Util;
 
 namespace Starscript;
 
-public class MutableScript
+public class MutableScript : ExecutableScript
 {
-    public List<Value> Constants { get; } = [];
+    private readonly List<Value> _constants = [];
+
+    public override ReadOnlySpan<Value> Constants => CollectionsMarshal.AsSpan(_constants);
 
     public ResizableBuffer<byte> CodeBuffer { get; } = new();
+
+    public override ReadOnlySpan<byte> Code => CodeBuffer.RoSpan;
 
     public Script MoveToImmutable()
     {
@@ -20,7 +25,7 @@ public class MutableScript
 
         // Clear the current script's memory, potentially useful for a reusable script instance system in the future(?)
         CodeBuffer.ResetAndClear();
-        Constants.Clear();
+        _constants.Clear();
 
 #if DEBUG
         Compiler.DebugLog($"Resulting immutable script size in bytes after move: {codeCopy.Length * Unsafe.SizeOf<byte>()}");
@@ -31,6 +36,8 @@ public class MutableScript
             constantsCopy
         );
     }
+
+    #region Script writing
 
     /// <summary>
     ///     Write an <see cref="Instruction"/> to this <see cref="MutableScript"/>.
@@ -62,7 +69,7 @@ public class MutableScript
     {
         var constIndex = -1;
 
-        foreach (var (idx, value) in Constants.Index())
+        foreach (var (idx, value) in _constants.Index())
         {
             if (value == constant)
             {
@@ -73,10 +80,10 @@ public class MutableScript
 
         if (constIndex is -1)
         {
-            constIndex = Constants.Count;
-            Constants.Add(constant);
+            constIndex = _constants.Count;
+            _constants.Add(constant);
         }
-        
+
         CodeBuffer.Write((byte)constIndex);
     }
 
@@ -102,5 +109,25 @@ public class MutableScript
 
         CodeBuffer.Span[offset] = (byte)((jump >> 8) & 0xFF);
         CodeBuffer.Span[offset + 1] = (byte)(jump & 0xFF);
+    }
+
+    #endregion
+    
+    public override void Dispose()
+    {
+        if (IsDisposed)
+            throw new ObjectDisposedException(nameof(MutableScript), "Cannot dispose an already disposed Script.");
+        
+        _constants.Clear();
+        _constants.TrimExcess();
+        CodeBuffer.ResetAndClear();
+
+#if DEBUG
+        Compiler.DebugLog("Destroyed mutable script");
+#endif
+
+        IsDisposed = true;
+
+        GC.SuppressFinalize(this);
     }
 }

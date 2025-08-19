@@ -1,15 +1,15 @@
-﻿namespace Starscript;
+﻿using Starscript.Internal;
 
-public class Script : IDisposable
+namespace Starscript;
+
+public class Script : ExecutableScript
 {
-    private bool _disposed;
-    
     private byte[] _code;
     private Value[] _constants;
 
-    public ReadOnlySpan<byte> Code => _code;
+    public override ReadOnlySpan<byte> Code => _code;
 
-    public ReadOnlySpan<Value> Constants => _constants;
+    public override ReadOnlySpan<Value> Constants => _constants;
 
     public Script(byte[] codeBuffer, Value[] constants)
     {
@@ -17,43 +17,17 @@ public class Script : IDisposable
         _constants = constants;
     }
 
-    public byte GetByteAt(int idx)
+    public override byte GetByteAt(int idx)
     {
-        if (_disposed)
+        if (IsDisposed)
             throw new ObjectDisposedException(nameof(Script), "Cannot access bytecode of a disposed Script.");
 
         return _code[idx];
     }
 
-    public int GetMaskedByteAt(int idx) => GetByteAt(idx) & 0xFF;
-
-    public StringSegment Execute(StarscriptHypervisor hypervisor)
+    public override void Dispose()
     {
-        if (_disposed)
-            throw new ObjectDisposedException(nameof(Script), "Cannot execute a disposed Script.");
-
-        return hypervisor.Run(this);
-    }
-
-    public StringSegment Execute(StarscriptHypervisor hypervisor, ValueMap locals)
-    {
-        if (_disposed)
-            throw new ObjectDisposedException(nameof(Script), "Cannot execute a disposed Script.");
-
-        return hypervisor.Run(this, locals);
-    }
-
-    public StringSegment Execute(StarscriptHypervisor hypervisor, IStarscriptObject obj)
-    {
-        if (_disposed)
-            throw new ObjectDisposedException(nameof(Script), "Cannot execute a disposed Script.");
-
-        return hypervisor.Run(this, obj);
-    }
-
-    public void Dispose()
-    {
-        if (_disposed)
+        if (IsDisposed)
             throw new ObjectDisposedException(nameof(Script), "Cannot dispose an already disposed Script.");
         
         Array.Resize(ref _code, 0);
@@ -63,7 +37,7 @@ public class Script : IDisposable
         Compiler.DebugLog("Destroyed script");
 #endif
 
-        _disposed = true;
+        IsDisposed = true;
         
         GC.SuppressFinalize(this);
     }
