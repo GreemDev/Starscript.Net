@@ -20,7 +20,15 @@ public static class Program
         var hypervisor = StarscriptHypervisor.Create().WithStandardLibrary();
 
         Console.WriteLine("Output: ");
-        Console.WriteLine("    " + script.Execute(hypervisor, new TestUser()));
+        var segment = script.Execute(hypervisor, new TestUser());
+        Console.WriteLine("    " + segment);
+        
+        Console.WriteLine("Walked: {");
+        segment.Walk(seg =>
+        {
+            Console.WriteLine($"    Index: {seg.Index}, Content: \"{seg.Content}\", HasNext: {seg.Next is not null}");
+        });
+        Console.WriteLine("}");
 
         try
         {
