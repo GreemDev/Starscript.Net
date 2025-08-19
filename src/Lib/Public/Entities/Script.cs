@@ -17,7 +17,7 @@ public class Script : ExecutableScript
         _constants = constants;
     }
 
-    public override byte GetByteAt(int idx)
+    protected override byte GetByteAt(int idx)
     {
         if (IsDisposed)
             throw new ObjectDisposedException(nameof(Script), "Cannot access bytecode of a disposed Script.");

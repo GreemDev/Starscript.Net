@@ -25,17 +25,17 @@ public partial class StarscriptHypervisor
         {
 #if DEBUG
             var idx = instructionPointer++;
-            var insn = (Instruction)script.GetByteAt(idx);
+            var insn = (Instruction)script[idx];
             DebugLog($"Processing {Enum.GetName(insn)} instruction @ ip 0x{idx:x8} ({idx})");
 
             switch (insn)
 #else
-            switch ((Instruction)script.GetByteAt(instructionPointer++))
+            switch ((Instruction)script[instructionPointer++])
 #endif
             {
                 case Constant:
                 {
-                    Push(script.Constants[script.GetMaskedByteAt(instructionPointer++)]);
+                    Push(script.Constants[script.GetMasked(instructionPointer++)]);
                     break;
                 }
                 case Null: Push(Value.Null); break;
@@ -114,7 +114,7 @@ public partial class StarscriptHypervisor
 
                 case AddConstant:
                 {
-                    var b = script.Constants[script.GetMaskedByteAt(instructionPointer++)];
+                    var b = script.Constants[script.GetMasked(instructionPointer++)];
                     var a = Pop();
 
                     if (a.IsNumber && b.IsNumber)
@@ -225,7 +225,7 @@ public partial class StarscriptHypervisor
 
                 case Variable:
                 {
-                    var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
+                    var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
 
                     Push((Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke());
 
@@ -233,7 +233,7 @@ public partial class StarscriptHypervisor
                 }
                 case Get:
                 {
-                    var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
+                    var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
 
                     var value = Pop();
 
@@ -246,7 +246,7 @@ public partial class StarscriptHypervisor
                 }
                 case Call:
                 {
-                    var argCount = script.GetByteAt(instructionPointer++);
+                    var argCount = script[instructionPointer++];
 
                     var a = Peek(argCount);
 
@@ -265,8 +265,8 @@ public partial class StarscriptHypervisor
 
                 case Jump:
                 {
-                    var jump = (script.GetMaskedByteAt(instructionPointer++) << 8)
-                               | script.GetMaskedByteAt(instructionPointer++);
+                    var jump = (script.GetMasked(instructionPointer++) << 8)
+                               | script.GetMasked(instructionPointer++);
 
                     instructionPointer += jump;
 
@@ -274,8 +274,8 @@ public partial class StarscriptHypervisor
                 }
                 case JumpIfTrue:
                 {
-                    var jump = (script.GetMaskedByteAt(instructionPointer++) << 8)
-                               | script.GetMaskedByteAt(instructionPointer++);
+                    var jump = (script.GetMasked(instructionPointer++) << 8)
+                               | script.GetMasked(instructionPointer++);
 
                     if (Peek().IsTruthy)
                         instructionPointer += jump;
@@ -284,8 +284,8 @@ public partial class StarscriptHypervisor
                 }
                 case JumpIfFalse:
                 {
-                    var jump = (script.GetMaskedByteAt(instructionPointer++) << 8)
-                               | script.GetMaskedByteAt(instructionPointer++);
+                    var jump = (script.GetMasked(instructionPointer++) << 8)
+                               | script.GetMasked(instructionPointer++);
 
                     if (!Peek().IsTruthy)
                         instructionPointer += jump;
@@ -307,7 +307,7 @@ public partial class StarscriptHypervisor
                     }
 
                     sb.Length = 0;
-                    index = script.GetByteAt(instructionPointer++);
+                    index = script[instructionPointer++];
                     break;
                 }
 
@@ -318,12 +318,12 @@ public partial class StarscriptHypervisor
                 }
                 case ConstantAppend:
                 {
-                    Append(sb, script.Constants[script.GetMaskedByteAt(instructionPointer++)]);
+                    Append(sb, script.Constants[script.GetMasked(instructionPointer++)]);
                     break;
                 }
                 case VariableAppend:
                 {
-                    var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
+                    var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
 
                     Append(sb, (Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke());
 
@@ -331,7 +331,7 @@ public partial class StarscriptHypervisor
                 }
                 case GetAppend:
                 {
-                    var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
+                    var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
 
                     var value = Pop();
 
@@ -343,7 +343,7 @@ public partial class StarscriptHypervisor
                 }
                 case CallAppend:
                 {
-                    var argCount = script.GetByteAt(instructionPointer++);
+                    var argCount = script[instructionPointer++];
 
                     var a = Peek(argCount);
                     
@@ -366,13 +366,13 @@ public partial class StarscriptHypervisor
 
                     {
                         // Variable
-                        var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
+                        var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
                         value = (Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke() ?? Value.Null;
                     }
 
                     {
                         // Get
-                        var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
+                        var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
 
                         if (!value.IsMap)
                         {
@@ -391,13 +391,13 @@ public partial class StarscriptHypervisor
 
                     {
                         // Variable
-                        var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
+                        var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
                         value = (Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke() ?? Value.Null;
                     }
 
                     {
                         // Get
-                        var name = script.Constants[script.GetMaskedByteAt(instructionPointer++)].GetString();
+                        var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
 
                         if (!value.IsMap)
                         {
@@ -419,8 +419,13 @@ public partial class StarscriptHypervisor
 
                     goto EndExecution;
                 default:
+#if DEBUG
                     throw new InvalidOperationException(
-                        $"Unknown instruction '{Enum.GetName((Instruction)script.GetByteAt(instructionPointer))}'");
+                        $"Unknown instruction '{Enum.GetName(insn)}'");
+                #else
+                    throw new InvalidOperationException(
+                        $"Unknown instruction '{Enum.GetName((Instruction)script[instructionPointer])}'");
+#endif
             }
         }
 

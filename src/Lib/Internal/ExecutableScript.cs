@@ -8,12 +8,14 @@ public abstract class ExecutableScript : IDisposable
     
     public abstract void Dispose();
 
-    public virtual byte GetByteAt(int idx) => Code[idx];
+    protected virtual byte GetByteAt(int idx) => Code[idx];
+
+    public byte this[int idx] => GetByteAt(idx);
 
 
     public bool IsDisposed { get; protected set; }
 
-    public int GetMaskedByteAt(int idx) => GetByteAt(idx) & 0xFF;
+    public int GetMasked(int idx) => GetByteAt(idx) & 0xFF;
 
     public StringSegment Execute(StarscriptHypervisor hypervisor) 
         => hypervisor.Run(this);
