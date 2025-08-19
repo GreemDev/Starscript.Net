@@ -15,6 +15,14 @@ public class MutableScript : ExecutableScript
 
     public override ReadOnlySpan<byte> Code => CodeBuffer.RoSpan;
 
+    protected override ref readonly byte GetByteAt(int idx)
+    {
+        if (IsDisposed)
+            throw new ObjectDisposedException(nameof(MutableScript), "Cannot access bytecode of a disposed Script.");
+
+        return ref CodeBuffer[idx];
+    }
+
     public Script MoveToImmutable()
     {
         // Trim the excess (null) bytes before copying
@@ -112,7 +120,7 @@ public class MutableScript : ExecutableScript
     }
 
     #endregion
-    
+
     public override void Dispose()
     {
         if (IsDisposed)

@@ -17,12 +17,12 @@ public class Script : ExecutableScript
         _constants = constants;
     }
 
-    protected override byte GetByteAt(int idx)
+    protected override ref readonly byte GetByteAt(int idx)
     {
         if (IsDisposed)
             throw new ObjectDisposedException(nameof(Script), "Cannot access bytecode of a disposed Script.");
 
-        return _code[idx];
+        return ref _code[idx];
     }
 
     public override void Dispose()

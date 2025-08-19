@@ -8,10 +8,9 @@ public abstract class ExecutableScript : IDisposable
     
     public abstract void Dispose();
 
-    protected virtual byte GetByteAt(int idx) => Code[idx];
+    protected virtual ref readonly byte GetByteAt(int idx) => ref Code[idx];
 
-    public byte this[int idx] => GetByteAt(idx);
-
+    public ref readonly byte this[int idx] => ref GetByteAt(idx);
 
     public bool IsDisposed { get; protected set; }
 
