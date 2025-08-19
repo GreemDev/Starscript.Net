@@ -227,7 +227,7 @@ public partial class StarscriptHypervisor
                 {
                     var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
 
-                    Push((Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke());
+                    Push(GetVariable(name));
 
                     break;
                 }
@@ -239,7 +239,7 @@ public partial class StarscriptHypervisor
 
                     Push(!value.IsMap
                         ? Value.Null
-                        : value.GetMap().GetRaw(name)?.Invoke()
+                        : GetVariable(name)
                     );
 
                     break;
@@ -325,7 +325,7 @@ public partial class StarscriptHypervisor
                 {
                     var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
 
-                    Append(sb, (Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke());
+                    Append(sb, GetVariable(name));
 
                     break;
                 }
@@ -367,7 +367,7 @@ public partial class StarscriptHypervisor
                     {
                         // Variable
                         var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
-                        value = (Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke() ?? Value.Null;
+                        value = GetVariable(name) ?? Value.Null;
                     }
 
                     {
@@ -392,7 +392,7 @@ public partial class StarscriptHypervisor
                     {
                         // Variable
                         var name = script.Constants[script.GetMasked(instructionPointer++)].GetString();
-                        value = (Locals?.GetRaw(name) ?? Globals.GetRaw(name))?.Invoke() ?? Value.Null;
+                        value = GetVariable(name) ?? Value.Null;
                     }
 
                     {

@@ -85,6 +85,10 @@ public partial class StarscriptHypervisor
     /// </summary>
     public void Clear() => Globals.Clear();
 
+    internal Func<Value>? ResolveVariable(string name) => Locals?.GetRaw(name) ?? Globals.GetRaw(name);
+
+    internal Value? GetVariable(string name) => ResolveVariable(name)?.Invoke();
+
     /// <summary>
     ///     Removes a single value with the specified name from the globals and returns the removed value.
     /// </summary>
