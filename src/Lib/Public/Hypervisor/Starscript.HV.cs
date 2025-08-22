@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Starscript.Internal;
+using Starscript.Util;
 
 namespace Starscript;
 
@@ -97,7 +98,7 @@ public partial class StarscriptHypervisor
 
                 case Instruction.End:
 #if DEBUG
-                    DebugLog($"Encountered {Enum.GetName(Instruction.End)} instruction. Breaking execution.");
+                    DebugLog("End of script code reached. Breaking execution.");
 #endif
 
                     goto EndExecution;
@@ -114,16 +115,7 @@ public partial class StarscriptHypervisor
 
         EndExecution:
 
-        if (!_persistentLocals)
-            ClearLocals();
-
-        if (firstSegment != null)
-        {
-            segment!.Next = new StringSegment(index, sb.ToString());
-            return firstSegment;
-        }
-
-        return new StringSegment(index, sb.ToString());
+        return EndExecution(ref sb, ref firstSegment.NullableRef(), ref segment.NullableRef(), index);
     }
 
     private static void AppendValue(StringBuilder sb, Value? value) => sb.Append(value ?? Value.Null);

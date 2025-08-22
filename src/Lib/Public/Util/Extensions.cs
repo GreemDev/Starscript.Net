@@ -1,9 +1,25 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Starscript.Util;
 
 public static class Extensions
 {
+    public static ref T NullableRef<T>(this T? value) where T : class
+    {
+        if (value is null)
+            return ref Unsafe.NullRef<T>();
+
+        return ref Unsafe.AsRef(ref value);
+    }
+
+    public static bool TryGetNullableRef<T>(this T? value, out T result) where T : class
+    {
+        result = NullableRef(value);
+        return !Unsafe.IsNullRef(ref result);
+    }
+
     public static string Pluralize(this string word, int quantity, Plurality? plurality = null,
         bool prefixQuantity = false)
     {

@@ -47,7 +47,7 @@ public partial class StarscriptHypervisor
     public static StarscriptException Error([StringSyntax("CompositeFormat")] string format, params object?[] args) 
         => new(args.Length == 0 ? format : string.Format(format, args));
 
-    public StarscriptHypervisor ClearLocals()
+    public virtual StarscriptHypervisor ClearLocals()
     {
         Locals = null;
         return this;
