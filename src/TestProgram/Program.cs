@@ -21,7 +21,7 @@ public static class Program
 #if !DEBUG
         throw new InvalidOperationException(
             "TestProgram can only be run in debug as it relies on debug-only logging instrumentation in Starscript.");
-#endif
+#else
 
         string source = "Name: {name}     Age: {age() >> 2}";
 
@@ -62,6 +62,7 @@ public static class Program
         }
 
         script.Dispose();
+#endif
     }
 }
 
