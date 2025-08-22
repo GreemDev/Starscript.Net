@@ -36,7 +36,8 @@ public partial class StarscriptHypervisor
     public static StarscriptHypervisor CreateFromParentWithLocals(StarscriptHypervisor hv, IStarscriptObject obj, bool persistentLocals = false)
         => CreateFromParentWithLocals(hv, obj.ToStarscript(), persistentLocals);
 
-    private StarscriptHypervisor(ValueMap? globals = null, ValueMap? locals = null, bool persistentLocals = false)
+    // ReSharper disable once MemberCanBePrivate.Global
+    protected StarscriptHypervisor(ValueMap? globals = null, ValueMap? locals = null, bool persistentLocals = false)
     {
         Globals = globals?.Copy() ?? new ValueMap();
         Locals = locals;
