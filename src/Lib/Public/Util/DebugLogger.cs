@@ -9,7 +9,8 @@ public enum DebugLogSource
     Lexer, 
     Parser, 
     Compiler, 
-    Hypervisor
+    Hypervisor,
+    Test
 }
 
 public static class DebugLogger
