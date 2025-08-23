@@ -2,16 +2,16 @@
 using Starscript.Internal;
 using Starscript.Util;
 
-namespace Starscript;
+namespace Starscript.Abstraction;
 
-public partial class StarscriptHypervisor
+public partial class AbstractHypervisor<TSelf>
 {
-    internal StringSegment RunImpl(ExecutableScript script, StringBuilder sb)
+    protected virtual StringSegment RunInternal(ExecutableScript script, StringBuilder sb)
     {
         if (script.IsDisposed)
             throw new ObjectDisposedException(script.GetType().FullName, "Cannot execute a disposed Script.");
 
-        _stack.Clear();
+        ClearStack();
 
         sb.Length = 0;
 
@@ -80,28 +80,15 @@ public partial class StarscriptHypervisor
 
                 case Instruction.Section:
                 {
-                    if (firstSegment is null)
-                    {
-                        firstSegment = new StringSegment(index, sb.ToString());
-                        segment = firstSegment;
-                    }
-                    else
-                    {
-                        segment!.Next = new StringSegment(index, sb.ToString());
-                        segment = segment.Next;
-                    }
-
-                    sb.Length = 0;
-                    index = script[instructionPointer++];
+                    Section(ref sb, ref script, 
+                        ref firstSegment.NullableRef(), 
+                        ref segment.NullableRef(), 
+                        ref index, ref instructionPointer);
                     break;
                 }
 
                 case Instruction.End:
-#if DEBUG
-                    DebugLog("End of script code reached. Breaking execution.");
-#endif
-
-                    goto EndExecution;
+                    return EndExecution(ref sb, ref firstSegment.NullableRef(), ref segment.NullableRef(), index);
                 default:
 #if DEBUG
                     throw new InvalidOperationException(
@@ -112,11 +99,5 @@ public partial class StarscriptHypervisor
 #endif
             }
         }
-
-        EndExecution:
-
-        return EndExecution(ref sb, ref firstSegment.NullableRef(), ref segment.NullableRef(), index);
     }
-
-    private static void AppendValue(StringBuilder sb, Value? value) => sb.Append(value ?? Value.Null);
 }

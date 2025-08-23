@@ -44,7 +44,7 @@ public static class DebugLogger
         }
     }
     
-    public const int PaddingWidth = 45;
+    public const int PaddingWidth = 55;
 }
     
 public readonly struct InvocationInfo

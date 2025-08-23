@@ -6,7 +6,7 @@ namespace Starscript;
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public partial class StarscriptHypervisor
 {
-    protected virtual void Jump(ref ExecutableScript script, ref int insnPtr)
+    protected override void Jump(ref ExecutableScript script, ref int insnPtr)
     {
         var jump = (script.GetMasked(insnPtr++) << 8)
                    | script.GetMasked(insnPtr++);
@@ -14,7 +14,7 @@ public partial class StarscriptHypervisor
         insnPtr += jump;
     }
 
-    protected virtual void JumpIfTrue(ref ExecutableScript script, ref int insnPtr)
+    protected override void JumpIfTrue(ref ExecutableScript script, ref int insnPtr)
     {
         var jump = (script.GetMasked(insnPtr++) << 8)
                    | script.GetMasked(insnPtr++);
@@ -23,7 +23,7 @@ public partial class StarscriptHypervisor
             insnPtr += jump;
     }
 
-    protected virtual void JumpIfFalse(ref ExecutableScript script, ref int insnPtr)
+    protected override void JumpIfFalse(ref ExecutableScript script, ref int insnPtr)
     {
         var jump = (script.GetMasked(insnPtr++) << 8)
                    | script.GetMasked(insnPtr++);
@@ -32,21 +32,21 @@ public partial class StarscriptHypervisor
             insnPtr += jump;
     }
 
-    protected virtual void Not() => Push(!Pop().IsTruthy);
+    protected override void Not() => Push(!Pop().IsTruthy);
 
-    protected virtual void Equals()
+    protected override void Equals()
     {
         // ReSharper disable once EqualExpressionComparison
         Push(Pop().Equals(Pop()));
     }
 
-    protected virtual void NotEquals()
+    protected override void NotEquals()
     {
         // ReSharper disable once EqualExpressionComparison
         Push(!Pop().Equals(Pop()));
     }
 
-    protected virtual void Greater()
+    protected override void Greater()
     {
         var (a, b) = PopPair();
 
@@ -56,7 +56,7 @@ public partial class StarscriptHypervisor
             throw Error("> operation requires 2 numbers.");
     }
 
-    protected virtual void GreaterEqual()
+    protected override void GreaterEqual()
     {
         var (a, b) = PopPair();
 
@@ -66,7 +66,7 @@ public partial class StarscriptHypervisor
             throw Error(">= operation requires 2 numbers.");
     }
 
-    protected virtual void Less()
+    protected override void Less()
     {
         var (a, b) = PopPair();
 
@@ -76,7 +76,7 @@ public partial class StarscriptHypervisor
             throw Error("< operation requires 2 numbers.");
     }
 
-    protected virtual void LessEqual()
+    protected override void LessEqual()
     {
         var (a, b) = PopPair();
 

@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Starscript;
+namespace Starscript.Abstraction;
 
-public partial class StarscriptHypervisor
+public partial class AbstractHypervisor<TSelf>
 {
     /// <summary>
     ///     Sets a variable supplier for the provided name.
     /// </summary>
-    public StarscriptHypervisor Set(string name, Func<Value> supplier) 
+    public TSelf Set(string name, Func<Value> supplier) 
     {
         Globals.Set(name, supplier);
         return this;
@@ -16,7 +16,7 @@ public partial class StarscriptHypervisor
     /// <summary>
     ///     Sets a variable supplier that always returns the same value for the provided name.
     /// </summary>
-    public StarscriptHypervisor Set(string name, Value value) 
+    public TSelf Set(string name, Value value) 
     {
         Globals.Set(name, value);
         return this;
@@ -25,7 +25,7 @@ public partial class StarscriptHypervisor
     /// <summary>
     ///     Sets a variable supplier that always returns the same <see cref="IStarscriptObject"/> for the provided name.
     /// </summary>
-    public StarscriptHypervisor Set(string name, IStarscriptObject value)
+    public TSelf Set(string name, IStarscriptObject value)
     {
         Globals.Set(name, value);
         return this;
@@ -34,25 +34,25 @@ public partial class StarscriptHypervisor
     /// <summary>
     ///     Sets a function variable supplier that always returns the same value for the provided name.
     /// </summary>
-    public StarscriptHypervisor Set(string name, StarscriptFunction function) 
+    public TSelf Set(string name, StarscriptFunction function) 
     {
         Globals.Set(name, function);
         return this;
     }
 
-    public StarscriptHypervisor Set(string name, Constraint constraint, ContextualStarscriptFunction contextualFunction)
+    public TSelf Set(string name, Constraint constraint, ContextualStarscriptFunction contextualFunction)
     {
         Globals.Set(name, constraint, contextualFunction);
         return this;
     }
 
-    public StarscriptHypervisor Set(string name, ContextualStarscriptFunction contextualFunction)
+    public TSelf Set(string name, ContextualStarscriptFunction contextualFunction)
     {
         Globals.Set(name, contextualFunction);
         return this;
     }
 
-    public StarscriptHypervisor NewSubMap(string name, Action<ValueMap> init)
+    public TSelf NewSubMap(string name, Action<ValueMap> init)
     {
         var map = new ValueMap();
         init(map);
@@ -65,7 +65,7 @@ public partial class StarscriptHypervisor
     /// </summary>
     /// <param name="map">A reference to the new globals map.</param>
     /// <remarks>StandardLibrary variables &amp; functions are provided via the globals map, so use one of the helpers in <see cref="StandardLibrary"/> to add them back if you want.</remarks>
-    public StarscriptHypervisor ReplaceGlobals(ValueMap map)
+    public TSelf ReplaceGlobals(ValueMap map)
     {
         Globals = map;
         return this;
@@ -74,20 +74,11 @@ public partial class StarscriptHypervisor
     /// <summary>
     ///     Sets an object variable supplier that always returns the same value for the provided name.
     /// </summary>
-    public StarscriptHypervisor Set(string name, object obj) 
+    public TSelf Set(string name, object obj) 
     {
         Globals.Set(name, TopLevelFunctions.Object(obj));
         return this;
     }
-
-    /// <summary>
-    ///     Removes all values from the globals.
-    /// </summary>
-    public void Clear() => Globals.Clear();
-
-    internal Func<Value>? ResolveVariable(string name) => Locals?.GetRaw(name) ?? Globals.GetRaw(name);
-
-    internal Value? GetVariable(string name) => ResolveVariable(name)?.Invoke();
 
     /// <summary>
     ///     Removes a single value with the specified name from the globals and returns the removed value.
@@ -96,8 +87,7 @@ public partial class StarscriptHypervisor
         => Globals.Remove(name, out removedValue);
 
     /// <summary>
-    ///     Returns a new <see cref="StarscriptHypervisor"/> with the globals inherited from this one.
-    ///     Useful for maintaining multiple <see cref="StarscriptHypervisor"/>s for varied use-cases, inheriting from a single globals map with minor differences.
+    ///     Removes all values from the globals.
     /// </summary>
-    public StarscriptHypervisor CopyGlobalsToNew() => CreateFromParent(this);
+    public void Clear() => Globals.Clear();
 }

@@ -1,8 +1,8 @@
 ﻿using Starscript.Util;
 
-namespace Starscript;
+namespace Starscript.Abstraction;
 
-public partial class StarscriptHypervisor
+public partial class AbstractHypervisor<TSelf>
 {
     private readonly TransparentStack<Value> _stack = new();
 
@@ -16,7 +16,9 @@ public partial class StarscriptHypervisor
 
         return (left, right);
     }
-    
+
+    protected void ClearStack() => _stack.Clear();
+
     public Value Peek() => _stack.Peek();
     public Value Peek(int offset) => _stack.Peek(offset);
 

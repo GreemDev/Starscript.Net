@@ -7,19 +7,19 @@ namespace Starscript;
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public partial class StarscriptHypervisor
 {
-    protected virtual void Append(ref StringBuilder sb) => AppendValue(sb, Pop());
+    protected override void Append(ref StringBuilder sb) => AppendValue(sb, Pop());
 
-    protected virtual void ConstantAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr) 
+    protected override void ConstantAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr) 
         => AppendValue(sb, script.Constants[script.GetMasked(insnPtr++)]);
 
-    protected virtual void VariableAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
+    protected override void VariableAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
     {
         var name = script.Constants[script.GetMasked(insnPtr++)].GetString();
 
         AppendValue(sb, GetVariable(name));
     }
     
-    protected virtual void GetAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
+    protected override void GetAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
     {
         var name = script.Constants[script.GetMasked(insnPtr++)].GetString();
 
@@ -30,7 +30,7 @@ public partial class StarscriptHypervisor
             : null);
     }
 
-    protected virtual void CallAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
+    protected override void CallAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
     {
         var argCount = script[insnPtr++];
 
@@ -47,7 +47,7 @@ public partial class StarscriptHypervisor
         AppendValue(sb, result);
     }
 
-    protected virtual void VariableGetAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
+    protected override void VariableGetAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
     {
         Value? value;
 

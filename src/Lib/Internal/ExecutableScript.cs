@@ -1,4 +1,6 @@
-﻿namespace Starscript.Internal;
+﻿using Starscript.Abstraction;
+
+namespace Starscript.Internal;
 
 public abstract class ExecutableScript : IDisposable
 {
@@ -16,12 +18,15 @@ public abstract class ExecutableScript : IDisposable
 
     public int GetMasked(int idx) => GetByteAt(idx) & 0xFF;
 
-    public StringSegment Execute(StarscriptHypervisor hypervisor) 
+    public StringSegment Execute<THypervisor>(THypervisor hypervisor) 
+        where THypervisor : AbstractHypervisor<THypervisor> 
         => hypervisor.Run(this);
 
-    public StringSegment Execute(StarscriptHypervisor hypervisor, ValueMap locals) 
+    public StringSegment Execute<THypervisor>(THypervisor hypervisor, ValueMap locals) 
+        where THypervisor : AbstractHypervisor<THypervisor> 
         => hypervisor.Run(this, locals);
 
-    public StringSegment Execute(StarscriptHypervisor hypervisor, IStarscriptObject obj) 
+    public StringSegment Execute<THypervisor>(THypervisor hypervisor, IStarscriptObject obj) 
+        where THypervisor : AbstractHypervisor<THypervisor> 
         => hypervisor.Run(this, obj);
 }

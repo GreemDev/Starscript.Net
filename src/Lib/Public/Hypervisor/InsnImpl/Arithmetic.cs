@@ -4,7 +4,7 @@
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public partial class StarscriptHypervisor
 {
-    protected virtual void Add()
+    protected override void Add()
     {
         var (a, b) = PopPair();
 
@@ -16,7 +16,7 @@ public partial class StarscriptHypervisor
             throw Error("Can only add 2 numbers, or 1 string and any other value.");
     }
 
-    protected virtual void Negate()
+    protected override void Negate()
     {
         var a = Pop();
 
@@ -26,7 +26,7 @@ public partial class StarscriptHypervisor
         Push(-a.GetNumber());
     }
 
-    protected virtual void Subtract()
+    protected override void Subtract()
     {
         var (a, b) = PopPair();
 
@@ -36,7 +36,7 @@ public partial class StarscriptHypervisor
             throw Error("Can only subtract 2 numbers.");
     }
 
-    protected virtual void Multiply()
+    protected override void Multiply()
     {
         var (a, b) = PopPair();
 
@@ -46,7 +46,7 @@ public partial class StarscriptHypervisor
             throw Error("Can only multiply 2 numbers.");
     }
 
-    protected virtual void Divide()
+    protected override void Divide()
     {
         var (a, b) = PopPair();
 
@@ -56,7 +56,7 @@ public partial class StarscriptHypervisor
             throw Error("Can only divide 2 numbers.");
     }
 
-    protected virtual void Modulo()
+    protected override void Modulo()
     {
         var (a, b) = PopPair();
 
@@ -66,7 +66,7 @@ public partial class StarscriptHypervisor
             throw Error("Can only modulo 2 numbers.");
     }
 
-    protected virtual void Power()
+    protected override void Power()
     {
         var (a, b) = PopPair();
 
@@ -76,7 +76,7 @@ public partial class StarscriptHypervisor
             throw Error("Can only power 2 numbers.");
     }
 
-    protected virtual void RightShift()
+    protected override void RightShift()
     {
         var (a, b) = PopPair();
 
@@ -86,7 +86,7 @@ public partial class StarscriptHypervisor
             throw Error(">> operation requires 2 numbers.");
     }
 
-    protected virtual void LeftShift()
+    protected override void LeftShift()
     {
         var (a, b) = PopPair();
 

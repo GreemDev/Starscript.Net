@@ -7,14 +7,17 @@ namespace Starscript;
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public partial class StarscriptHypervisor
 {
-    protected virtual StringSegment EndExecution(
+    protected override StringSegment EndExecution(
         ref StringBuilder sb, 
         ref StringSegment firstSegment, 
         ref StringSegment segment, 
         int index)
     {
-        if (!_persistentLocals)
-            ClearLocals();
+#if DEBUG
+        DebugLog("End of script code reached. Breaking execution.");
+#endif
+        
+        ClearLocals();
 
         if (!Unsafe.IsNullRef(ref firstSegment) && !Unsafe.IsNullRef(ref segment))
         {

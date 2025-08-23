@@ -6,14 +6,14 @@ namespace Starscript;
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public partial class StarscriptHypervisor
 {
-    protected virtual void Variable(ref ExecutableScript script, ref int insnPtr)
+    protected override void Variable(ref ExecutableScript script, ref int insnPtr)
     {
         var name = script.Constants[script.GetMasked(insnPtr++)].GetString();
 
         Push(GetVariable(name));
     }
 
-    protected virtual void Get(ref ExecutableScript script, ref int insnPtr)
+    protected override void Get(ref ExecutableScript script, ref int insnPtr)
     {
         var name = script.Constants[script.GetMasked(insnPtr++)].GetString();
 
@@ -25,7 +25,7 @@ public partial class StarscriptHypervisor
         );
     }
 
-    protected virtual void VariableGet(ref ExecutableScript script, ref int insnPtr)
+    protected override void VariableGet(ref ExecutableScript script, ref int insnPtr)
     {
         Value value;
 
@@ -46,7 +46,7 @@ public partial class StarscriptHypervisor
         }
     }
 
-    protected virtual void Call(ref ExecutableScript script, ref int insnPtr)
+    protected override void Call(ref ExecutableScript script, ref int insnPtr)
     {
         var argCount = script[insnPtr++];
 
