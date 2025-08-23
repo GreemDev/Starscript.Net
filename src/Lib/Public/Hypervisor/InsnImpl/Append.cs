@@ -7,6 +7,8 @@ namespace Starscript;
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public partial class StarscriptHypervisor
 {
+    private static void AppendValue(StringBuilder sb, Value? value) => sb.Append(value ?? Value.Null);
+
     protected override void Append(ref StringBuilder sb) => AppendValue(sb, Pop());
 
     protected override void ConstantAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr) 

@@ -50,6 +50,4 @@ public partial class StarscriptHypervisor : AbstractHypervisor<StarscriptHypervi
     ///     Useful for maintaining multiple <see cref="StarscriptHypervisor"/>s for varied use-cases, inheriting from a single globals map with minor differences.
     /// </summary>
     public StarscriptHypervisor CopyGlobalsToNew() => CreateFromParent(this);
-
-    private static void AppendValue(StringBuilder sb, Value? value) => sb.Append(value ?? Value.Null);
 }
