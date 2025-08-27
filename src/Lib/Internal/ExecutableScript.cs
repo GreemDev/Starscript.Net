@@ -14,7 +14,7 @@ public abstract class ExecutableScript : IDisposable
 
     public ref readonly byte this[int idx] => ref GetByteAt(idx);
 
-    public bool IsDisposed { get; protected set; }
+    public virtual bool IsDisposed { get; protected set; }
 
     public int GetMasked(int idx) => GetByteAt(idx) & 0xFF;
 
