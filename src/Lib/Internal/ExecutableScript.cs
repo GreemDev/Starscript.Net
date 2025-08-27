@@ -9,6 +9,8 @@ public abstract class ExecutableScript : IDisposable
     public abstract ReadOnlySpan<Value> Constants { get; }
     
     public abstract void Dispose();
+    
+    public abstract long CodeSize { get; }
 
     protected virtual ref readonly byte GetByteAt(int idx) => ref Code[idx];
 

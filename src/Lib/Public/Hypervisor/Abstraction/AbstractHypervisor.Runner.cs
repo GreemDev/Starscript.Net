@@ -11,6 +11,9 @@ public partial class AbstractHypervisor<TSelf>
         if (script.IsDisposed)
             throw new ObjectDisposedException(script.GetType().FullName, "Cannot execute a disposed Script.");
 
+        if (script.CodeSize is 0)
+            throw new StarscriptException($"Attempted to execute a {script.GetType().Name} with no bytecode.");
+
         ClearStack();
 
         sb.Length = 0;

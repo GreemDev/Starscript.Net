@@ -11,6 +11,8 @@ public class MutableScript : ExecutableScript
 
     public override ReadOnlySpan<Value> Constants => CollectionsMarshal.AsSpan(_constants);
 
+    public override long CodeSize => CodeBuffer.CurrentSize;
+
     public ResizableBuffer<byte> CodeBuffer { get; } = new();
 
     public override ReadOnlySpan<byte> Code => CodeBuffer.RoSpan;

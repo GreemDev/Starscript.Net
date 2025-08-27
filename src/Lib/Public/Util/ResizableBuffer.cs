@@ -38,12 +38,12 @@ public class ResizableBuffer<T>
     /// <summary>
     ///     The amount of elements in the underlying buffer.
     /// </summary>
-    public int BufferSize => _buffer.Length;
+    public long BufferSize => _buffer.LongLength;
 
     /// <summary>
     ///     The amount of bytes currently consumed by this buffer.
     /// </summary>
-    public long BufferByteSize => _buffer.Length * Unsafe.SizeOf<T>();
+    public long BufferByteSize => BufferSize * Unsafe.SizeOf<T>();
 
     /// <summary>
     ///     Write a value directly to the buffer. If the buffer is too small, it is resized by 50% (Length * 1.5).

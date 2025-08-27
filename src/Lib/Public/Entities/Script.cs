@@ -19,6 +19,10 @@ public class Script : ExecutableScript
                                                      ?? throw new ObjectDisposedException(nameof(Script),
                                                          "Cannot access constants of a disposed Script.");
 
+    public override long CodeSize => _code?.LongLength 
+                                     ?? throw new ObjectDisposedException(nameof(Script), 
+                                         "Cannot access bytecode size of a disposed Script.");
+
     public Script(byte[] codeBuffer, Value[] constants)
     {
         _code = codeBuffer ?? throw new NullReferenceException($"Cannot initialize a {nameof(Script)} with a null bytecode buffer.");
