@@ -37,4 +37,6 @@ public class TransparentStack<T>
     public T Peek() => _buffer[_buffer.CurrentSize - 1];
     
     public T Peek(int offset) => _buffer[_buffer.CurrentSize - 1 - offset];
+
+    public int Count => _buffer.CurrentSize;
 }

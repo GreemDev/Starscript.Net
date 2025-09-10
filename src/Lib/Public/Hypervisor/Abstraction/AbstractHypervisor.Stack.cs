@@ -19,8 +19,15 @@ public partial class AbstractHypervisor<TSelf>
 
     protected void ClearStack() => _stack.Clear();
 
-    public Value Peek() => _stack.Peek();
-    public Value Peek(int offset) => _stack.Peek(offset);
+    public Value Peek() 
+        => _stack.Count is 0 
+            ? Value.Null 
+            : _stack.Peek();
+
+    public Value Peek(int offset) 
+        => _stack.Count <= offset 
+            ? Value.Null 
+            : _stack.Peek(offset);
 
     public bool PopBoolean(string error)
     {
