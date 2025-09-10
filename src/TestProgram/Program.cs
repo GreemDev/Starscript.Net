@@ -60,6 +60,17 @@ public static class Program
             // StarscriptHypervisor should error here, as the source string calls a function that is defined as a local, so it is cleared when the script execution ends.
             // NotImplementedException is not caught as that is an error case, that being StarscriptHypervisor *not* erroring.  
         }
+        
+        try
+        {
+            hypervisor.Set("true", Value.Null);
+
+            throw new NotImplementedException();
+        }
+        catch (StarscriptException)
+        {
+            Log("Successfully errored when trying to set a variable name to a keyword.");
+        }
 
         script.Dispose();
 #endif
