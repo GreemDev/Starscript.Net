@@ -23,8 +23,15 @@ public partial class AbstractHypervisor<TSelf>
     protected abstract void Divide();
     protected abstract void Modulo();
     protected abstract void Power();
-    protected abstract void RightShift();
     protected abstract void LeftShift();
+    protected abstract void RightShift();
+    protected abstract void UnsignedRightShift();
+
+    protected abstract void BitwiseAnd();
+    protected abstract void BitwiseOr();
+    protected abstract void BitwiseXor();
+    protected abstract void BitwiseNot();
+
 
     protected abstract void Section(
         ref StringBuilder sb,

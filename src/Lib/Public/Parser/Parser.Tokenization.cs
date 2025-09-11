@@ -164,9 +164,30 @@ public partial struct Parser
     private Expr Factor()
     {
         int start = _previous.Start;
+        Expr expr = Bitwise();
+
+        while (MatchAnyNext(Token.Star, Token.Slash, Token.Percentage, Token.DoubleUpArrow))
+        {
+            Token op = _previous.Token;
+            Expr right = Bitwise();
+
+#if DEBUG
+            DebugLog(
+                $"Expr {nameof(Expr.Binary)} created: Start {start}, End {_previous.End}, LeftType {expr.ExprName} Operator {Enum.GetName(op)}, RightType {right.ExprName}");
+#endif
+
+            expr = new Expr.Binary(start, _previous.End, expr, op, right);
+        }
+
+        return expr;
+    }
+    
+    private Expr Bitwise()
+    {
+        int start = _previous.Start;
         Expr expr = Unary();
 
-        while (MatchAnyNext(Token.Star, Token.Slash, Token.Percentage, Token.UpArrow, Token.LeftShift, Token.RightShift))
+        while (MatchAnyNext(Token.Ampersand, Token.VBar, Token.UpArrow, Token.DoubleLess, Token.DoubleGreater, Token.TripleGreater))
         {
             Token op = _previous.Token;
             Expr right = Unary();
@@ -184,7 +205,7 @@ public partial struct Parser
 
     private Expr Unary()
     {
-        if (MatchAnyNext(Token.Bang, Token.Minus))
+        if (MatchAnyNext(Token.Bang, Token.Minus, Token.Tilde))
         {
             int start = _previous.Start;
 

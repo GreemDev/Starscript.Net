@@ -6,8 +6,6 @@ namespace Starscript;
 
 public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
 {
-    public static readonly ImmutableArray<string> Keywords = ["null", "true", "false", "and", "or"];
-    
     private readonly Dictionary<string, Func<Value>> _entries;
 
     /// <summary>
@@ -25,12 +23,12 @@ public class ValueMap : IReadOnlyDictionary<string, Func<Value>>
     /// </summary>
     public ValueMap SetRaw(string name, Func<Value> value)
     {
-        if (Keywords.Contains(name))
+        if (Internal.Lexer.Keywords.Contains(name))
             throw new StarscriptException($"The name of a variable cannot be a keyword. " +
                                           $"Disallowed words: [{
-                                              string.Join(", ", Keywords.Select(x => $"\"{x}\""))
+                                              string.Join(", ", Internal.Lexer.Keywords.Select(x => $"\"{x}\""))
                                           }]");
-        
+
         _entries[name] = value;
         return this;
     }

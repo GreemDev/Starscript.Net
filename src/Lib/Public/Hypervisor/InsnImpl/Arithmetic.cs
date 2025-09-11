@@ -86,6 +86,56 @@ public partial class StarscriptHypervisor
             throw Error(">> operation requires 2 numbers.");
     }
 
+    protected override void UnsignedRightShift()
+    {
+        var (a, b) = PopPair();
+
+        if (a.IsNumber && b.IsNumber)
+            Push(Convert.ToInt32(a.GetNumber()) >>> Convert.ToInt32(double.Truncate(b.GetNumber())));
+        else
+            throw Error(">> operation requires 2 numbers.");
+    }
+
+    protected override void BitwiseAnd()
+    {
+        var (a, b) = PopPair();
+
+        if (a.IsNumber && b.IsNumber)
+            Push(Convert.ToInt32(Math.Floor(a.GetNumber())) & Convert.ToInt32(Math.Floor(b.GetNumber())));
+        else
+            throw Error("& operation requires 2 numbers.");
+    }
+
+    protected override void BitwiseOr()
+    {
+        var (a, b) = PopPair();
+
+        if (a.IsNumber && b.IsNumber)
+            Push(Convert.ToInt32(Math.Floor(a.GetNumber())) | Convert.ToInt32(Math.Floor(b.GetNumber())));
+        else
+            throw Error("| operation requires 2 numbers.");
+    }
+
+    protected override void BitwiseXor()
+    {
+        var (a, b) = PopPair();
+
+        if (a.IsNumber && b.IsNumber)
+            Push(Convert.ToInt32(Math.Floor(a.GetNumber())) ^ Convert.ToInt32(Math.Floor(b.GetNumber())));
+        else
+            throw Error("^ operation requires 2 numbers.");
+    }
+
+    protected override void BitwiseNot()
+    {
+        var a = Pop();
+
+        if (a.IsNumber)
+            Push(~Convert.ToInt32(Math.Floor(a.GetNumber())));
+        else
+            throw Error("~ unary operation requires a number.");
+    }
+
     protected override void LeftShift()
     {
         var (a, b) = PopPair();

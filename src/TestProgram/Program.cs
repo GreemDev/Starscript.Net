@@ -23,7 +23,7 @@ public static class Program
             "TestProgram can only be run in debug as it relies on debug-only logging instrumentation in Starscript.");
 #else
 
-        string source = "Name: {name}     Age: {age() >> 2}";
+        string source = "Name: {name}     Age: {age() ^ 2}";
 
         DebugLogger.AllOutput = true;
 

@@ -13,16 +13,20 @@ public enum Token : byte
     Less, LessEqual,
 
     Plus, Minus,
-    Star, Slash, Percentage, UpArrow,
+    Star, Slash, Percentage, UpArrow, DoubleUpArrow,
     Bang,
 
     Dot, Comma,
     QuestionMark, Colon,
     LeftParen, RightParen,
     LeftBrace, RightBrace,
-    LeftShift, RightShift,
 
     Section,
+    Ampersand,
+    Tilde,
+    VBar,
+    DoubleGreater, TripleGreater,
+    DoubleLess,
 
     Error, EOF
 }

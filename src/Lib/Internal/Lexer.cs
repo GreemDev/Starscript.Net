@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Starscript.Util;
 
@@ -72,19 +73,21 @@ public class Lexer
                     case '!':  CreateToken(Match('=') ? Token.BangEqual : Token.Bang); break;
                     case '>':  
                         CreateToken(
-                            Match('=') 
-                                ? Token.GreaterEqual 
-                                : Match('>') 
-                                    ? Token.RightShift 
+                            Match('=')
+                                ? Token.GreaterEqual
+                                : Match('>')
+                                    ? Match('>')
+                                        ? Token.TripleGreater
+                                        : Token.DoubleGreater
                                     : Token.Greater
                             ); 
                         break;
                     case '<':
                         CreateToken(
-                            Match('=') 
-                                ? Token.LessEqual 
-                                : Match('<') 
-                                    ? Token.LeftShift 
+                            Match('=')
+                                ? Token.LessEqual
+                                : Match('<')
+                                    ? Token.DoubleLess
                                     : Token.Less
                             ); 
                         break;
@@ -94,7 +97,12 @@ public class Lexer
                     case '*':  CreateToken(Token.Star); break;
                     case '/':  CreateToken(Token.Slash); break;
                     case '%':  CreateToken(Token.Percentage); break;
-                    case '^':  CreateToken(Token.UpArrow); break;
+                    case '^':  CreateToken(
+                        Match('^')
+                            ? Token.DoubleUpArrow
+                            : Token.UpArrow
+                        );
+                        break;
 
                     case '.':  CreateToken(Token.Dot); break;
                     case ',':  CreateToken(Token.Comma); break;
@@ -109,6 +117,10 @@ public class Lexer
                         while (char.IsDigit(Peek())) Advance();
                         CreateToken(Token.Section, Source[(Start + 1)..Current]);
                         break;
+
+                    case '&': CreateToken(Token.Ampersand); break;
+                    case '|': CreateToken(Token.VBar); break;
+                    case '~': CreateToken(Token.Tilde); break;
 
                     default:   Unexpected(); break;
                 }
@@ -182,17 +194,25 @@ public class Lexer
         CreateToken(Token.Number);
     }
 
+    public static readonly ImmutableArray<string> Keywords = [NullKeyword, TrueKeyword, FalseKeyword, AndKeyword, OrKeyword];
+
+    private const string NullKeyword = "null";
+    private const string TrueKeyword = "true";
+    private const string FalseKeyword = "false";
+    private const string AndKeyword = "and";
+    private const string OrKeyword = "or";
+
     private void Identifier() {
         while (!IsAtEnd && IsAlphanumeric(Peek())) Advance();
 
         CreateToken(Token.Identifier);
 
         switch (Lexeme) {
-            case "null":  Token = Token.Null; break;
-            case "true":  Token = Token.True; break;
-            case "false": Token = Token.False; break;
-            case "and":   Token = Token.And; break;
-            case "or":    Token = Token.Or; break;
+            case NullKeyword:  Token = Token.Null; break;
+            case TrueKeyword:  Token = Token.True; break;
+            case FalseKeyword: Token = Token.False; break;
+            case AndKeyword:   Token = Token.And; break;
+            case OrKeyword:    Token = Token.Or; break;
         }
     }
 

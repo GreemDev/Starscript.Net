@@ -52,7 +52,14 @@ public partial class AbstractHypervisor<TSelf>
                 case Instruction.Modulo: Modulo(); break;
                 case Instruction.Power: Power(); break;
                 case Instruction.Negate: Negate(); break;
+
+                // Bit shenanigans
+                case Instruction.BitwiseNot: BitwiseNot(); break;
+                case Instruction.BitwiseAnd: BitwiseAnd(); break;
+                case Instruction.BitwiseOr: BitwiseOr(); break;
+                case Instruction.BitwiseXor: BitwiseXor(); break;
                 case Instruction.RightShift: RightShift(); break;
+                case Instruction.UnsignedRightShift: UnsignedRightShift(); break;
                 case Instruction.LeftShift: LeftShift(); break;
 
                 // Comparison

@@ -112,7 +112,7 @@ public partial class Compiler
             case Token.Star: _output.Write(Multiply); break;
             case Token.Slash: _output.Write(Divide); break;
             case Token.Percentage: _output.Write(Modulo); break;
-            case Token.UpArrow: _output.Write(Power); break;
+            case Token.DoubleUpArrow: _output.Write(Power); break;
 
             case Token.EqualEqual: _output.Write(Instruction.Equals); break;
             case Token.BangEqual: _output.Write(NotEquals); break;
@@ -120,8 +120,13 @@ public partial class Compiler
             case Token.GreaterEqual: _output.Write(GreaterEqual); break;
             case Token.Less: _output.Write(Less); break;
             case Token.LessEqual: _output.Write(LessEqual); break;
-            case Token.LeftShift: _output.Write(LeftShift); break;
-            case Token.RightShift: _output.Write(RightShift); break;
+            
+            case Token.Ampersand: _output.Write(BitwiseAnd); break;
+            case Token.VBar: _output.Write(BitwiseOr); break;
+            case Token.UpArrow: _output.Write(BitwiseXor); break;
+            case Token.DoubleLess: _output.Write(LeftShift); break;
+            case Token.DoubleGreater: _output.Write(RightShift); break;
+            case Token.TripleGreater: _output.Write(UnsignedRightShift); break;
         }
 
 #if DEBUG
@@ -139,6 +144,9 @@ public partial class Compiler
                 break;
             case Token.Minus:
                 _output.Write(Negate);
+                break;
+            case Token.Tilde:
+                _output.Write(BitwiseNot);
                 break;
         }
 

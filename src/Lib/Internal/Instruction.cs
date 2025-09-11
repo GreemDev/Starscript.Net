@@ -14,6 +14,14 @@ public enum Instruction : byte
     Modulo,
     Power,
 
+    BitwiseAnd,
+    BitwiseOr,
+    BitwiseXor,
+    BitwiseNot,
+    LeftShift,
+    RightShift,
+    UnsignedRightShift,
+
     AddConstant,
 
     Pop,
@@ -26,8 +34,6 @@ public enum Instruction : byte
     GreaterEqual,
     Less,
     LessEqual,
-    LeftShift, 
-    RightShift,
 
     Variable,
     Get,
