@@ -6,6 +6,7 @@ namespace Starscript.Abstraction;
 
 public partial class AbstractHypervisor<TSelf>
 {
+    // ReSharper disable once VirtualMemberNeverOverridden.Global
     protected virtual StringSegment RunInternal(ExecutableScript script, StringBuilder sb)
     {
         if (script.IsDisposed)

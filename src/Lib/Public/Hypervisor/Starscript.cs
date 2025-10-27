@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Starscript.Abstraction;
+﻿using Starscript.Abstraction;
 
 // ReSharper disable UnusedMethodReturnValue.Global
 
@@ -9,7 +8,7 @@ namespace Starscript;
 ///     An implementation of <see cref="AbstractHypervisor{TSelf}"/>, capable of running compiled Starscript <see cref="Starscript.Internal.ExecutableScript"/>s,
 ///     with contextual global variables and a secondary list of local variables, which is automatically cleared when a Starscript finishes.
 /// <br/><br/>
-///     <see cref="AbstractHypervisor{TSelf}"/> implements basically everything itself and this implementation does not do anything special.
+///     <see cref="AbstractHypervisor{TSelf}"/> implements all boilerplate itself and this implementation does not do anything special.
 /// <br/>
 ///     As a result, the only parts of this class are <see cref="CopyGlobalsToNew"/>, the creation utility methods, and the actual implementations for what the instructions do.
 /// </summary>

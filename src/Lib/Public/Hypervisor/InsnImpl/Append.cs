@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
 using Starscript.Internal;
 
 namespace Starscript;
@@ -7,20 +8,25 @@ namespace Starscript;
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public partial class StarscriptHypervisor
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     private static void AppendValue(StringBuilder sb, Value? value) => sb.Append(value ?? Value.Null);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override void Append(ref StringBuilder sb) => AppendValue(sb, Pop());
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override void ConstantAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr) 
         => AppendValue(sb, script.Constants[script.GetMasked(insnPtr++)]);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override void VariableAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
     {
         var name = script.Constants[script.GetMasked(insnPtr++)].GetString();
 
         AppendValue(sb, GetVariable(name));
     }
-    
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override void GetAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
     {
         var name = script.Constants[script.GetMasked(insnPtr++)].GetString();
@@ -32,6 +38,7 @@ public partial class StarscriptHypervisor
             : null);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override void CallAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
     {
         var argCount = script[insnPtr++];
@@ -49,6 +56,7 @@ public partial class StarscriptHypervisor
         AppendValue(sb, result);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override void VariableGetAppend(ref StringBuilder sb, ref ExecutableScript script, ref int insnPtr)
     {
         Value? value;

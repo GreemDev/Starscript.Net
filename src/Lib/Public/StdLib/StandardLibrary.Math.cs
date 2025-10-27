@@ -142,11 +142,11 @@ public static partial class StandardLibrary
         switch (ctx.ArgCount)
         {
             case 0:
-                return tl_Random.Value!.NextDouble();
+                return t_Random.Value!.NextDouble();
             case 2:
                 var (min, max) = ctx.NextTypedPair(TypedArg.Number(1), TypedArg.Number(2));
 
-                return tl_Random.Value!.NextDouble() * (min + (max - min));
+                return t_Random.Value!.NextDouble() * (min + (max - min));
             default:
                 throw ctx.Error("{0} requires 0 or 2 arguments, got {1}.", ctx.FormattedName, ctx.ArgCount);
         }

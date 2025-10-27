@@ -7,6 +7,7 @@ namespace Starscript;
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public partial class StarscriptHypervisor
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override StringSegment EndExecution(
         ref StringBuilder sb, 
         ref StringSegment firstSegment, 

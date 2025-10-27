@@ -4,7 +4,7 @@ public abstract class Expr : Expr.IVisitable
 {
     public int Start { get; }
     public int End { get; }
-    public Expr? Parent { get; internal set; }
+    public Expr? Parent { get; protected set; }
     public Expr[] Children { get; }
     
     public abstract string ExprName { get; }
@@ -23,7 +23,7 @@ public abstract class Expr : Expr.IVisitable
             child.Parent = this;
         }
     }
-
+    
     public string GetSource(string source) => source[Start..End];
 
     public void ReplaceChild(Expr toReplace, Expr replacement)

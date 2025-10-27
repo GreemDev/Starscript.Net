@@ -6,6 +6,7 @@ namespace Starscript;
 
 public partial class StarscriptHypervisor
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override void Section(
         ref StringBuilder sb, 
         ref ExecutableScript script, 

@@ -9,6 +9,7 @@ public abstract partial class AbstractHypervisor<TSelf> where TSelf : AbstractHy
     private ValueMap _globals;
     private ValueMap? _locals;
 
+    // ReSharper disable VirtualMemberNeverOverridden.Global
     public virtual ValueMap Globals
     {
         get => _globals;
@@ -20,7 +21,9 @@ public abstract partial class AbstractHypervisor<TSelf> where TSelf : AbstractHy
         get => _locals;
         protected set => _locals = value;
     }
+    // ReSharper restore VirtualMemberNeverOverridden.Global
 
+    // ReSharper disable once FieldCanBeMadeReadOnly.Global MemberCanBePrivate.Global
     protected bool PersistentLocals;
 
     protected AbstractHypervisor(ValueMap? globals = null, ValueMap? locals = null, bool persistentLocals = false)
@@ -33,6 +36,7 @@ public abstract partial class AbstractHypervisor<TSelf> where TSelf : AbstractHy
     protected AbstractHypervisor() 
         => _globals = new ValueMap();
 
+    // ReSharper disable once MemberCanBePrivate.Global
     protected Func<Value>? ResolveVariable(string name) => Locals?.GetRaw(name) ?? Globals.GetRaw(name);
 
     protected Value? GetVariable(string name) => ResolveVariable(name)?.Invoke();

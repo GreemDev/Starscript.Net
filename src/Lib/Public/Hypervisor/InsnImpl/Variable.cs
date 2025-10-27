@@ -1,4 +1,5 @@
-﻿using Starscript.Internal;
+﻿using System.Runtime.CompilerServices;
+using Starscript.Internal;
 
 namespace Starscript;
 
@@ -6,6 +7,7 @@ namespace Starscript;
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public partial class StarscriptHypervisor
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override void Variable(ref ExecutableScript script, ref int insnPtr)
     {
         var name = script.Constants[script.GetMasked(insnPtr++)].GetString();
@@ -13,6 +15,7 @@ public partial class StarscriptHypervisor
         Push(GetVariable(name));
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override void Get(ref ExecutableScript script, ref int insnPtr)
     {
         var name = script.Constants[script.GetMasked(insnPtr++)].GetString();
@@ -25,6 +28,7 @@ public partial class StarscriptHypervisor
         );
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override void VariableGet(ref ExecutableScript script, ref int insnPtr)
     {
         Value value;
@@ -46,6 +50,7 @@ public partial class StarscriptHypervisor
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] 
     protected override void Call(ref ExecutableScript script, ref int insnPtr)
     {
         var argCount = script[insnPtr++];
