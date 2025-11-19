@@ -19,8 +19,12 @@ public static class Program
     internal static void Main()
     {
 #if !DEBUG
-        throw new InvalidOperationException(
-            "TestProgram can only be run in debug as it relies on debug-only logging instrumentation in Starscript.");
+        throw new InvalidOperationException("""
+                                            TestProgram can only be run in debug as it relies on debug-only logging instrumentation in Starscript.
+                                            If you wish to test the library's speed, use the benchmarks project. 
+                                            This one is used for debugging while developing, to test new features and ensure nothing regresses.
+                                            (hence why age is XOR'd by 2....)
+                                            """);
 #else
 
         string source = "Name: {name}     Age: {age() ^ 2}";
@@ -73,6 +77,8 @@ public static class Program
         }
 
         script.Dispose();
+
+        Log("Test successful.");
 #endif
     }
 }

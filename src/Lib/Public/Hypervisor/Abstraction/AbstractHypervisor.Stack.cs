@@ -21,7 +21,7 @@ public partial class AbstractHypervisor<TSelf>
 
     public Value Peek() 
         => _stack.Count is 0 
-            ? Value.Null 
+            ? Value.Null
             : _stack.Peek();
 
     public Value Peek(int offset) 

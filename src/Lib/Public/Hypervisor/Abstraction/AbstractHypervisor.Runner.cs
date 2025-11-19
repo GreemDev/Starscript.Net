@@ -80,26 +80,30 @@ public partial class AbstractHypervisor<TSelf>
                 case Instruction.Get: Get(ref script, ref instructionPointer); break;
                 case Instruction.VariableGet: VariableGet(ref script, ref instructionPointer); break;
                 case Instruction.Call: Call(ref script, ref instructionPointer); break;
-                
+
                 case Instruction.Append: Append(ref sb); break;
                 case Instruction.ConstantAppend: ConstantAppend(ref sb, ref script, ref instructionPointer); break;
                 case Instruction.VariableAppend: VariableAppend(ref sb, ref script, ref instructionPointer); break;
                 case Instruction.GetAppend: GetAppend(ref sb, ref script, ref instructionPointer); break;
                 case Instruction.CallAppend: CallAppend(ref sb, ref script, ref instructionPointer); break;
-                case Instruction.VariableGetAppend: 
+                case Instruction.VariableGetAppend:
                     VariableGetAppend(ref sb, ref script, ref instructionPointer); break;
 
                 case Instruction.Section:
                 {
-                    Section(ref sb, ref script, 
-                        ref firstSegment.NullableRef(), 
-                        ref segment.NullableRef(), 
-                        ref index, ref instructionPointer);
+                    Section(
+                        ref sb,
+                        ref script,
+                        ref firstSegment.Ref,
+                        ref segment.Ref,
+                        ref index,
+                        ref instructionPointer
+                    );
                     break;
                 }
 
                 case Instruction.End:
-                    return EndExecution(ref sb, ref firstSegment.NullableRef(), ref segment.NullableRef(), index);
+                    return EndExecution(ref sb, ref firstSegment.Ref, ref segment.Ref, index);
                 default:
 #if DEBUG
                     throw new InvalidOperationException(
