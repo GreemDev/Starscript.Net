@@ -5,3 +5,4 @@ riderModule.iml
 /.idea/
 Starscript.Net.sln.DotSettings.user
 /_ReSharper.Caches/
+.nuke/temp/

@@ -6,7 +6,7 @@
 Fast text formatting language for C#. This is a .NET port of [starscript by MeteorDevelopment](https://github.com/MeteorDevelopment/starscript/), written in Java.
 Licensed under MIT.
 
-- Lightweight; No dependencies. Just .NET 9.
+- Lightweight; No dependencies. Just .NET 10.
 - Standard operators: + - * / % ^
 - Ability to call functions defined in C#
 - Variables can be different each time they are used
