@@ -34,6 +34,24 @@ partial class Build : NukeBuild
 
     [Parameter("nuget.org API key", Name = "NugetApiKey")] readonly string NugetApiKey;
 
+    public string NextVersion
+    {
+        get
+        {
+            if (field != null)
+                return field;
+            
+            if (Host is GitHubActions gha)
+            {
+                // +58 accounts for the final version of pre-GRUKE CI
+                // -2 accounts for the 2 failed CI runs after GRUKE migration
+                return field = $"{BaseVersion}.{(gha.RunNumber + 58) - 2}";
+            }
+
+            return field = "999.0.0";
+        }
+    }
+
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
@@ -68,11 +86,13 @@ partial class Build : NukeBuild
                 .SetProjectFile(Solution.Starscript_Net_Benchmarks)
                 .SetApplicationArguments("--ci")
                 .SetConfiguration(Configuration.Release));
-
+            
+            if (Host is not GitHubActions gha) return;
+            
             var fileCandidates = (RootDirectory / "benchout" / "results")
                 .GlobFiles("*-github.md");
 
-            if (Host is GitHubActions gha && fileCandidates.FirstOrDefault() is { } markdownPath)
+            if (fileCandidates.FirstOrDefault() is { } markdownPath)
             {
                 gha.StepSummaryFile.AppendAllLines(
                     File.ReadAllLines(markdownPath)
@@ -87,6 +107,7 @@ partial class Build : NukeBuild
             DotNetTasks.DotNetBuild(_ => _
                 .SetConfiguration(Configuration)
                 .SetOutputDirectory(ArtifactsPath)
+                .SetVersion(NextVersion)
                 .SetProjectFile(Solution.Starscript_Net));
 
             Log.Information("NuGet package written to '{packagePath}'", NuGetPackageOutput);
@@ -101,7 +122,8 @@ partial class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .SetOutputDirectory(ArtifactsPath)
                 .SetProjectFile(Solution.Starscript_Net)
-                .SetVersionPrefix($"{BaseVersion}.{GitHubActions.Instance.RunNumber}")
+                .SetVersion(NextVersion)
+                .SetVersionPrefix(NextVersion)
                 .SetVersionSuffix(GitTasks.GitCurrentCommit()));
 
             DotNetTasks.DotNetNuGetPush(_ => _
