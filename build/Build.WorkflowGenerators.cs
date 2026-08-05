@@ -4,6 +4,11 @@ using Nuke.Common.CI.GitHubActions;
     GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,
     OnPushBranches = ["main"],
+    OnPushIncludePaths = [
+        "Starscript.Net.sln",
+        "build/**",
+        "src/Lib/**"
+    ],
     OnPushExcludePaths =
     [
         ".github/**",
@@ -22,6 +27,12 @@ using Nuke.Common.CI.GitHubActions;
     GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,
     OnPullRequestBranches = ["main"],
+    OnPullRequestIncludePaths = [
+        "Starscript.Net.sln",
+        "build/**",
+        "src/Lib/**",
+        "src/Benchmarks/**"
+    ],
     OnPullRequestExcludePaths =
     [
         ".github/**",
@@ -35,6 +46,12 @@ using Nuke.Common.CI.GitHubActions;
         ".gitattributes"
     ],
     OnPushBranches = ["main"],
+    OnPushIncludePaths = [
+        "Starscript.Net.sln",
+        "build/**",
+        "src/Lib/**",
+        "src/Benchmarks/**"
+    ],
     OnPushExcludePaths =
     [
         ".github/**",

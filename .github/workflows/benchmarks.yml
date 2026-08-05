@@ -21,6 +21,10 @@ on:
     branches:
       - main
     paths:
+      - 'Starscript.Net.sln'
+      - 'build/**'
+      - 'src/Lib/**'
+      - 'src/Benchmarks/**'
       - '!.github/**'
       - '!docs/**'
       - '!assets/**'
@@ -34,6 +38,10 @@ on:
     branches:
       - main
     paths:
+      - 'Starscript.Net.sln'
+      - 'build/**'
+      - 'src/Lib/**'
+      - 'src/Benchmarks/**'
       - '!.github/**'
       - '!docs/**'
       - '!assets/**'
