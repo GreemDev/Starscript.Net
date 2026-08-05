@@ -21,8 +21,8 @@ using static Nuke.Common.IO.PathConstruction;
 partial class Build : NukeBuild
 {
     public const string BaseVersion = "1.0";
-    
-    public static int Main () => Execute<Build>(x => x.Compile);
+
+    public static int Main() => Execute<Build>(x => x.Compile);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -31,24 +31,23 @@ partial class Build : NukeBuild
     private AbsolutePath ArtifactsPath => RootDirectory / "artifacts";
 
     private AbsolutePath NuGetPackageOutput => ArtifactsPath.GlobFiles("*.nupkg").FirstOrDefault();
-    
-    [Parameter("nuget.org API key", Name = "NugetApiKey")] 
-    readonly string NugetApiKey;
+
+    [Parameter("nuget.org API key", Name = "NugetApiKey")] readonly string NugetApiKey;
 
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
         {
             ArtifactsPath.CreateOrCleanDirectory();
-            
+
             DotNetTasks.DotNetClean(_ => _
                 .SetProject(Solution.Starscript_Net)
             );
-            
+
             DotNetTasks.DotNetClean(_ => _
                 .SetProject(Solution.Starscript_Net_Benchmarks)
             );
-            
+
             DotNetTasks.DotNetClean(_ => _
                 .SetProject(Solution.Starscript_Net_TestProgram)
             );
@@ -69,10 +68,10 @@ partial class Build : NukeBuild
                 .SetProjectFile(Solution.Starscript_Net_Benchmarks)
                 .SetApplicationArguments("--ci")
                 .SetConfiguration(Configuration.Release));
-            
+
             var fileCandidates = (RootDirectory / "benchout" / "results")
                 .GlobFiles("*-github.md");
-            
+
             if (Host is GitHubActions gha && fileCandidates.FirstOrDefault() is { } markdownPath)
             {
                 gha.StepSummaryFile.AppendAllLines(
@@ -89,7 +88,7 @@ partial class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .SetOutputDirectory(ArtifactsPath)
                 .SetProjectFile(Solution.Starscript_Net));
-            
+
             Log.Information("NuGet package written to '{packagePath}'", NuGetPackageOutput);
         });
 
@@ -104,11 +103,10 @@ partial class Build : NukeBuild
                 .SetProjectFile(Solution.Starscript_Net)
                 .SetVersionPrefix($"{BaseVersion}.{GitHubActions.Instance.RunNumber}")
                 .SetVersionSuffix(GitTasks.GitCurrentCommit()));
-            
+
             DotNetTasks.DotNetNuGetPush(_ => _
                 .SetTargetPath(NuGetPackageOutput)
                 .SetSource("nuget.org")
                 .SetApiKey(NugetApiKey.NotNull()));
         });
-
 }

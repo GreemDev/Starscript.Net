@@ -1,10 +1,11 @@
 using Nuke.Common.CI.GitHubActions;
 
-[GitHubActions("ci", 
-    GitHubActionsImage.UbuntuLatest, 
+[GitHubActions("ci",
+    GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,
     OnPushBranches = ["main"],
-    OnPushExcludePaths = [
+    OnPushExcludePaths =
+    [
         ".github/**",
         "docs/**",
         "assets/**",
@@ -17,11 +18,12 @@ using Nuke.Common.CI.GitHubActions;
     ], InvokedTargets = [nameof(Ci)],
     EnableGitHubToken = true,
     ImportSecrets = [nameof(NugetApiKey)])]
-[GitHubActions("benchmarks", 
-    GitHubActionsImage.UbuntuLatest, 
+[GitHubActions("benchmarks",
+    GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,
     OnPullRequestBranches = ["main"],
-    OnPullRequestExcludePaths = [
+    OnPullRequestExcludePaths =
+    [
         ".github/**",
         "docs/**",
         "assets/**",
@@ -33,7 +35,8 @@ using Nuke.Common.CI.GitHubActions;
         ".gitattributes"
     ],
     OnPushBranches = ["main"],
-    OnPushExcludePaths = [
+    OnPushExcludePaths =
+    [
         ".github/**",
         "docs/**",
         "assets/**",
