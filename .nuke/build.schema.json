@@ -26,6 +26,7 @@
     "ExecutableTarget": {
       "type": "string",
       "enum": [
+        "Benchmarks",
         "Ci",
         "Clean",
         "Compile",

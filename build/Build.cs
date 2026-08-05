@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.ChangeLog;
@@ -17,24 +18,7 @@ using Serilog;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.PathConstruction;
 
-[GitHubActions("ci", 
-    GitHubActionsImage.UbuntuLatest, 
-    FetchDepth = 0,
-    OnPushBranches = ["main"],
-    OnPushExcludePaths = [
-        ".github/**",
-        "docs/**",
-        "assets/**",
-        ".vscode/**",
-        "*.yml",
-        "*.json",
-        "*.md",
-        ".gitignore",
-        ".gitattributes"
-    ], InvokedTargets = [nameof(Ci)],
-    EnableGitHubToken = true,
-    ImportSecrets = [nameof(NugetApiKey)])]
-class Build : NukeBuild
+partial class Build : NukeBuild
 {
     public const string BaseVersion = "1.0";
     
@@ -76,6 +60,25 @@ class Build : NukeBuild
             DotNetTasks.DotNetRestore(_ => _
                 .SetProjectFile(Solution)
             );
+        });
+
+    Target Benchmarks => _ => _
+        .Executes(() =>
+        {
+            DotNetTasks.DotNetRun(_ => _
+                .SetProjectFile(Solution.Starscript_Net_Benchmarks)
+                .SetApplicationArguments("--ci")
+                .SetConfiguration(Configuration.Release));
+            
+            var fileCandidates = (RootDirectory / "benchout" / "results")
+                .GlobFiles("*-github.md");
+            
+            if (Host is GitHubActions gha && fileCandidates.FirstOrDefault() is { } markdownPath)
+            {
+                gha.StepSummaryFile.AppendAllLines(
+                    File.ReadAllLines(markdownPath)
+                );
+            }
         });
 
     Target Compile => _ => _
