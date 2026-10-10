@@ -86,9 +86,9 @@ partial class Build : NukeBuild
                 .SetProjectFile(Solution.Starscript_Net_Benchmarks)
                 .SetApplicationArguments("--ci")
                 .SetConfiguration(Configuration.Release));
-            
+
             if (Host is not GitHubActions gha) return;
-            
+
             var fileCandidates = (RootDirectory / "benchout" / "results")
                 .GlobFiles("*-github.md");
 
@@ -116,8 +116,10 @@ partial class Build : NukeBuild
     Target Ci => _ => _
         .Unlisted()
         .Requires(() => Host is GitHubActions)
-        .Executes(() =>
+        .Executes(async () =>
         {
+            var nugetToken = await (Host as GitHubActions)!.GetNuGetApiKeyWithOpenIdAsync(username: "GreemDev");
+
             DotNetTasks.DotNetBuild(_ => _
                 .SetConfiguration(Configuration)
                 .SetOutputDirectory(ArtifactsPath)
@@ -129,6 +131,6 @@ partial class Build : NukeBuild
             DotNetTasks.DotNetNuGetPush(_ => _
                 .SetTargetPath(NuGetPackageOutput)
                 .SetSource("nuget.org")
-                .SetApiKey(NugetApiKey.NotNull()));
+                .SetApiKey(nugetToken));
         });
 }

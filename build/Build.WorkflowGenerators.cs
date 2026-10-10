@@ -1,6 +1,6 @@
 using Nuke.Common.CI.GitHubActions;
 
-[GitHubActions("main",
+[GitHubActions("ci",
     GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,
     OnPushBranches = ["main"],
