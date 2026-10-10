@@ -4,6 +4,9 @@ using Nuke.Common.CI.GitHubActions;
     GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,
     OnPushBranches = ["main"],
+    WritePermissions = [
+        GitHubActionsPermissions.IdToken
+    ],
     OnPushIncludePaths = [
         "Starscript.Net.sln",
         "build/**",

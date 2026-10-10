@@ -34,6 +34,9 @@ on:
       - '!.gitignore'
       - '!.gitattributes'
 
+permissions:
+  id-token: write
+
 jobs:
   ubuntu-latest:
     name: ubuntu-latest
