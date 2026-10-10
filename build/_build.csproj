@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GreemDev.Nuke" Version="10.5.0-alpha.6" />
+    <PackageReference Include="GreemDev.Nuke" Version="10.5.0-alpha.7" />
   </ItemGroup>
 
 </Project>
