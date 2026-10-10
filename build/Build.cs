@@ -118,7 +118,7 @@ partial class Build : NukeBuild
         .Requires(() => Host is GitHubActions)
         .Executes(async () =>
         {
-            var nugetToken = await (Host as GitHubActions)!.GetNuGetApiKeyWithOpenIdAsync(username: "GreemDev");
+            var nugetToken = await (Host as GitHubActions)!.GetNuGetApiKeyWithOpenIdAsync(username: "Greem");
 
             DotNetTasks.DotNetBuild(_ => _
                 .SetConfiguration(Configuration)
