@@ -24,8 +24,7 @@ using Nuke.Common.CI.GitHubActions;
         ".gitignore",
         ".gitattributes"
     ], InvokedTargets = [nameof(Ci)],
-    EnableGitHubToken = true,
-    ImportSecrets = [nameof(NugetApiKey)])]
+    EnableGitHubToken = true)]
 [GitHubActions("benchmarks",
     GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,

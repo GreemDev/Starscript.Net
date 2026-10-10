@@ -55,5 +55,4 @@ jobs:
       - name: 'Run: Ci'
         run: ./build.cmd Ci
         env:
-          NugetApiKey: ${{ secrets.NUGET_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

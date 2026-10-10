@@ -32,8 +32,6 @@ partial class Build : NukeBuild
 
     private AbsolutePath NuGetPackageOutput => ArtifactsPath.GlobFiles("*.nupkg").FirstOrDefault();
 
-    [Parameter("nuget.org API key", Name = "NugetApiKey")] readonly string NugetApiKey;
-
     public string NextVersion
     {
         get
